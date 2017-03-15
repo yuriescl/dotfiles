@@ -103,6 +103,8 @@ hi CursorLine cterm=NONE ctermbg=240 ctermfg=NONE
 
 " NERDTree
 nnoremap <silent> <leader>n :NERDTreeToggle %:p:h<CR>
+" Refresh directory listing (deleted and new files, etc)
+nmap <Leader>r :NERDTreeFocus<cr>R<c-w><c-p> 
 let g:NERDTreeWinSize   = 22
 let g:NERDTreeChDirMode = 2
 let g:NERDTreeIgnore = ['\.pyc$']
