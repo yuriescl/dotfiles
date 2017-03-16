@@ -4,11 +4,21 @@ let mapleader = "\\"
 " #######################################
 " #######################################
 " Plugin management (using vim-plug)
-call plug#begin()
+if isdirectory(expand('~/.vim/autoload'))
+  call plug#begin()
 
-" On-demand loading
-Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
-call plug#end()
+    " NERDTree
+    Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
+    nmap <silent> <leader>n :NERDTreeToggle %:p:h<CR>
+    " Refresh directory listing (deleted and new files, etc)
+    nmap <Leader>r :NERDTreeFocus<cr>R<c-w><c-p> 
+    let g:NERDTreeWinSize   = 22
+    let g:NERDTreeChDirMode = 2
+    let g:NERDTreeIgnore = ['\.pyc$']
+    let g:NERDTreeShowHidden = 0
+
+  call plug#end()
+endif
 
 " #######################################
 " #######################################
@@ -118,20 +128,6 @@ augroup BgHighlight
   autocmd WinLeave * set nocul
 augroup END
     
-" #######################################
-" #######################################
-" Plugins 
-
-" NERDTree
-nmap <silent> <leader>n :NERDTreeToggle %:p:h<CR>
-" Refresh directory listing (deleted and new files, etc)
-nmap <Leader>r :NERDTreeFocus<cr>R<c-w><c-p> 
-let g:NERDTreeWinSize   = 22
-let g:NERDTreeChDirMode = 2
-let g:NERDTreeIgnore = ['\.pyc$']
-let g:NERDTreeShowHidden = 0
-
-
 " #######################################
 " #######################################
 " Vim Files
