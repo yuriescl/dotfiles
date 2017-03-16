@@ -3,8 +3,7 @@
 ## Setup Vim
 
 ```bash
-mkdir ~/.vim
-cp -r vim/* ~/.vim/
+cp -r vim/* ~/
 ```
 
 Open vim and enter these commands:
