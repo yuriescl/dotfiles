@@ -69,28 +69,41 @@ syntax enable " enable syntax highlighting
 " Create empty line without leaving normal mode
 
 " Ctrl-j/k inserts blank line below/above
-nnoremap <c-k> m`O<esc>``
-nnoremap <c-j> m`o<esc>``
-inoremap <c-j> <esc>m`o<esc>``a
-inoremap <c-k> <esc>m`O<esc>``a
+nmap <c-k> m`O<esc>``
+nmap <c-j> m`o<esc>``
+imap <c-j> <esc>m`o<esc>``a
+imap <c-k> <esc>m`O<esc>``a
 
 " Use ctrl+hjkl to move between window splits
 noremap <C-h> <C-w>h
 noremap <C-l> <C-w>l
 
-nnoremap <C-n> :set invnumber<CR>
+nmap <C-n> :set invnumber<CR>
 
 " Keep search matches in middle of window
-nnoremap <silent> n nzzzv
-nnoremap <silent> N Nzzzv
+nmap <silent> n nzzzv
+nmap <silent> N Nzzzv
 
+" Exit insert mode with jj
 imap jj <Esc>
 
-
 " Better exiting
-nnoremap <C-z> :q!<CR>
-nnoremap <C-x> :w!<CR>:q<CR>
+nmap <C-z> :q!<CR>
+nmap <C-x> :w!<CR>:q<CR>
 
+
+" Delete line without copying text
+nmap dd <S-v>"_d
+
+" Delete line when in insert mode
+imap dd <Esc>ddi
+
+" Paste when insert mode
+imap <C-o> <Esc>Pi
+imap <C-p> <Esc>pi
+
+" Copy line when in insert mode
+imap yy <Esc>yyi
 
 " #######################################
 " #######################################
@@ -110,7 +123,7 @@ augroup END
 " Plugins 
 
 " NERDTree
-nnoremap <silent> <leader>n :NERDTreeToggle %:p:h<CR>
+nmap <silent> <leader>n :NERDTreeToggle %:p:h<CR>
 " Refresh directory listing (deleted and new files, etc)
 nmap <Leader>r :NERDTreeFocus<cr>R<c-w><c-p> 
 let g:NERDTreeWinSize   = 22
