@@ -116,8 +116,7 @@ nmap <Leader>r :NERDTreeFocus<cr>R<c-w><c-p>
 let g:NERDTreeWinSize   = 22
 let g:NERDTreeChDirMode = 2
 let g:NERDTreeIgnore = ['\.pyc$']
-let g:NERDTreeShowHidden = 1
-
+let g:NERDTreeShowHidden = 0
 
 
 " #######################################

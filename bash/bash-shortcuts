@@ -1,0 +1,32 @@
+================================================
+Use arguments from last command used:
+
+!^      first argument
+!$      last argument
+!*      all arguments
+!:2     second argument
+
+!:2-3   second to third arguments
+!:2-$   second to last arguments
+!:2*    second to last arguments
+!:2-    second to next to last arguments
+!:0     command
+
+
+Example:
+
+$ echo '/etc/'
+/etc/
+$ cd !^
+cd '/etc/'
+$ pwd
+/etc
+
+================================================
+Navigate through previous commands and arguments:
+
+Alt-0   for argument 0 (command name)
+Alt-1   for argument 1
+and so on...
+
+Then you press Alt-. to browse up history.
