@@ -96,9 +96,14 @@ nmap <silent> N Nzzzv
 " Exit insert mode with jj
 imap jj <Esc>
 
-" Better exiting
-nmap <C-z> :q!<CR>
+" Better exiting and saving
+nmap <C-z> :w!<CR>
 nmap <C-x> :w!<CR>:q<CR>
+nmap <C-c> :q!<CR>
+" Better exiting and saving when in insert mode
+imap <C-z> <Esc>:w!<CR>a
+imap <C-x> :w!<CR>:q<CR>
+imap <C-c> :q!<CR>
 
 
 " Delete line without copying text
