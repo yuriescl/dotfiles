@@ -4,21 +4,20 @@ let mapleader = "\\"
 " #######################################
 " #######################################
 " Plugin management (using vim-plug)
-if isdirectory(expand('~/.vim/autoload'))
-  call plug#begin()
+call plug#begin()
 
-    " NERDTree
-    Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
-    nmap <silent> <leader>n :NERDTreeToggle %:p:h<CR>
-    " Refresh directory listing (deleted and new files, etc)
-    nmap <Leader>r :NERDTreeFocus<cr>R<c-w><c-p> 
-    let g:NERDTreeWinSize   = 22
-    let g:NERDTreeChDirMode = 2
-    let g:NERDTreeIgnore = ['\.pyc$']
-    let g:NERDTreeShowHidden = 0
+" NERDTree
+Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
+nmap <silent> <leader>n :NERDTreeToggle %:p:h<CR>
+" Refresh directory listing (deleted and new files, etc)
+nmap <Leader>r :NERDTreeFocus<cr>R<c-w><c-p> 
+let g:NERDTreeWinSize   = 22
+let g:NERDTreeWinPos = "right"
+let g:NERDTreeChDirMode = 2
+let g:NERDTreeIgnore = ['\.pyc$']
+let g:NERDTreeShowHidden = 0
 
-  call plug#end()
-endif
+call plug#end()
 
 " #######################################
 " #######################################
@@ -153,3 +152,8 @@ if exists("+undofile")
   set undofile
 endif
 
+" #######################################
+" #######################################
+" Themes
+
+colorscheme jellybeans
