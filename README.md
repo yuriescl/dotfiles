@@ -10,7 +10,7 @@ curl -fLo ~/.vim/autoload/plug.vim --create-dirs     https://raw.githubuserconte
 Put .vimrc in your home dir
 
 ```bash
-cp .vimrc ~/.vimrc
+cp vim/.vimrc ~/.vimrc
 ```
 
 Open vim and enter these commands:
