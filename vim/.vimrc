@@ -119,18 +119,6 @@ imap <C-p> <Esc>pi
 " Copy line when in insert mode
 imap yy <Esc>yyi
 
-" #######################################
-" #######################################
-" Cursor Line
-"
-
-set cursorline
-hi CursorLine cterm=NONE ctermbg=240 ctermfg=NONE
-augroup BgHighlight
-  autocmd!
-  autocmd WinEnter * set cul
-  autocmd WinLeave * set nocul
-augroup END
     
 " #######################################
 " #######################################
@@ -162,3 +150,12 @@ endif
 " Themes
 
 colorscheme jellybeans
+
+
+" #######################################
+" #######################################
+" Cursor Line
+"
+
+set cursorline
+hi CursorLine cterm=NONE ctermbg=236 ctermfg=NONE
