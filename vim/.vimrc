@@ -102,8 +102,8 @@ nmap <C-x> :w!<CR>:q<CR>
 nmap <C-c> :q!<CR>
 " Better exiting and saving when in insert mode
 imap <C-z> <Esc>:w!<CR>a
-imap <C-x> :w!<CR>:q<CR>
-imap <C-c> :q!<CR>
+imap <C-x> <Esc>:w!<CR>:q<CR>
+imap <C-c> <Esc>:q!<CR>
 
 
 " Delete line without copying text
