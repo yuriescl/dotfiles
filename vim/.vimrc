@@ -8,9 +8,11 @@ call plug#begin()
 
 " NERDTree
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
-nmap <silent> <leader>N :NERDTreeToggle %:p:h<CR>
+map <silent> <leader>N :NERDTreeToggle %:p:h<CR>
 " Set focus in NERDTree when it's being displayed in screen
-nmap <silent> <Leader>n :NERDTreeFocus<cr>
+map <silent> <Leader>n :NERDTreeFocus<cr>
+" View the current buffer in NERDTree
+map <silent> <leader>e :NERDTreeFind<cr>
 let g:NERDTreeWinSize   = 22
 let g:NERDTreeWinPos = "right"
 let g:NERDTreeChDirMode = 2
