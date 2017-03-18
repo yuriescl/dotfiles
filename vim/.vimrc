@@ -8,9 +8,9 @@ call plug#begin()
 
 " NERDTree
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
-nmap <silent> <leader>n :NERDTreeToggle %:p:h<CR>
-" Refresh directory listing (deleted and new files, etc)
-nmap <Leader>r :NERDTreeFocus<cr>R<c-w><c-p> 
+nmap <silent> <leader>N :NERDTreeToggle %:p:h<CR>
+" Set focus in NERDTree when it's being displayed in screen
+nmap <silent> <Leader>n :NERDTreeFocus<cr>
 let g:NERDTreeWinSize   = 22
 let g:NERDTreeWinPos = "right"
 let g:NERDTreeChDirMode = 2
@@ -27,7 +27,7 @@ set autoindent " indent automatically
 set number  " show line numbers
 set encoding=utf-8 "sets how vim shall represent characters internally. Utf-8 is necessary for most flavors of Unicode
 set showmode          " Vim default on. Vi off. Displays mode in command line.
-set undofile          " Vim automatically saves undo history to an undo file
+"set undofile          " Vim automatically saves undo history to an undo file
 set modifiable        " make a buffer modifiable
 set undoreload=10000  " Save the whole buffer for undo when reloading it.
 set nolist            " Show invisible symbols as characters.
@@ -75,11 +75,10 @@ syntax enable " enable syntax highlighting
 " #######################################
 " Keyboard improvements
 
-" Create empty line without leaving normal mode
-
 " Ctrl-j/k inserts blank line below/above
 nmap <c-k> m`O<esc>``
 nmap <c-j> m`o<esc>``
+" Also in insert mode
 imap <c-j> <esc>m`o<esc>``a
 imap <c-k> <esc>m`O<esc>``a
 
@@ -97,29 +96,38 @@ nmap <silent> N Nzzzv
 imap jj <Esc>
 
 " Better exiting and saving
-nmap <C-z> :w!<CR>
-nmap <C-x> :w!<CR>:q<CR>
+nmap <C-z> :w!<CR>:q<CR>
+nmap <C-x> :w!<CR>
 nmap <C-c> :q!<CR>
 " Better exiting and saving when in insert mode
-imap <C-z> <Esc>:w!<CR>a
-imap <C-x> <Esc>:w!<CR>:q<CR>
+imap <C-z> <Esc>:w!<CR>:q<CR>
+imap <C-x> <Esc>:w!<CR>a
 imap <C-c> <Esc>:q!<CR>
-
 
 " Delete line without copying text
 nmap dd <S-v>"_d
 
-" Delete line when in insert mode
-imap dd <Esc>ddi
+"""""""""
+" Buffers, windows and tabs
+"
+" Close (delete) current buffer without changing the window |lyout
+nmap <silent> <C-d> :bp<CR>:bd!#<CR>
+" Create a new buffer in the current window
+nmap <silent> <C-e> :ene!<CR>
+" Switch to last buffer visited
+nmap <silent> <F4> :b#<CR>
+" Switch to previous buffer
+nmap <silent> <F5> :bprevious<CR>
+" Switch to next buffer
+nmap <silent> <F6> :bnext<CR>
 
-" Paste when insert mode
-imap <C-o> <Esc>Pi
-imap <C-p> <Esc>pi
+" Create a new tab
+nmap <silent> <C-t> :tabnew<CR>
+" Move to previous tab
+nmap <silent> <F7> :tabprevious<CR>
+" Move to next tab
+nmap <silent> <F8> :tabnext<CR>
 
-" Copy line when in insert mode
-imap yy <Esc>yyi
-
-    
 " #######################################
 " #######################################
 " Vim Files
@@ -153,9 +161,30 @@ colorscheme jellybeans
 
 
 " #######################################
+"
 " #######################################
 " Cursor Line
 "
 
 set cursorline
 hi CursorLine cterm=NONE ctermbg=236 ctermfg=NONE
+
+
+" #######################################
+"
+" #######################################
+" Startup commands
+
+" Start NERDTree
+autocmd VimEnter * NERDTree
+"  Go to previous (last accessed) window.
+autocmd VimEnter * wincmd p" 
+" Auto close NERDTree if it's the last remaining window
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+
+
+" Uncomment the following to have Vim jump to the last position when
+" " reopening a file
+if has("autocmd")
+    au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+endif
