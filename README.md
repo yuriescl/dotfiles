@@ -2,15 +2,13 @@
 
 ## Setup Vim
 
+Make sure you have `git` installed, vim plugins use it.
 ```bash
-cp -r vim/* ~/
+sudo apt-get install git
 ```
 
-Open vim and enter these commands:
-
-```
-:PluginInstall nerdtree
-:NERDTreeToogle
+```bash
+cp -r vim/.vim vim/.vimrc ~/
 ```
 
 Done.
