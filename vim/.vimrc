@@ -7,7 +7,7 @@ let mapleader = "\\"
 call plug#begin()
 
 " NERDTree
-Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
+Plug 'scrooloose/nerdtree'
 map <silent> <leader>N :NERDTreeToggle %:p:h<CR>
 " Set focus in NERDTree when it's being displayed in screen
 map <silent> <Leader>n :NERDTreeFocus<cr>
@@ -19,6 +19,12 @@ let g:NERDTreeChDirMode = 2
 let g:NERDTreeIgnore = ['\.pyc$']
 let g:NERDTreeShowHidden = 0
 
+" Vim Misc (required by vim-session)
+Plug 'xolox/vim-misc'
+" Vim Session (required because NERDTree is annoying for sessions)
+Plug 'xolox/vim-session'
+let g:session_autosave = 'no'
+
 call plug#end()
 
 " #######################################
@@ -29,7 +35,6 @@ set autoindent " indent automatically
 set number  " show line numbers
 set encoding=utf-8 "sets how vim shall represent characters internally. Utf-8 is necessary for most flavors of Unicode
 set showmode          " Vim default on. Vi off. Displays mode in command line.
-"set undofile          " Vim automatically saves undo history to an undo file
 set modifiable        " make a buffer modifiable
 set undoreload=10000  " Save the whole buffer for undo when reloading it.
 set nolist            " Show invisible symbols as characters.
@@ -99,10 +104,12 @@ nmap <silent> N Nzzzv
 imap jj <Esc>
 
 " Better exiting and saving
+nmap <C-a> :qa!<CR>
 nmap <C-z> :w!<CR>:q<CR>
 nmap <C-x> :w!<CR>
 nmap <C-c> :q!<CR>
 " Better exiting and saving when in insert mode
+imap <C-a> <Esc>:qa!<CR>
 imap <C-z> <Esc>:w!<CR>:q<CR>
 imap <C-x> <Esc>:w!<CR>a
 imap <C-c> <Esc>:q!<CR>
@@ -131,6 +138,29 @@ nmap <silent> <F7> :tabprevious<CR>
 " Move to next tab
 nmap <silent> <F8> :tabnext<CR>
 
+" Decrease window size
+nmap <silent> <C-F9> <C-w><<CR>
+" Increase window size
+nmap <silent> <C-F10> <C-w>><CR>
+
+
+
+"""""""""
+" Folding
+"
+inoremap <F10> <C-O>za
+nnoremap <F10> za
+onoremap <F10> <C-C>za
+vnoremap <F10> zf
+
+""""""""
+" Open saved session
+"
+
+nmap <C-F11> :SaveSession! vim_session<CR>
+nmap <C-F12> :OpenSession! vim_session<CR>
+
+
 " #######################################
 " #######################################
 " Vim Files
@@ -148,13 +178,13 @@ if isdirectory(expand('/.vim_tmp/swap')) == 0
 endif
 set directory=~/.vim_tmp/swap//
 
-if exists("+undofile")
-  if isdirectory(expand('/.vim_tmp/undo')) == 0
-    :silent !mkdir -p ~/.vim_tmp/undo > /dev/null 2>&1
-  endif
-  set undodir=~/.vim_tmp/undo//
-  set undofile
-endif
+" if exists("+undofile")
+"  if isdirectory(expand('/.vim_tmp/undo')) == 0
+"    :silent !mkdir -p ~/.vim_tmp/undo > /dev/null 2>&1
+"  endif
+"  set undodir=~/.vim_tmp/undo//
+"  set undofile
+"endif
 
 " #######################################
 " #######################################
@@ -176,16 +206,16 @@ hi CursorLine cterm=NONE ctermbg=236 ctermfg=NONE
 " #######################################
 "
 " #######################################
-" Startup commands
+" Auto commands (THE ORDER OF THE COMMANDS MATTER, A LOT)
 
-" Start NERDTree
-autocmd VimEnter * NERDTree
-"  Go to previous (last accessed) window.
-autocmd VimEnter * wincmd p" 
 " Auto close NERDTree if it's the last remaining window
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
+" Start NERDTree
+autocmd VimEnter * NERDTree
 
+"  Go to previous (last accessed) window.
+autocmd VimEnter * wincmd p" 
 " Uncomment the following to have Vim jump to the last position when
 " " reopening a file
 if has("autocmd")
