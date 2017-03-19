@@ -113,9 +113,9 @@ nmap dd <S-v>"_d
 " Buffers, windows and tabs
 "
 " Close (delete) current buffer without changing the window |lyout
-nmap <silent> <C-d> :bp<CR>:bd!#<CR>
+nmap <silent> <F2> :bp<CR>:bd!#<CR>
 " Create a new buffer in the current window
-nmap <silent> <C-e> :ene!<CR>
+nmap <silent> <F3> :ene!<CR>
 " Switch to last buffer visited
 nmap <silent> <F4> :b#<CR>
 " Switch to previous buffer
