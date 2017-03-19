@@ -13,6 +13,6 @@ cp -r vim/.vim vim/.vimrc ~/
 ```
 Otherwise just take a look at `vim/.vimrc` and read the start of the `vim/vim-shortcuts` file, they have what you need to know.
 
-Screenshots of my vim:
+Screenshot of my vim:
 
-![vim screenshot](https://raw.githubusercontent.com/yuriescl/config-files/master/images/screenshot-vim.jpg);
+![vim screenshot](https://raw.githubusercontent.com/yuriescl/config-files/master/images/screenshot-vim.jpg)
