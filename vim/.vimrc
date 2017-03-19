@@ -88,6 +88,7 @@ imap <c-k> <esc>m`O<esc>``a
 noremap <C-h> <C-w>h
 noremap <C-l> <C-w>l
 
+" Toggle line number display
 nmap <C-n> :set invnumber<CR>
 
 " Keep search matches in middle of window

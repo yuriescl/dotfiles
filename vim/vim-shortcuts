@@ -1,3 +1,36 @@
+My custom (.vimrc) shortcuts
+
+C-k     insert line above (works in insert mode)
+C-j     insert line below (works in insert mode)
+
+C-h     move to left window split
+C-l     move to right window split
+
+C-n     toggle line number display
+
+jj      exit insert mode
+
+C-z     saves (:w!) and exits (:q) (works in insert mode)
+C-x     saves (:w!)
+C-c     exits without prompt (:q!)
+
+dd      delete line without copying it
+
+F2      close (delete) current buffer without affecting window layout
+F3      open a new buffer in current split
+F4      switch to last visited buffer
+F5      previous buffer
+F6      next buffer
+
+C-t     open a new tab
+F7      previous tab
+F8      next tab
+
+
+=============================================
+VIM SHORTCUTS (DEFAULT)
+
+
 C-a == Ctrl-a
 M-a == Alt-a
 
