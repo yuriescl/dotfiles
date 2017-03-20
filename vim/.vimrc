@@ -25,6 +25,9 @@ Plug 'xolox/vim-misc'
 Plug 'xolox/vim-session'
 let g:session_autosave = 'no'
 
+" HTML close tags
+Plug 'alvan/vim-closetag'
+
 call plug#end()
 
 " #######################################
@@ -105,14 +108,14 @@ imap jj <Esc>
 
 " Better exiting and saving
 nmap <C-a> :qa!<CR>
-nmap <C-z> :w!<CR>:q<CR>
+nmap <C-z> :q!<CR>
 nmap <C-x> :w!<CR>
-nmap <C-c> :q!<CR>
+nmap <C-c> :w!<CR>:q<CR>
 " Better exiting and saving when in insert mode
 imap <C-a> <Esc>:qa!<CR>
-imap <C-z> <Esc>:w!<CR>:q<CR>
+imap <C-z> <Esc>:q!<CR>
 imap <C-x> <Esc>:w!<CR>a
-imap <C-c> <Esc>:q!<CR>
+imap <C-c> <Esc>:w!<CR>:q<CR>
 
 " Delete line without copying text
 nmap dd <S-v>"_d
@@ -207,6 +210,11 @@ hi CursorLine cterm=NONE ctermbg=236 ctermfg=NONE
 "
 " #######################################
 " Auto commands (THE ORDER OF THE COMMANDS MATTER, A LOT)
+"
+
+if has("statusline")
+  set statusline=%<%f\ %h%m%r%=%{\"[\".(&fenc==\"\"?&enc:&fenc).((exists(\"+bomb\")\ &&\ &bomb)?\",B\":\"\").\"]\ \"}%k\ %-14.(%l,%c%V%)\ %P
+endif
 
 " Auto close NERDTree if it's the last remaining window
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
