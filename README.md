@@ -11,7 +11,7 @@ If you have no idea what is `vim` or never installed anything or configured anyt
 ```bash
 cp -r vim/.vim vim/.vimrc ~/
 ```
-Otherwise just take a look at `vim/.vimrc` and read the start of the `vim/vim-shortcuts` file, they have what you need to know.
+Take a look at `vim/vim-shortcuts` and `vim/.vimrc`. The relavant stuff is in there.
 
 Screenshot of my vim:
 

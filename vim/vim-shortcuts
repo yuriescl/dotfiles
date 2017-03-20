@@ -1,5 +1,14 @@
 My custom (.vimrc) shortcuts
 
+NERDTree:
+  \N    toggle NERDTree
+  \n    focus NERDTree
+  \e    view current buffer in NERDTree
+
+Vim closetag:
+  >       (insert mode) auto close tag
+  > twice (insert mode) indent tag below
+
 C-k     insert line above (works in insert mode)
 C-j     insert line below (works in insert mode)
 
@@ -10,9 +19,10 @@ C-n     toggle line number display
 
 jj      exit insert mode
 
-C-z     saves (:w!) and exits (:q) (works in insert mode)
-C-x     saves (:w!)
-C-c     exits without prompt (:q!)
+C-a     exit everything without prompt (works in insert mode)
+C-z     exits without prompt (:q!) (works in insert mode)
+C-x     saves (:w!) (works in insert mode)
+C-c     saves (:w!) and exits (:q) (works in insert mode)
 
 dd      delete line without copying it
 
@@ -25,6 +35,14 @@ F6      next buffer
 C-t     open a new tab
 F7      previous tab
 F8      next tab
+
+C-F9    decresce current window size
+C-F10   decresce current window size
+
+F10     toggle fold
+
+C-F11   save current session
+C-F12   load saved session
 
 
 =============================================
