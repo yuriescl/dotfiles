@@ -146,6 +146,8 @@ nmap <silent> <C-F9> <C-w><<CR>
 " Increase window size
 nmap <silent> <C-F10> <C-w>><CR>
 
+" List buffers and wait for buffer name (fast way of switching to a specific buffer)
+nmap <C-m> :ls<cr>:b 
 
 
 """""""""

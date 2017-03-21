@@ -6,8 +6,8 @@ NERDTree:
   \e    view current buffer in NERDTree
 
 Vim closetag:
-  >       (insert mode) auto close tag
-  > twice (insert mode) indent tag below
+  >     (insert mode) auto close tag
+  >>    (insert mode) indent tag below
 
 C-k     insert line above (works in insert mode)
 C-j     insert line below (works in insert mode)
