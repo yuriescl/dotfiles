@@ -1,8 +1,8 @@
 # My config files
 
-## Setup Vim
+## 1)Setup Vim
 
-### To copy my vim config AND the plugins:
+### 1.1) To copy my vim config AND the plugins:
 ```bash
 apt-get install git
 cp -r vim-withplugins/.vim vim-withplugins/.vimrc ~/
@@ -13,7 +13,7 @@ Screenshot of my vim with plugins:
 
 ![vim screenshot](https://raw.githubusercontent.com/yuriescl/config-files/master/images/screenshot-vim-withplugins.jpg)
 
-### To only copy my vimrc (no plugins required):
+### 1.2) To only copy my vimrc (no plugins required):
 ```bash
 cp vim-noplugins/.vimrc ~/
 ```
