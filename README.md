@@ -1,6 +1,6 @@
 # My config files
 
-## 1)Setup Vim
+## 1) Setup Vim
 
 ### 1.1) To copy my vim config AND the plugins:
 ```bash
