@@ -3,36 +3,8 @@ let mapleader = "\\"
 
 " #######################################
 " #######################################
-" Plugin management (using vim-plug)
-call plug#begin()
-
-" NERDTree
-Plug 'scrooloose/nerdtree'
-map <silent> <leader>N :NERDTreeToggle %:p:h<CR>
-" Set focus in NERDTree when it's being displayed in screen
-map <silent> <Leader>n :NERDTreeFocus<cr>
-" View the current buffer in NERDTree
-map <silent> <leader>e :NERDTreeFind<cr>
-let g:NERDTreeWinSize   = 22
-let g:NERDTreeWinPos = "right"
-let g:NERDTreeChDirMode = 2
-let g:NERDTreeIgnore = ['\.pyc$']
-let g:NERDTreeShowHidden = 0
-
-" Vim Misc (required by vim-session)
-Plug 'xolox/vim-misc'
-" Vim Session (required because NERDTree is annoying for sessions)
-Plug 'xolox/vim-session'
-let g:session_autosave = 'no'
-
-" HTML close tags
-Plug 'alvan/vim-closetag'
-
-call plug#end()
-
-" #######################################
-" #######################################
 " General settings
+set t_Co=256
 set nocompatible
 set autoindent " indent automatically
 set number  " show line numbers
@@ -158,14 +130,6 @@ nnoremap <F10> za
 onoremap <F10> <C-C>za
 vnoremap <F10> zf
 
-""""""""
-" Open saved session
-"
-
-nmap <C-F11> :SaveSession! vim_session<CR>
-nmap <C-F12> :OpenSession! vim_session<CR>
-
-
 " #######################################
 " #######################################
 " Vim Files
@@ -195,7 +159,7 @@ set directory=~/.vim_tmp/swap//
 " #######################################
 " Themes
 
-colorscheme jellybeans
+colorscheme industry
 
 
 " #######################################
@@ -218,14 +182,6 @@ if has("statusline")
   set statusline=%<%f\ %h%m%r%=%{\"[\".(&fenc==\"\"?&enc:&fenc).((exists(\"+bomb\")\ &&\ &bomb)?\",B\":\"\").\"]\ \"}%k\ %-14.(%l,%c%V%)\ %P
 endif
 
-" Auto close NERDTree if it's the last remaining window
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-
-" Start NERDTree
-autocmd VimEnter * NERDTree
-
-"  Go to previous (last accessed) window.
-autocmd VimEnter * wincmd p" 
 " Uncomment the following to have Vim jump to the last position when
 " " reopening a file
 if has("autocmd")

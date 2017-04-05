@@ -2,17 +2,23 @@
 
 ## Setup Vim
 
-Make sure you have `git` installed, vim plugins use it:
+###To copy my vim config AND the plugins:
 ```bash
-sudo apt-get install git
+apt-get install git
+cp -r vim-withplugins/.vim vim-withplugins/.vimrc ~/
 ```
+List of shortcuts in `vim-withplugins/vim-shortcuts`.
 
-If you have no idea what is `vim` or never installed anything or configured anything for it, you can install all my configs and plugins by copying all the files:
+Screenshot of my vim with plugins:
+
+![vim screenshot](https://raw.githubusercontent.com/yuriescl/config-files/master/images/screenshot-vim-withplugins.jpg)
+
+###To only copy my vimrc (no plugins required):
 ```bash
-cp -r vim/.vim vim/.vimrc ~/
+cp vim-noplugins/.vimrc ~/
 ```
-Take a look at `vim/vim-shortcuts` and `vim/.vimrc`. The relevant stuff is in there.
+List of shortcuts in `vim-noplugins/vim-shortcuts`.
 
-Screenshot of my vim:
+Screenshot of my vim without plugins:
 
-![vim screenshot](https://raw.githubusercontent.com/yuriescl/config-files/master/images/screenshot-vim.jpg)
+![vim screenshot](https://raw.githubusercontent.com/yuriescl/config-files/master/images/screenshot-vim-noplugins.jpg)
