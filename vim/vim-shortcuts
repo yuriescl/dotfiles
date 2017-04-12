@@ -1,48 +1,37 @@
-My custom (.vimrc) shortcuts
+MY SHORTCUTS (defined in .vimrc)
 
-NERDTree:
-  \N    toggle NERDTree
-  \n    focus NERDTree
-  \e    view current buffer in NERDTree
+  Normal mode:
+    C-k     insert line above
+    C-j     insert line below
 
-Vim closetag:
-  >     (insert mode) auto close tag
-  >>    (insert mode) indent tag below
+    C-h     move to left window split
+    C-l     move to right window split
 
-C-k     insert line above (works in insert mode)
-C-j     insert line below (works in insert mode)
+    C-n     toggle line number display
 
-C-h     move to left window split
-C-l     move to right window split
+    C-x     saves (:w)
 
-C-n     toggle line number display
+    dd      delete line without copying it
 
-jj      exit insert mode
+    F2      delete current buffer (:bd) 
+    F3      open a new buffer in current split
+    F4      switch to last visited buffer
+    F5      previous buffer
+    F6      next buffer
 
-C-a     exit everything without prompt (works in insert mode)
-C-z     exits without prompt (:q!) (works in insert mode)
-C-x     saves (:w!) (works in insert mode)
-C-c     saves (:w!) and exits (:q) (works in insert mode)
+    C-t     open a new tab
+    F7      previous tab
+    F8      next tab
 
-dd      delete line without copying it
+    F10     toggle fold
 
-F2      close (delete) current buffer without affecting window layout
-F3      open a new buffer in current split
-F4      switch to last visited buffer
-F5      previous buffer
-F6      next buffer
+    C-m     list buffers and wait for buffer name
 
-C-t     open a new tab
-F7      previous tab
-F8      next tab
+  Insert mode:
 
-C-F9    decresce current window size
-C-F10   decresce current window size
+    jj      exit insert mode
 
-F10     toggle fold
-
-C-F11   save current session
-C-F12   load saved session
+    C-x     saves (:w)
 
 
 =============================================

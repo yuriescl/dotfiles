@@ -46,9 +46,6 @@ set noerrorbells      " Default off. Turn off audible bell
 set visualbell        " Default off.  Turn on visual bell
 set number            " Row numbers
 
-set autochdir
-
-
 syntax enable " enable syntax highlighting
 
 
@@ -78,16 +75,10 @@ nmap <silent> N Nzzzv
 " Exit insert mode with jj
 imap jj <Esc>
 
-" Better exiting and saving
-nmap <C-a> :qa!<CR>
-nmap <C-z> :q!<CR>
-nmap <C-x> :w!<CR>
-nmap <C-c> :w!<CR>:q<CR>
+" Better saving
+nmap <C-x> :w<CR>
 " Better exiting and saving when in insert mode
-imap <C-a> <Esc>:qa!<CR>
-imap <C-z> <Esc>:q!<CR>
-imap <C-x> <Esc>:w!<CR>a
-imap <C-c> <Esc>:w!<CR>:q<CR>
+imap <C-x> <Esc>:w<CR>a
 
 " Delete line without copying text
 nmap dd <S-v>"_d
@@ -96,7 +87,7 @@ nmap dd <S-v>"_d
 " Buffers, windows and tabs
 "
 " Close (delete) current buffer without changing the window |lyout
-nmap <silent> <F2> :bp<CR>:bd!#<CR>
+nmap <silent> <F2> :bd<CR>
 " Create a new buffer in the current window
 nmap <silent> <F3> :ene!<CR>
 " Switch to last buffer visited
@@ -112,11 +103,6 @@ nmap <silent> <C-t> :tabnew<CR>
 nmap <silent> <F7> :tabprevious<CR>
 " Move to next tab
 nmap <silent> <F8> :tabnext<CR>
-
-" Decrease window size
-nmap <silent> <C-F9> <C-w><<CR>
-" Increase window size
-nmap <silent> <C-F10> <C-w>><CR>
 
 " List buffers and wait for buffer name (fast way of switching to a specific buffer)
 nmap <C-m> :ls<cr>:b 
@@ -159,7 +145,7 @@ set directory=~/.vim_tmp/swap//
 " #######################################
 " Themes
 
-colorscheme industry
+colorscheme jellybeans
 
 
 " #######################################
@@ -179,7 +165,7 @@ hi CursorLine cterm=NONE ctermbg=236 ctermfg=NONE
 "
 
 if has("statusline")
-  set statusline=%<%f\ %h%m%r%=%{\"[\".(&fenc==\"\"?&enc:&fenc).((exists(\"+bomb\")\ &&\ &bomb)?\",B\":\"\").\"]\ \"}%k\ %-14.(%l,%c%V%)\ %P
+  set statusline=%<%F\ %h%m%r%=%{\"[\".(&fenc==\"\"?&enc:&fenc).((exists(\"+bomb\")\ &&\ &bomb)?\",B\":\"\").\"]\ \"}%k\ %-14.(%l,%c%V%)\ %P
 endif
 
 " Uncomment the following to have Vim jump to the last position when
