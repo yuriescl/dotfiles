@@ -10,4 +10,4 @@ List of vim shortcuts in `vim-noplugins/vim-shortcuts`.
 
 Screenshot of my vim:
 
-![vim screenshot](https://raw.githubusercontent.com/yuriescl/config-files/master/images/screenshot-vim-noplugins.jpg)
+![vim screenshot](https://raw.githubusercontent.com/yuriescl/config-files/master/images/vim.jpg)
