@@ -4,7 +4,7 @@
 
 ### 1.1) To copy my vim config
 ```bash
-cp vim-noplugins/.vimrc ~/
+cp vim/vimrc ~/.vimrc && cp -r vim/vim ~/.vim
 ```
 List of vim shortcuts in `vim-noplugins/vim-shortcuts`.
 
