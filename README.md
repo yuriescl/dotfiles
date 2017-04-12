@@ -6,7 +6,7 @@
 ```bash
 cp vim/vimrc ~/.vimrc && cp -r vim/vim ~/.vim
 ```
-List of vim shortcuts in `vim-noplugins/vim-shortcuts`.
+List of vim shortcuts in `vim/vim-shortcuts`.
 
 Screenshot of my vim:
 
