@@ -17,5 +17,6 @@
         "editor.quickSuggestions": false
     },
     "workbench.iconTheme": "vscode-icons",
-    "workbench.editor.enablePreview": false
+    "workbench.editor.enablePreview": false,
+    "workbench.iconTheme": "vscode-icons"
 }
