@@ -1,6 +1,7 @@
 // Place your settings in this file to overwrite the default settings
 {
     "editor.fontFamily": "'Dejavu Sans Mono', 'Droid Sans Mono', 'Courier New', monospace",
+    "editor.fontSize": 15,
 
     // Controls the rendering size of tabs in characters.
     // If set to auto, the value will be guessed based on the opened file.
@@ -8,5 +9,13 @@
 
     // Controls if the editor will insert spaces for tabs.
     // If set to auto, the value will be guessed based on the opened file.
-    "editor.insertSpaces": true
+    "editor.insertSpaces": true,
+    "[cpp]": {
+        "editor.quickSuggestions": false
+    },
+    "[c]": {
+        "editor.quickSuggestions": false
+    },
+    "workbench.iconTheme": "vscode-icons",
+    "workbench.editor.enablePreview": false
 }
