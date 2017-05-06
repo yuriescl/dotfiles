@@ -17,6 +17,6 @@
         "editor.quickSuggestions": false
     },
     "workbench.iconTheme": "vscode-icons",
-    "workbench.editor.enablePreview": false,
-    "workbench.iconTheme": "vscode-icons"
+    "vsicons.dontShowNewVersionMessage": true,
+    "editor.autoClosingBrackets" : false
 }
