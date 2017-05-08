@@ -7,10 +7,11 @@
 	],
 	"font_size": 11,
 	"highlight_line": true,
+	"ignored_packages":
+	[
+		"Vintage"
+	],
 	"line_numbers": true,
 	"tab_size": 2,
-	"translate_tabs_to_spaces": true,
-
-	"keys": ["ctrl+tab"], "command": "next_view" ,
-	"keys": ["ctrl+shift+tab"], "command": "prev_view",
+	"translate_tabs_to_spaces": true
 }
