@@ -1,0 +1,26 @@
+! ######################################
+! URxvt
+
+URxvt.font: xft:Inconsolata:medium:size=12
+URxvt.boldFont: xft:Inconsolata:bold:size=12
+URxvt.italicFont: xft:Inconsolata:italic:size=12
+URxvt.boldItalicFont: xft:Inconsolata:bold:italic:size=12
+URXvt.foreground: #000000
+URxvt.background: #f2f2f2
+URxvt.scrollBar: false
+URxvt.title: urxvt
+URxvt.termName: urxvt
+URxvt.underlineColor: red
+
+URxvt.color0: #000000
+URxvt.color1: #B21818
+URxvt.color2: #18B218
+URxvt.color3: #B26818
+URxvt.color4: #1818B2
+URxvt.color5: #B218B2
+URxvt.color6: #18B2B2
+URxvt.color7: #B2B2B2
+
+URxvt.clipboard.autocopy: true
+
+! ################################
