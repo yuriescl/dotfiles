@@ -338,13 +338,3 @@ Plugins may depend on certain features. Therefore:
     It may matter which OS you're on, especially if the plugin calls in external commands.
 
 For most plugins, though, it may not matter.
-
-
------------
-BufExplorer
-http://www.vim.org/scripts/script.php?script_id=42
-
-> Error: Not an editor command: ^M
-> Solution:
-    :e bufexplorer.vim
-    :w ++ff=unix

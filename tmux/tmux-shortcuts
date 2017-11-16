@@ -1,0 +1,17 @@
+# My custom shortcuts
+
+C-a              <prefix>
+C-a C-a          send prefix (to inner tmux session)
+<prefix> |       split window horizontally
+<prefix> -       split window vertically
+<prefix> s       choose to switch to session/window from a list
+
+M-Left           select window on the left
+M-Right          select window on the right
+
+# Default shortcuts
+
+<prefix> ?                         list all Key Bindings
+<prefix> :movew -r                 renumber all windows
+<prefix> :switch -t [session_name] switch to a session
+<prefix> :new<CR>  [session_name]  create new session
