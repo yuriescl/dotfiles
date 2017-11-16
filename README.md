@@ -41,3 +41,7 @@ cp tmux/tmux-full.conf ~/.tmux.conf
 ```
 
 List of tmux shortcuts in `tmux/tmux-shortcuts`
+
+Screenshot:
+
+![vim screenshot](https://raw.githubusercontent.com/yuriescl/config-files/master/images/tmux.jpg)
