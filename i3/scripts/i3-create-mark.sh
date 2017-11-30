@@ -1,4 +1,9 @@
 #!/bin/bash
-# Set mark for current window
+# if $1 is set, set mark for current window
+# else unmark current window
 
-i3-input -F 'mark "%s"' -P 'Set mark: '
+if [ -n "$1"]; then
+	i3-msg mark "$1"
+else
+	# unmark current window how?
+fi
