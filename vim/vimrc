@@ -3,5 +3,6 @@ set mouse=
 set hidden
 set autoindent
 set showmode
+set showcmd
 
 colorscheme desert

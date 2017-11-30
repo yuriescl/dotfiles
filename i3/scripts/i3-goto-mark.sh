@@ -1,6 +1,4 @@
 #!/bin/bash
+# Goto window containing mark (case sensitive)
 
-answer=$(zenity --title="i3 goto mark" --text "Goto Mark" --entry)
-if [ -n "$answer" ]; then
-	i3-msg [con_mark="^.*$answer.*$"] focus
-fi
+i3-input -F '[con_mark="^.*%s.*$"] focus' -P 'Goto mark: '

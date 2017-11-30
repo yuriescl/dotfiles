@@ -45,6 +45,8 @@ set splitbelow        " New buffers open below current buffer
 set noerrorbells      " Default off. Turn off audible bell
 set visualbell        " Default off.  Turn on visual bell
 set number            " Row numbers
+set mouse=	      " Disable mouse
+set showcmd	      " Show commands being typed (in normal mode)
 
 syntax enable " enable syntax highlighting
 
