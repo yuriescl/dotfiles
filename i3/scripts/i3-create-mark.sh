@@ -1,9 +1,9 @@
 #!/bin/bash
-# if $1 is set, set mark for current window
+# if $1 is set, mark current window
 # else unmark current window
 
-if [ -n "$1"]; then
+if [ -n "$1" ]; then
 	i3-msg mark "$1"
 else
-	# unmark current window how?
+	i3-msg "[con_id=$(/opt/scripts/i3get)]" unmark
 fi

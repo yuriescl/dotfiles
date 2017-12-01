@@ -1,4 +1,4 @@
 #!/bin/bash
 # Goto window containing title (case insensitive)
 
-i3-input -F '[title="(?i)^.*%s.*$"] focus' -P "Goto to title: "
+i3-msg [title="(?i)^.*$1.*$"] focus
