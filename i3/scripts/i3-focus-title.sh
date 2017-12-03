@@ -20,7 +20,6 @@ Last Updated: 03 Dec 2017
 from difflib import SequenceMatcher as SM
 import i3
 import sys
-import re
 
 
 def find_title_format(matches, dic, title):
