@@ -62,7 +62,7 @@ def improved_matches(matches, title):
 if __name__ == "__main__":
     if len(sys.argv) > 1:
         title = sys.argv[1]
-        if title is not None:
+        if title is not None and title.strip() != "":
             title = title.lower()
             tree = i3.get_tree()
             matches = find_title_format(dict(), tree, title)
