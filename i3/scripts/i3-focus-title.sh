@@ -6,6 +6,17 @@ Focus i3 container by title or title_format (matches using similarity score)
 Example:
     i3-focus-title.sh title
 
+If you want to execute "focus child" after focusing the container by the title,
+ you can choose how many times "focus child" will be executed by passing
+ a number as the second parameter to the script. This is useful if you want to
+ find a container by the title, but that container is actually a parent container
+ and you want to instead focus a child of that container.
+ This won't affect i3 behavior if the container does not have child containers,
+ so you can always use the number after the title (I use the value '5' in my i3
+ config to be certain that I'll never focus a parent container by accident):
+
+    i3-focus-title.sh "my title" 5
+
 Example in i3 config:
     bindsym $mod+x exec i3-input -F 'exec i3-focus-title.sh "%s"' -P 'Focus title: '
 
@@ -27,17 +38,17 @@ def find_title_format(matches, dic, title):
         for node in dic["nodes"]:
             matches = find_title_format(matches, node, title)
     if "title_format" in dic: # check title_format if exists
-        dic_title = dic["title_format"].lower()
+        dic_title = dic["title_format"]
         matches[dic["id"]] = {
-                                "title": dic_title,
+                                "title": dic_title.lower(),
                                 "ratio": SM(None, dic_title, title).ratio()  # similarity score (0 - 1) 
                              }
     elif "window_properties" in dic: # check properties title instead
         window_properties = dic["window_properties"]
         if "title" in window_properties: 
-            wp_title = window_properties["title"].lower()
+            wp_title = window_properties["title"]
             matches[dic["id"]] = {
-                                    "title": wp_title,
+                                    "title": wp_title.lower(),
                                     "ratio": SM(None, wp_title, title).ratio()  # similarity score (0 - 1)
                                  }
 
@@ -45,6 +56,7 @@ def find_title_format(matches, dic, title):
 
 
 def improved_matches(matches, title):
+    title = title.lower()
     title_array = title.split(" ")
     new_matches = {}
     for con_id, values in matches.items():
@@ -58,12 +70,15 @@ def improved_matches(matches, title):
 
     return new_matches
 
+def focus_child(child_level):
+    for i in range(0, child_level):
+        i3.command('focus child')
+
 
 if __name__ == "__main__":
     if len(sys.argv) > 1:
         title = sys.argv[1]
         if title is not None and title.strip() != "":
-            title = title.lower()
             tree = i3.get_tree()
             matches = find_title_format(dict(), tree, title)
             matches = improved_matches(matches, title)
@@ -75,3 +90,6 @@ if __name__ == "__main__":
                         best_con_id = con_id
                         highest_match_ratio = values["ratio"]
                 i3.focus(con_id=best_con_id)
+                if len(sys.argv) > 2:
+                    child_level = int(sys.argv[2])
+                    focus_child(child_level)
