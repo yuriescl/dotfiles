@@ -1,41 +1,64 @@
 # My config files
 
-## 1) Vim
+*Note: do not just copy/paste commands without understanding them first, they can potentially override your current configs.*
 
-I prefer to not use Vim plugins because Vim is not my text editor for most programming tasks (for that I use Sublime Text with a few plugins).
-I use Vim mainly for fast terminal file viewing or remote server programming (along with Tmux).
+## Bell (beep)
 
+See https://wiki.archlinux.org/index.php/PC_speaker#Disable_PC_Speaker
 
-### 1.1) Simple config (does not change keybindings, use this if you share the same vim config with other people who are used to the defaults)
+To disable all bell sounds:
+```bash
+echo "blacklist pcspkr" > /etc/modprobe.d/nobeep.conf
+echo "setterm -blength 0" > /etc/profile.d/disable-beep.sh
+echo "xset -b" >> /etc/xprofile
+echo "set bell-style none" >> ~/.inputrc
+```
 
+## i3
+
+####  i3 config
+*There are hardcoded paths in i3 config.*
+```bash
+cp i3/i3.conf ~/.config/i3/config
+```
+
+####  i3 status
+```bash
+cp i3/i3-status.conf ~/.config/i3status/config
+```
+
+## Vim
+
+###  Simple config
+*With default keybindings.*
 ```bash
 cp vim/vimrc ~/.vimrc
 ```
 
-### 1.2) Full config, with a lot of customization and keybindings (careful with overriding your current config files)
-(config based on https://github.com/phil303/dotfiles/blob/master/vimrc)
-
+###  Full config
+*Changes keybindings.*
+Config based on https://github.com/phil303/dotfiles/blob/master/vimrc
 ```bash
 cp vim/vimrc-full ~/.vimrc && cp -r vim/vim ~/.vim
 ```
 List of vim shortcuts in `vim/vim-shortcuts`.
 
-Screenshot:
+Screenshot using full config:
 
 ![vim screenshot](https://raw.githubusercontent.com/yuriescl/config-files/master/images/vim.jpg)
 
-## 2) Tmux
+## Tmux
 
-(config based on http://www.hamvocke.com/blog/a-guide-to-customizing-your-tmux-conf/)
+Config based on http://www.hamvocke.com/blog/a-guide-to-customizing-your-tmux-conf/
 
-### 2.1) Simple config (does not change keybindings)
-
+###  Simple config
+*With default keybindings.*
 ```bash
 cp tmux/tmux.conf ~/.tmux.conf
 ```
 
-### 2.2) Full config (changes a few default keybindings)
-
+###  Full config
+*Changes keybindings.*
 ```bash
 cp tmux/tmux-full.conf ~/.tmux.conf
 ```
@@ -44,4 +67,24 @@ List of tmux shortcuts in `tmux/tmux-shortcuts`
 
 Screenshot:
 
-![vim screenshot](https://raw.githubusercontent.com/yuriescl/config-files/master/images/tmux.jpg)
+![tmux screenshot](https://raw.githubusercontent.com/yuriescl/config-files/master/images/tmux.jpg)
+
+## Fonts
+
+In Debian 9, font rendering is not that great by default. It can be customized using `fontconfig` and `xrdb`.<br>
+*Also check the font configuration settings in your Desktop Environment.*
+
+### fontconfig
+
+```bash
+cp fonts/fonts.conf ~/.config/fontconfig/fonts.conf
+```
+
+### xrdb
+
+```bash
+# check your current settings
+xrdb -query
+
+cp fonts/Xresources-fonts ~/.Xresources
+```
