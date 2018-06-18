@@ -1,8 +1,21 @@
+filetype plugin indent on
+" show existing tab with 4 spaces width
+set tabstop=4
+" when indenting with '>', use 4 spaces width
+set shiftwidth=4
+" On pressing tab, insert 4 spaces
+set expandtab
+" show line numbers
 set number
+" disable mouse integration
 set mouse=
+" do not force buffer saving before switching
 set hidden
+" auto indent
 set autoindent
+" show current mode
 set showmode
+" show command (normal mode)
 set showcmd
 
 colorscheme desert
