@@ -21,6 +21,11 @@ call plug#begin('~/.vim/plugged')
   nmap ; :Buffers<CR>
   " show file in NERDTree
   nmap <silent> <leader>e :NERDTreeFind<CR>
+
+  Plug 'xolox/vim-misc'
+  Plug 'xolox/vim-session'
+  let g:session_autosave = 'yes'
+  let g:session_autoload = 'yes'
 call plug#end()
 
 " #######################################
@@ -89,13 +94,6 @@ nnoremap <S-k> <NOP>
 "
 nmap <c-k> m`O<esc>``
 nmap <c-j> m`o<esc>``
-" Also in insert mode
-imap <c-j> <esc>m`o<esc>``a
-imap <c-k> <esc>m`O<esc>``a
-
-" Use ctrl+hjkl to move between window splits
-noremap <C-h> <C-w>h
-noremap <C-l> <C-w>l
 
 " Keep search matches in middle of window
 nmap <silent> n nzzzv
@@ -103,7 +101,6 @@ nmap <silent> N Nzzzv
 
 " Exit insert mode with kj
 imap kj <Esc>
-
 
 " Delete line without copying text
 nmap dd <S-v>"_d
@@ -123,13 +120,13 @@ nmap <silent> <F5> :bprevious<CR>
 nmap <silent> <F6> :bnext<CR>
 
 " Create a new tab
-"nmap <silent> <C-t> :tabnew<CR>
+nmap <silent> <C-t> :tabnew<CR>
 " Move to previous tab
-nmap <silent> <F7> :tabprevious<CR>
+nmap <silent> <C-h> :tabprevious<CR>
 " Move to next tab
-nmap <silent> <F8> :tabnext<CR>
+nmap <silent> <C-l> :tabnext<CR>
 " Close current tab
-nmap <silent> <F9> :tabclose<CR>
+nmap <silent> <C-x> :tabclose<CR>
 
 """""""""
 " Folding
