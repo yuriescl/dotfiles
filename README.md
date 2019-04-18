@@ -33,6 +33,8 @@ cp i3/i3-status.conf ~/.config/i3status/config
 cp vim/vimrc ~/.vimrc
 ```
 
+# Tmux
+
 ```bash
 cp tmux/tmux.conf ~/.tmux.conf
 ```
