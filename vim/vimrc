@@ -1,10 +1,30 @@
-set number
+" Note: default <leader> is usually \
+let mapleader = "\\"
+
+set tabstop=2
+set shiftwidth=2
 set mouse=
+set expandtab
 set hidden
+set number
 set autoindent
 set showmode
 set showcmd
+set hlsearch
+set incsearch
+set ruler
 
-syntax enable
+" remove netrw directory banner
+let g:netrw_banner = 0
 
-colorscheme desert
+syntax on
+colorscheme elflord
+
+" Switch to last buffer visited
+nmap <silent> <F2> :b!#<CR>
+" Switch to previous buffer
+nmap <silent> <F3> :bprevious<CR>
+" Switch to next buffer
+nmap <silent> <F4> :bnext<CR>
+" Print full path of current file
+nmap <silent> <F6> :echo expand('%:p')<CR>

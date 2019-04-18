@@ -29,46 +29,13 @@ cp i3/i3-status.conf ~/.config/i3status/config
 
 ## Vim
 
-###  Simple config
-*With default keybindings.*
 ```bash
 cp vim/vimrc ~/.vimrc
 ```
 
-###  Full config
-*Changes keybindings.*
-Config based on https://github.com/phil303/dotfiles/blob/master/vimrc
-```bash
-cp vim/vimrc-full ~/.vimrc && cp -r vim/vim ~/.vim
-```
-List of vim shortcuts in `vim/vim-shortcuts`.
-
-Screenshot using full config:
-
-![vim screenshot](https://raw.githubusercontent.com/yuriescl/config-files/master/images/vim.jpg)
-
-## Tmux
-
-Config based on http://www.hamvocke.com/blog/a-guide-to-customizing-your-tmux-conf/
-
-###  Simple config
-*With default keybindings.*
 ```bash
 cp tmux/tmux.conf ~/.tmux.conf
 ```
-
-###  Full config
-*Changes keybindings.*
-```bash
-cp tmux/tmux-full.conf ~/.tmux.conf
-```
-
-List of tmux shortcuts in `tmux/tmux-shortcuts`
-
-Screenshot:
-
-![tmux screenshot](https://raw.githubusercontent.com/yuriescl/config-files/master/images/tmux.jpg)
-
 ## Fonts
 
 In Debian 9, font rendering is not that great by default. It can be customized using `fontconfig` and `xrdb`.<br>
