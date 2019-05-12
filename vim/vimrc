@@ -1,8 +1,13 @@
 " Note: default <leader> is usually \
 let mapleader = "\\"
 
-set tabstop=2
-set shiftwidth=2
+set tabstop=4
+set shiftwidth=4
+set laststatus=2
+set backupdir=/tmp//
+set directory=/tmp//
+set undodir=/tmp//
+set keywordprg=rg
 set mouse=
 set expandtab
 set hidden
@@ -13,13 +18,104 @@ set showcmd
 set hlsearch
 set incsearch
 set ruler
+set cursorline
+set cursorcolumn
+set nowrap
+set listchars=space:·,tab:»\ ,extends:›,precedes:‹,nbsp:·,trail:·,eol:$
+set smartcase
+
+"
+" Plugins
+"
+" To install vim-plug:
+"
+"  curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+"   https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+"
+" Then call :PlugInstall to install the plugins.
+call plug#begin('~/.vim/plugged')
+  " Color Highlighter
+  Plug 'chrisbra/Colorizer'
+  " fuzzyfinder
+  Plug '~/opt/fzf'  " path to fzf
+  Plug 'junegunn/fzf.vim'
+
+  " Python syntax highlight
+  Plug 'vim-python/python-syntax'
+
+  " Colorschemes
+  Plug 'BarretRen/vim-colorscheme'
+call plug#end()
+
+runtime macros/matchit.vim
+
+syntax enable
+colorscheme monokai
+
+" auto reload files on change
+set autoread
+au CursorHold,CursorHoldI * checktime
 
 " remove netrw directory banner
 let g:netrw_banner = 0
 
-syntax on
-colorscheme elflord
+let g:python_highlight_all = 1
 
+
+" Cursor column/line highlight
+:hi CursorLine   cterm=NONE ctermbg=0 
+:hi CursorColumn cterm=NONE ctermbg=0
+function EnableCursorHighlight()
+   setlocal cursorline
+   setlocal cursorcolumn
+endfunction
+function DisableCursorHighlight()
+   setlocal nocursorline
+   setlocal nocursorcolumn
+endfunction
+augroup CursorLine
+  au!
+  au VimEnter,WinEnter,BufWinEnter * call EnableCursorHighlight()
+  au WinLeave * call DisableCursorHighlight()
+augroup END
+
+" Show git diff of current file
+function GitDiff()
+    :silent execute '!git diff --color=always -- ' . expand('%:p') . ' | less --RAW-CONTROL-CHARS'
+    :redraw!
+endfunction
+
+
+function ToggleFoldColumn()
+    if (&foldcolumn != 0)
+        set foldcolumn=0
+    else
+        set foldcolumn=3
+    endif
+endfunction
+
+augroup AutoSaveFolds
+  autocmd!
+  autocmd BufWinLeave ?* mkview
+  autocmd BufWinEnter ?* silent loadview
+augroup END
+
+
+" Uncomment the following to have Vim jump to the last position when                                                       
+" reopening a file
+if has("autocmd")
+  au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
+    \| exe "normal! g'\"" | endif
+endif
+
+
+
+"
+" Custom keybindings
+"
+
+" Clear highlight
+nmap <silent> <F1> :noh<CR>
 " Switch to last buffer visited
 nmap <silent> <F2> :b!#<CR>
 " Switch to previous buffer
@@ -28,3 +124,24 @@ nmap <silent> <F3> :bprevious<CR>
 nmap <silent> <F4> :bnext<CR>
 " Print full path of current file
 nmap <silent> <F6> :echo expand('%:p')<CR>
+" Horizontal scrolling
+nmap <silent> <F8> zl
+nmap <silent> <F7> zh
+" Toggle line wrapping
+nmap <silent> <Leader>w :set wrap!<CR>
+" Git Diff
+nmap <silent> <leader>gd :call GitDiff()<CR>
+" Python PDB
+nmap <silent> <leader>pdb iimport pdb; pdb.set_trace()<ESC>
+" Python __main__
+nmap <silent> <leader>main iif __name__ == "__main__":<CR>main()<ESC>
+" Cursor to the end of last operated text or end of putted text
+nmap <silent> <leader>l `[
+" Delete without copying
+nmap <leader>d "_dd
+xmap <leader>d "_d
+" Toggle fold column
+nmap <silent> <leader>f :call ToggleFoldColumn()<CR>
+" CTRL shortcuts
+imap <C-s> <ESC>:w<CR>
+nmap <C-s> :w<CR>
