@@ -24,6 +24,20 @@ set nowrap
 set listchars=space:·,tab:»\ ,extends:›,precedes:‹,nbsp:·,trail:·,eol:$
 set smartcase
 
+
+" Statusline
+set statusline=
+set statusline+=[%n]\                                  "buffernr
+set statusline+=%<%F\                                  "File+path
+set statusline+=%m%r%w\                                "Modified? Readonly? 
+set statusline+=%=%y\                                    "FileType
+set statusline+=%{''.(&fenc!=''?&fenc:&enc).''}        "Encoding
+set statusline+=%{(&bomb?\",BOM\":\"\")}\              "Encoding2
+set statusline+=%{&ff}\                                "FileFormat (dos/unix..) 
+set statusline+=r:%l/%L\                               "Rownumber/total (%)
+set statusline+=c:%c\                                  "Colnr
+set statusline+=%P\                                    "Top/bot.
+
 "
 " Plugins
 "
@@ -36,6 +50,7 @@ set smartcase
 call plug#begin('~/.vim/plugged')
   " Color Highlighter
   Plug 'chrisbra/Colorizer'
+
   " fuzzyfinder
   Plug '~/opt/fzf'  " path to fzf
   Plug 'junegunn/fzf.vim'
@@ -48,6 +63,9 @@ call plug#begin('~/.vim/plugged')
 call plug#end()
 
 runtime macros/matchit.vim
+
+filetype plugin on
+filetype plugin indent on
 
 syntax enable
 colorscheme monokai
@@ -85,6 +103,28 @@ function GitDiff()
     :redraw!
 endfunction
 
+
+" Returns char under cursor
+function GetCurrentChar()
+    return strcharpart(strpart(getline('.'), col('.') - 1), 0, 1)
+endfunction
+
+"function SplitIntoNextLine()
+"    
+"    NEEDED FUNCTIONALITIES:
+"       - break remaining of line (including current or backwards whitespace)
+"       into next line
+"       - remove all whitespaces from the end of current line
+"    let currentChar = GetCurrentChar()
+"    let currentLineNumber = line('.')
+"    normal b
+"    let newLineNumber = line('.')
+"    if currentLineNumber == newLineNumber
+"        normal eldw
+"    else
+"        echo 1
+"    endif
+"endfunction
 
 function ToggleFoldColumn()
     if (&foldcolumn != 0)
@@ -137,11 +177,18 @@ nmap <silent> <leader>pdb iimport pdb; pdb.set_trace()<ESC>
 nmap <silent> <leader>main iif __name__ == "__main__":<CR>main()<ESC>
 " Cursor to the end of last operated text or end of putted text
 nmap <silent> <leader>l `[
-" Delete without copying
-nmap <leader>d "_dd
-xmap <leader>d "_d
+" Deleting
+nmap <silent> <leader>d :echo Getchar()<CR>
 " Toggle fold column
 nmap <silent> <leader>f :call ToggleFoldColumn()<CR>
-" CTRL shortcuts
-imap <C-s> <ESC>:w<CR>
-nmap <C-s> :w<CR>
+" FuzzyFinder
+nmap <C-b> :Buffers<CR>
+nmap <C-n> :Files<CR>
+
+function! HighlightSearch()
+  if &hls
+    return 'H'
+  else
+    return ''
+  endif
+endfunction
