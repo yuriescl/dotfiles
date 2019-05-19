@@ -1,0 +1,27 @@
+#
+# [previous .bashrc content goes here]
+#
+
+##
+## Suggested
+##
+
+#alias sl='ls'
+
+# PATH
+#export PATH="$PATH:$HOME/.local/bin"
+
+#stty -ixon # disable Ctrl-S
+
+# Use ripgrep for FZF
+#export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --follow --glob "!.git/*"'
+
+# Source extra scripts. This should be at the end of .bashrc.
+#if [ -d ~/.bashrc.d ]; then
+#  for i in ~/.bashrc.d/*.sh; do
+#    if [ -r $i ]; then
+#      . $i
+#    fi
+#  done
+#  unset i
+#fi

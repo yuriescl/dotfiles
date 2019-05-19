@@ -1,17 +1,3 @@
-alias sl='ls'
-
-##
-## Suggested
-##
-
-# PATH
-#export PATH="$PATH:$HOME/.local/bin"
-
-#stty -ixon # disable Ctrl-S
-
-# Use ripgrep for FZF
-#export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --follow --glob "!.git/*"'
-
 ##
 ## Git
 ##
