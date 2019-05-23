@@ -7,6 +7,8 @@
 ##
 
 #alias sl='ls'
+#alias Tl='tmux list-sessions'
+#alias Ta='tmux a -t'
 
 # PATH
 #export PATH="$PATH:$HOME/.local/bin"
@@ -15,6 +17,20 @@
 
 # Use ripgrep for FZF
 #export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --follow --glob "!.git/*"'
+
+# returns 0 if the fzf choice is valid (has characters other than only whitespace/tab/newline)
+# Example:
+#	ANSWER=$(ls | fzf)
+#	validate_fzf_choice "$ANSWER" && echo "$ANSWER" || echo "invalid answer"
+#function validate_fzf_choice {
+#    case "$1" in
+#        "") return 1;; 
+#        + ) return 1;;
+#        +\n) return 1;;
+#        +\t) return 1;;
+#        *) return 0;;
+#    esac
+#}
 
 # Source extra scripts. This should be at the end of .bashrc.
 #if [ -d ~/.bashrc.d ]; then
