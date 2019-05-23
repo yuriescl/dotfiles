@@ -1,3 +1,4 @@
+# prevent visual column/line bugs in terminals
 alias 'docker_exec'='docker exec -e COLUMNS="`tput cols`" -e LINES="`tput lines`"'
 
 # exec bash in a container (choose from list)
