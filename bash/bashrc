@@ -9,6 +9,7 @@
 #alias sl='ls'
 #alias Tl='tmux list-sessions'
 #alias Ta='tmux a -t'
+#alias Lr='ls -lathr'
 
 # PATH
 #export PATH="$PATH:$HOME/.local/bin"
