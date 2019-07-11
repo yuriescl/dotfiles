@@ -5,5 +5,5 @@
 if [ -n "$1" ]; then
 	i3-msg mark "$1"
 else
-	i3-msg "[con_id=$(/opt/scripts/i3get)]" unmark
+	i3-msg "[con_id=$(~/opt/scripts/i3/i3get)]" unmark
 fi
