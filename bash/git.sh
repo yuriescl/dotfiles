@@ -1,10 +1,6 @@
-##
-## Git
-##
-
-alias 'Gs'='git status'
-alias 'Gl'='git log'
-alias 'Gb'='git branch'
+#
+# Git
+#
 
 function Qeval {
 	# Run a command using eval. Arguments have its surrounding quotes removed.
@@ -16,26 +12,29 @@ function Qeval {
 	eval "$1 $(printf '%q' $i)"
 }
 
+alias 'Gs'='git status'
+alias 'Gl'='git log'
+alias 'Gb'='git branch'
 # Exits with status 0 if inside a git repository
 function Isgitrepo {
     git rev-parse --is-inside-work-tree 2>/dev/null 1>/dev/null
 }
-# Show commit (choose from list)
-function Gshow {
-    if Isgitrepo; then
-        local COMMIT=$(git log --pretty=oneline 2>/dev/null | fzf | awk '{ print $1}')
-        if [ -n "$COMMIT" ]; then
-            git show "$COMMIT"
-        fi
-    else
-        echo "not a git repo" && return 1
-    fi
-}
+#function Gshow {
+#    if Isgitrepo; then
+#        local COMMIT=$(git log --pretty=oneline 2>/dev/null | fzf | awk '{ print $1}')
+#        if [ -n "$COMMIT" ]; then
+#            git show "$COMMIT"
+#        fi
+#    else
+#        echo "not a git repo" && return 1
+#    fi
+#}
 # Checkout branch (choose from list, ordered from most recent commit)
 function Gc {
     if Isgitrepo; then
-        local BRANCH=$(git for-each-ref --sort=-committerdate --format='%(refname:short)' refs/heads/ | head -n 100 | fzf)
+        local BRANCH=$(git for-each-ref --sort=-refname --format='%(refname:short)' refs/heads/ | head -n 100 | fzf)
         if [ -n "$BRANCH" ]; then
+            echo "git checkout '$BRANCH'"
             git checkout "$BRANCH"
         fi
     else
@@ -45,8 +44,9 @@ function Gc {
 # Merge branch into current branch (choose fromi list, ordered from most recent commit)
 function Gm {
     if Isgitrepo; then
-        local BRANCH=$(git for-each-ref --sort=-committerdate --format='%(refname:short)' refs/heads/ | head -n 100 | fzf)
+        local BRANCH=$(git for-each-ref --sort=-refname --format='%(refname:short)' refs/heads/ | head -n 100 | fzf)
         if [ -n "$BRANCH" ]; then
+            echo "git merge '$BRANCH'"
             git merge "$BRANCH"
         fi
     else
@@ -58,6 +58,7 @@ function Gp {
     if Isgitrepo; then
         local BRANCH=$(git branch | grep \* | cut -d ' ' -f2)
         if [ -n "$BRANCH" ]; then
+            echo "git push -u origin  '$BRANCH'"
             git push -u origin  "$BRANCH"
         fi
     else
@@ -90,7 +91,7 @@ function Gr {
         echo "not a git repo" && return 1
     fi
 }
-# 'git checkout --' file(s) ("revert changes")
+# Revert changes to file(s) (git checkout -- <file>)
 function Gx {
     if Isgitrepo; then
 		local IFS=$'\n'
