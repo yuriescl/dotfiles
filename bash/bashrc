@@ -6,24 +6,21 @@
 ## Suggested
 ##
 
-#alias sl='ls'
-#alias Tl='tmux list-sessions'
-#alias Ta='tmux a -t'
-#alias Lr='ls -lathr'
-
-# PATH
-#export PATH="$PATH:$HOME/.local/bin"
-
 #stty -ixon # disable Ctrl-S
-
-# Use ripgrep for FZF
+#
+## avoid Ctrl-D spam exitting shells
+#set -o ignoreeof
+#
 #export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --follow --glob "!.git/*"'
-
-# returns 0 if the fzf choice is valid (has characters other than only whitespace/tab/newline)
-# Example:
-#	ANSWER=$(ls | fzf)
-#	validate_fzf_choice "$ANSWER" && echo "$ANSWER" || echo "invalid answer"
-#function validate_fzf_choice {
+#
+#alias sl='ls'
+#alias lr='ls -lathr'
+#
+#alias t='tmux'
+#alias tl='tmux list-sessions'
+#alias ta='tmux a -t'
+#
+#function validate_fzf_choice { 
 #    case "$1" in
 #        "") return 1;; 
 #        + ) return 1;;
@@ -32,8 +29,9 @@
 #        *) return 0;;
 #    esac
 #}
-
-# Source extra scripts. This should be at the end of .bashrc.
+#
+## this should be at the end of .bashrc
+##  because some scripts use variables and functions declared above
 #if [ -d ~/.bashrc.d ]; then
 #  for i in ~/.bashrc.d/*.sh; do
 #    if [ -r $i ]; then
@@ -42,3 +40,4 @@
 #  done
 #  unset i
 #fi
+

@@ -23,7 +23,8 @@ set cursorcolumn
 set nowrap
 set listchars=space:·,tab:»\ ,extends:›,precedes:‹,nbsp:·,trail:·,eol:$
 set smartcase
-
+set foldmethod=manual
+set foldnestmax=1
 
 " Statusline
 set statusline=
@@ -57,10 +58,10 @@ call plug#begin('~/.vim/plugged')
 
   " Python syntax highlight
   Plug 'vim-python/python-syntax'
-
+  
   " Colorschemes
   Plug 'BarretRen/vim-colorscheme'
-  
+
   " NERD Commenter
   Plug 'scrooloose/nerdcommenter'
 call plug#end()
@@ -138,23 +139,28 @@ endfunction
 "    endif
 "endfunction
 
+" Toggle fold column
 function ToggleFoldColumn()
     if (&foldcolumn != 0)
         set foldcolumn=0
     else
-        set foldcolumn=3
+        set foldcolumn=2
     endif
 endfunction
 
-function! HighlightSearch()
-  if &hls
-    return 'H'
-  else
-    return ''
-  endif
+" Toggles between manual and syntax folding
+function ToggleFoldMethod()
+	if (&foldmethod == 'manual')
+		setlocal foldmethod=syntax
+		echo 'foldmethod=syntax'
+	else
+		setlocal foldmethod=manual
+		echo 'foldmethod=manual'
+	endif
 endfunction
 
-function! MakeSession()
+" Save current session based on current dir
+function! SaveSession()
   let b:sessiondir = $HOME . "/.vim/sessions" . getcwd()
   if (filewritable(b:sessiondir) != 2)
     exe 'silent !mkdir -p ' b:sessiondir
@@ -163,7 +169,7 @@ function! MakeSession()
   let b:filename = b:sessiondir . '/session.vim'
   exe "mksession! " . b:filename
 endfunction
-
+" Load session based on current dir
 function! LoadSession()
   let b:sessiondir = $HOME . "/.vim/sessions" . getcwd()
   let b:sessionfile = b:sessiondir . "/session.vim"
@@ -182,7 +188,6 @@ endfunction
 " ":RangerChooser" or the keybinding "<leader>r".  Once you select one or more
 " files, press enter and ranger will quit again and vim will open the selected
 " files.
-
 function! RangeChooser()
     let temp = tempname()
     " The option "--choosefiles" was added in ranger 1.5.1. Use the next line
@@ -229,9 +234,8 @@ if has("autocmd")
 endif
 
 
-
 "
-" Custom keybindings
+" Keybindings
 "
 
 " Clear highlight
@@ -258,18 +262,22 @@ nmap <silent> <leader>main iif __name__ == "__main__":<CR>main()<ESC>
 nmap <silent> <leader>l `[
 " Deleting
 nmap <silent> <leader>d :echo Getchar()<CR>
-" Toggle fold column
+" Folding
 nmap <silent> <leader>f :call ToggleFoldColumn()<CR>
+nmap <silent> <F11> :call ToggleFoldMethod()<CR>
 " FuzzyFinder
 nmap <C-b> :Buffers<CR>
 nmap <C-n> :Files<CR>
 " Saving & Exitting
 nmap <C-p> :w<CR>
 nmap <C-q> :q<CR>
-
+" Scrolling
 nmap <silent> <C-j> <C-e>
 nmap <silent> <C-k> <C-y>
+nmap <silent> <F6> zh
+nmap <silent> <F7> zl
 
+" Clipboard copy-paste
 nmap <silent> <F9> "+yy
 vmap <silent> <F9> "+y
 nmap <silent> <F10> "+P
