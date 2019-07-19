@@ -84,7 +84,7 @@ let g:netrw_banner = 0
 let g:python_highlight_all = 1
 
 " [Buffers] Jump to the existing window if possible
-let g:fzf_buffers_jump = 1
+let g:fzf_buffers_jump = 0
 
 " Cursor column/line highlight
 :hi CursorLine   cterm=NONE ctermbg=0 
@@ -277,7 +277,7 @@ nmap <silent> <C-k> <C-y>
 nmap <silent> <F6> zh
 nmap <silent> <F7> zl
 
-" Clipboard copy-paste
+" Copy-paste
 nmap <silent> <F9> "+yy
 vmap <silent> <F9> "+y
 nmap <silent> <F10> "+P
