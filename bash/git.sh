@@ -29,7 +29,7 @@ function Isgitrepo {
 #        echo "not a git repo" && return 1
 #    fi
 #}
-# Checkout branch (choose from list, ordered from most recent commit)
+# Checkout branch (choose from list, ordered by refname ascending)
 function Gc {
     if Isgitrepo; then
         local BRANCH=$(git for-each-ref --sort=-refname --format='%(refname:short)' refs/heads/ | head -n 100 | fzf)
@@ -41,7 +41,7 @@ function Gc {
         echo "not a git repo" && return 1
     fi
 }
-# Merge branch into current branch (choose fromi list, ordered from most recent commit)
+# Merge branch into current branch (choose from list, ordered by refname ascending)
 function Gm {
     if Isgitrepo; then
         local BRANCH=$(git for-each-ref --sort=-refname --format='%(refname:short)' refs/heads/ | head -n 100 | fzf)
