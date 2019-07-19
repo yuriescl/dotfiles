@@ -25,6 +25,7 @@ set listchars=space:·,tab:»\ ,extends:›,precedes:‹,nbsp:·,trail:·,eol:$
 set smartcase
 set foldmethod=manual
 set foldnestmax=1
+set tags=./tags,tags  " look for the tags file in current directory, then globally
 
 " Statusline
 set statusline=
@@ -64,6 +65,9 @@ call plug#begin('~/.vim/plugged')
 
   " NERD Commenter
   Plug 'scrooloose/nerdcommenter'
+
+  " Rename
+  Plug 'danro/rename.vim'
 call plug#end()
 
 runtime macros/matchit.vim
@@ -249,7 +253,7 @@ nmap <silent> <F4> :bnext<CR>
 " Print full path of current file
 nmap <silent> <F5> :echo expand('%:p')<CR>
 " Folding
-nmap <silent> <C-m> za
+nmap <silent> <C-f> za
 " Toggle line wrapping
 nmap <silent> <Leader>w :set wrap!<CR>
 " Git Diff
@@ -268,6 +272,8 @@ nmap <silent> <F11> :call ToggleFoldMethod()<CR>
 " FuzzyFinder
 nmap <C-b> :Buffers<CR>
 nmap <C-n> :Files<CR>
+nmap <C-m> :Lines<CR>
+nmap <C-t> :Tags<CR>
 " Saving & Exitting
 nmap <C-p> :w<CR>
 nmap <C-q> :q<CR>
