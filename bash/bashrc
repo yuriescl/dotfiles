@@ -6,6 +6,11 @@
 ## Suggested
 ##
 
+#export EDITOR=vim
+#
+## set to 1 to enable NVM
+#export NVM_AUTOLOAD=1
+#
 #stty -ixon # disable Ctrl-S
 #
 ## avoid Ctrl-D spam exitting shells
@@ -30,6 +35,18 @@
 #    esac
 #}
 #
+#function Suspend { # put system in suspend (sleep) mode
+#    sudo sleep 0 && i3lock -c 000000 && sudo systemctl suspend
+#}
+#
+#function XrandrHDMI-0 {
+#    xrandr --output HDMI-0 --mode 1920x1080 --output DVI-D-0 off
+#}
+#
+#function XrandrAll {
+#    xrandr --output HDMI-0 --mode 1920x1080 --primary --output DVI-D-0 --mode 1920x1080 --right-of HDMI-0 --rotate left
+#}
+#
 ## this should be at the end of .bashrc
 ##  because some scripts use variables and functions declared above
 #if [ -d ~/.bashrc.d ]; then
@@ -40,4 +57,4 @@
 #  done
 #  unset i
 #fi
-
+#
