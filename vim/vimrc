@@ -79,6 +79,9 @@ syntax enable
 
 colorscheme monokai
 
+hi StatusLine ctermbg=147 ctermfg=0
+hi StatusLineNC ctermbg=18 ctermfg=15
+
 " auto reload files on change
 set autoread
 au CursorHold,CursorHoldI * checktime
