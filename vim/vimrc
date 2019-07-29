@@ -66,7 +66,7 @@ call plug#begin('~/.vim/plugged')
   " NERD Commenter
   Plug 'scrooloose/nerdcommenter'
 
-  " Rename
+  " Rename buffers (and its file) on the fly
   Plug 'danro/rename.vim'
 call plug#end()
 
