@@ -79,6 +79,7 @@ syntax enable
 
 colorscheme monokai
 
+" Status line colors
 hi StatusLine ctermbg=147 ctermfg=0
 hi StatusLineNC ctermbg=18 ctermfg=15
 
@@ -89,14 +90,21 @@ au CursorHold,CursorHoldI * checktime
 " remove netrw directory banner
 let g:netrw_banner = 0
 
+" (Plugin Python syntax) 
 let g:python_highlight_all = 1
 
-" [Buffers] Jump to the existing window if possible
+" (Plugin FZF) Disable jumping to existing windows
 let g:fzf_buffers_jump = 0
 
 " Cursor column/line highlight
 :hi CursorLine   cterm=NONE ctermbg=0 
 :hi CursorColumn cterm=NONE ctermbg=0
+
+
+"""""""""""""""""""""""""""""""""""
+"           Functions
+"
+
 function EnableCursorHighlight()
    setlocal cursorline
    setlocal cursorcolumn
@@ -129,23 +137,6 @@ endfunction
 function GetCurrentChar()
     return strcharpart(strpart(getline('.'), col('.') - 1), 0, 1)
 endfunction
-
-"function SplitIntoNextLine()
-"    
-"    NEEDED FUNCTIONALITIES:
-"       - break remaining of line (including current or backwards whitespace)
-"       into next line
-"       - remove all whitespaces from the end of current line
-"    let currentChar = GetCurrentChar()
-"    let currentLineNumber = line('.')
-"    normal b
-"    let newLineNumber = line('.')
-"    if currentLineNumber == newLineNumber
-"        normal eldw
-"    else
-"        echo 1
-"    endif
-"endfunction
 
 " Toggle fold column
 function ToggleFoldColumn()
@@ -227,6 +218,7 @@ function! RangeChooser()
 endfunction
 command! -bar RangerChooser call RangeChooser()
 
+" See https://vim.fandom.com/wiki/Make_search_results_appear_in_the_middle_of_the_screen
 function s:SearchMode()
   if !exists('s:searchmode') || s:searchmode == 0
     echo 'Search next: scroll hit to middle if not on same page'
@@ -253,6 +245,19 @@ function s:MaybeMiddle()
   endif
 endfunction
 
+
+" Display an error message.
+function! s:Warn(msg)
+  echohl ErrorMsg
+  echomsg a:msg
+  echohl NONE
+endfunction
+
+
+"""""""""""""""""""""""""""""""""""
+"           Auto commands
+"
+
 " Delete buffer while keeping window layout (don't close buffer's windows).
 " Version 2008-11-18 from http://vim.wikia.com/wiki/VimTip165
 if v:version < 700 || exists('loaded_bclose') || &cp
@@ -263,19 +268,11 @@ if !exists('bclose_multiple')
   let bclose_multiple = 1
 endif
 
-" Display an error message.
-function! s:Warn(msg)
-  echohl ErrorMsg
-  echomsg a:msg
-  echohl NONE
-endfunction
-
 augroup AutoSaveFolds
   autocmd!
   autocmd BufWinLeave ?* mkview
   autocmd BufWinEnter ?* silent loadview
 augroup END
-
 
 " Uncomment the following to have Vim jump to the last position when                                                       
 " reopening a file
@@ -285,9 +282,31 @@ if has("autocmd")
 endif
 
 
+"""""""""""""""""""""""""""""""""""
+"           Mappings
 "
-" Keybindings
-"
+
+"""
+" Leader
+nmap <silent> <Leader>w :set wrap!<CR>
+" Git Diff
+nmap <silent> <leader>gd :call GitDiff()<CR>
+" Python PDB
+nmap <silent> <leader>pdb iimport pdb; pdb.set_trace()<ESC>
+" Python __main__
+nmap <silent> <leader>main iif __name__ == "__main__":<CR>main()<ESC>
+" Linters
+nmap <silent> <leader>phpl :!php -l %:p<CR>
+nmap <silent> <leader>pylint :!pylint %:p<CR>
+nmap <silent> <leader>flake8 :!flake8 %:p<CR>
+nmap <silent> <leader>pep8 :!pep8 %:p<CR>
+" Cursor to the end of last operated text or end of putted text
+nmap <silent> <leader>l `[
+" Deleting
+nmap <silent> <leader>d :echo Getchar()<CR>
+" Folding
+nmap <silent> <leader>f :call ToggleFoldColumn()<CR>
+
 
 " Clear highlight
 nmap <silent> <F1> :noh<CR>
@@ -302,21 +321,6 @@ nmap <silent> <F5> :echo expand('%:p')<CR>
 " Folding
 nmap <silent> <C-m> za
 " Toggle line wrapping
-nmap <silent> <Leader>w :set wrap!<CR>
-" Git Diff
-nmap <silent> <leader>gd :call GitDiff()<CR>
-" Python PDB
-nmap <silent> <leader>pdb iimport pdb; pdb.set_trace()<ESC>
-" Python __main__
-nmap <silent> <leader>main iif __name__ == "__main__":<CR>main()<ESC>
-" PHP Lint
-nmap <silent> <leader>phpl :!php -l %:p<CR>
-" Cursor to the end of last operated text or end of putted text
-nmap <silent> <leader>l `[
-" Deleting
-nmap <silent> <leader>d :echo Getchar()<CR>
-" Folding
-nmap <silent> <leader>f :call ToggleFoldColumn()<CR>
 nmap <silent> <F11> :call ToggleFoldMethod()<CR>
 " FuzzyFinder
 nmap <C-b> :Buffers<CR>
@@ -331,22 +335,15 @@ nmap <silent> <C-j> <C-e><C-e>
 nmap <silent> <C-k> <C-y><C-y>
 nmap <silent> <F6> zh
 nmap <silent> <F7> zl
-
 " Copy-paste
 nmap <silent> <F9> "+yy
 vmap <silent> <F9> "+y
 nmap <silent> <F10> "+P
 vmap <silent> <F10> "+P
-
 " Select pasted text. See https://vim.fandom.com/wiki/Selecting_your_pasted_text
 nnoremap <expr> gp '`[' . strpart(getregtype(), 0, 1) . '`]'
-
 " See https://vim.fandom.com/wiki/Move_cursor_by_display_lines_when_wrapping
 nnoremap j gj
 nnoremap k gk
 vnoremap j gj
 vnoremap k gk
-
-" See
-" https://vim.fandom.com/wiki/Make_search_results_appear_in_the_middle_of_the_screen
-nnoremap <silent> <leader>n :call <SID>SearchMode()<CR>
