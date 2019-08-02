@@ -19,16 +19,17 @@ alias 'Gb'='git branch'
 function Isgitrepo {
     git rev-parse --is-inside-work-tree 2>/dev/null 1>/dev/null
 }
-#function Gshow {
-#    if Isgitrepo; then
-#        local COMMIT=$(git log --pretty=oneline 2>/dev/null | fzf | awk '{ print $1}')
-#        if [ -n "$COMMIT" ]; then
-#            git show "$COMMIT"
-#        fi
-#    else
-#        echo "not a git repo" && return 1
-#    fi
-#}
+
+function Gshow {
+    if Isgitrepo; then
+        local COMMIT=$(git log --oneline | fzf | awk '{ print $1}')
+        if [ -n "$COMMIT" ]; then
+            git show "$COMMIT"
+        fi
+    else
+        echo "not a git repo" && return 1
+    fi
+}
 # Checkout branch (choose from list, ordered by refname ascending)
 function Gc {
     if Isgitrepo; then
@@ -53,7 +54,7 @@ function Gm {
         echo "not a git repo" && return 1
     fi
 }
-# Push current branch (setting it as upstream)
+# Push current branch with the -u flag
 function Gp {
     if Isgitrepo; then
         local BRANCH=$(git branch | grep \* | cut -d ' ' -f2)
@@ -69,7 +70,7 @@ function Gp {
 function Ga {
     if Isgitrepo; then
 		local IFS=$'\n'
-		local FILES=($(git status -s | fzf -m | awk '{out=$2; for(i=3;i<=NF;i++){out=out" "$i}; print out}'))
+		local FILES=($(git status -s | tac | fzf -m | awk '{out=$2; for(i=3;i<=NF;i++){out=out" "$i}; print out}'))
 		for i in "${FILES[@]}"
 		do
 			Qeval "git add" "$i"
@@ -82,7 +83,7 @@ function Ga {
 function Gr {
     if Isgitrepo; then
 		local IFS=$'\n'
-		local FILES=($(git status -s | fzf -m | awk '{out=$2; for(i=3;i<=NF;i++){out=out" "$i}; print out}'))
+		local FILES=($(git status -s | tac | fzf -m | awk '{out=$2; for(i=3;i<=NF;i++){out=out" "$i}; print out}'))
 		for i in "${FILES[@]}"
 		do
 			Qeval "git reset HEAD" "$i"	
@@ -95,10 +96,49 @@ function Gr {
 function Gx {
     if Isgitrepo; then
 		local IFS=$'\n'
-		local FILES=($(git status -s | fzf -m | awk '{out=$2; for(i=3;i<=NF;i++){out=out" "$i}; print out}'))
+		local FILES=($(git status -s | tac | fzf -m | awk '{out=$2; for(i=3;i<=NF;i++){out=out" "$i}; print out}'))
 		for i in "${FILES[@]}"
 		do
 			Qeval "git checkout --" "$i"
+		done
+    else
+        echo "not a git repo" && return 1
+    fi
+}
+# Delete branches with the -D flag
+function Gbd {
+    if Isgitrepo; then
+		local IFS=$'\n'
+		local FILES=($(git branch | tac | fzf -m | awk '{print $NF}'))
+		for i in "${FILES[@]}"
+		do
+			Qeval "git branch -D" "$i"
+		done
+    else
+        echo "not a git repo" && return 1
+    fi
+}
+# Diff files
+function Gdiff {
+    if Isgitrepo; then
+		local IFS=$'\n'
+		local FILES=($(git status -s | tac | fzf -m | awk '{out=$2; for(i=3;i<=NF;i++){out=out" "$i}; print out}'))
+		for i in "${FILES[@]}"
+		do
+			Qeval "git diff" "$i"
+		done
+    else
+        echo "not a git repo" && return 1
+    fi
+}
+# Diff staged files
+function Gdiffs {
+    if Isgitrepo; then
+		local IFS=$'\n'
+		local FILES=($(git status -s | tac | fzf -m | awk '{out=$2; for(i=3;i<=NF;i++){out=out" "$i}; print out}'))
+		for i in "${FILES[@]}"
+		do
+			Qeval "git diff --staged" "$i"
 		done
     else
         echo "not a git repo" && return 1

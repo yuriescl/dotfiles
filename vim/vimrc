@@ -25,6 +25,9 @@ set listchars=space:·,tab:»\ ,extends:›,precedes:‹,nbsp:·,trail:·,eol:$
 set smartcase
 set foldmethod=manual
 set foldnestmax=1
+set splitright
+set splitbelow
+set vb t_vb=     " no visual bell & flash
 set tags=./tags,tags  " look for the tags file in current directory, then globally
 
 " Statusline
@@ -50,9 +53,6 @@ set statusline+=%P\                                    "Top/bot.
 "
 " Then call :PlugInstall to install the plugins.
 call plug#begin('~/.vim/plugged')
-  " Color Highlighter
-  Plug 'chrisbra/Colorizer'
-
   " fuzzyfinder
   Plug '~/opt/fzf'  " path to fzf
   Plug 'junegunn/fzf.vim'
@@ -61,13 +61,25 @@ call plug#begin('~/.vim/plugged')
   Plug 'vim-python/python-syntax'
 
   " Colorschemes
-  Plug 'BarretRen/vim-colorscheme'
+  Plug 'yuriescl/vim-colorscheme'
   
   " NERD Commenter
   Plug 'scrooloose/nerdcommenter'
 
   " Rename buffers (and its file) on the fly
   Plug 'danro/rename.vim'
+
+  " Delete buffers without closing the window or split
+  Plug 'qpkorr/vim-bufkill'
+
+  " Solarized colorscheme
+  Plug 'altercation/vim-colors-solarized'
+
+  " Auto close HTML tags
+  Plug 'alvan/vim-closetag'
+
+  " Emmet
+  Plug 'mattn/emmet-vim'
 call plug#end()
 
 runtime macros/matchit.vim
@@ -96,6 +108,11 @@ let g:python_highlight_all = 1
 " (Plugin FZF) Disable jumping to existing windows
 let g:fzf_buffers_jump = 0
 
+" (Plugin Emmet)
+let g:user_emmet_mode='i' " Enable only in insert mode
+let g:user_emmet_install_global = 0 " Enable just for html/css files
+autocmd FileType html,css EmmetInstall
+
 " Cursor column/line highlight
 :hi CursorLine   cterm=NONE ctermbg=0 
 :hi CursorColumn cterm=NONE ctermbg=0
@@ -123,19 +140,6 @@ augroup END
 function GitDiff()
     :silent execute '!git diff --color=always -- ' . expand('%:p') . ' | less --RAW-CONTROL-CHARS'
     :redraw!
-endfunction
-
-function CheckRo()
-    if &readonly
-        colorscheme moria
-    else
-        colorscheme monokai
-    endif
-endfunction
-
-" Returns char under cursor
-function GetCurrentChar()
-    return strcharpart(strpart(getline('.'), col('.') - 1), 0, 1)
 endfunction
 
 " Toggle fold column
@@ -291,19 +295,8 @@ endif
 nmap <silent> <Leader>w :set wrap!<CR>
 " Git Diff
 nmap <silent> <leader>gd :call GitDiff()<CR>
-" Python PDB
-nmap <silent> <leader>pdb iimport pdb; pdb.set_trace()<ESC>
-" Python __main__
-nmap <silent> <leader>main iif __name__ == "__main__":<CR>main()<ESC>
-" Linters
-nmap <silent> <leader>phpl :!php -l %:p<CR>
-nmap <silent> <leader>pylint :!pylint %:p<CR>
-nmap <silent> <leader>flake8 :!flake8 %:p<CR>
-nmap <silent> <leader>pep8 :!pep8 %:p<CR>
 " Cursor to the end of last operated text or end of putted text
 nmap <silent> <leader>l `[
-" Deleting
-nmap <silent> <leader>d :echo Getchar()<CR>
 " Folding
 nmap <silent> <leader>f :call ToggleFoldColumn()<CR>
 
@@ -311,11 +304,9 @@ nmap <silent> <leader>f :call ToggleFoldColumn()<CR>
 " Clear highlight
 nmap <silent> <F1> :noh<CR>
 " Switch to last buffer visited
-nmap <silent> <F2> :b!#<CR>
-" Switch to previous buffer
-nmap <silent> <F3> :bprevious<CR>
-" Switch to next buffer
-nmap <silent> <F4> :bnext<CR>
+nmap <silent> <F2> :b#<CR>
+" (Plugin bufkill) Delete current buffer without losing window/split
+nmap <silent> <F4> :BD<CR>
 " Print full path of current file
 nmap <silent> <F5> :echo expand('%:p')<CR>
 " Folding
@@ -347,3 +338,5 @@ nnoremap j gj
 nnoremap k gk
 vnoremap j gj
 vnoremap k gk
+
+nmap <C-e> <C-w>w
