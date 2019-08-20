@@ -22,6 +22,7 @@ set cursorline
 set cursorcolumn
 set nowrap
 set listchars=space:·,tab:»\ ,extends:›,precedes:‹,nbsp:·,trail:·,eol:$
+set ignorecase
 set smartcase
 set foldmethod=manual
 set foldnestmax=1
@@ -53,33 +54,19 @@ set statusline+=%P\                                    "Top/bot.
 "
 " Then call :PlugInstall to install the plugins.
 call plug#begin('~/.vim/plugged')
-  " fuzzyfinder
   Plug '~/opt/fzf'  " path to fzf
   Plug 'junegunn/fzf.vim'
-
-  " Python syntax highlight
   Plug 'vim-python/python-syntax'
-
-  " Colorschemes
   Plug 'yuriescl/vim-colorscheme'
-  
-  " NERD Commenter
   Plug 'scrooloose/nerdcommenter'
-
-  " Rename buffers (and its file) on the fly
   Plug 'danro/rename.vim'
-
-  " Delete buffers without closing the window or split
   Plug 'qpkorr/vim-bufkill'
-
-  " Solarized colorscheme
   Plug 'altercation/vim-colors-solarized'
-
-  " Auto close HTML tags
   Plug 'alvan/vim-closetag'
-
-  " Emmet
   Plug 'mattn/emmet-vim'
+  Plug 'xolox/vim-misc'
+  Plug 'xolox/vim-session'
+  Plug 'majutsushi/tagbar'
 call plug#end()
 
 runtime macros/matchit.vim
@@ -95,10 +82,6 @@ colorscheme monokai
 hi StatusLine ctermbg=147 ctermfg=0
 hi StatusLineNC ctermbg=18 ctermfg=15
 
-" auto reload files on change
-set autoread
-au CursorHold,CursorHoldI * checktime
-
 " remove netrw directory banner
 let g:netrw_banner = 0
 
@@ -108,9 +91,16 @@ let g:python_highlight_all = 1
 " (Plugin FZF) Disable jumping to existing windows
 let g:fzf_buffers_jump = 0
 
+" Disable automatic session saving
+let g:session_autosave = 'no'
+
 " (Plugin Emmet)
 let g:user_emmet_mode='i' " Enable only in insert mode
 let g:user_emmet_install_global = 0 " Enable just for html/css files
+
+" (Plugin vim-closetag) Shortcut for closing tags, default is '>'
+let g:closetag_shortcut = '<leader>>'
+
 autocmd FileType html,css EmmetInstall
 
 " Cursor column/line highlight
@@ -141,6 +131,10 @@ function GitDiff()
     :silent execute '!git diff --color=always -- ' . expand('%:p') . ' | less --RAW-CONTROL-CHARS'
     :redraw!
 endfunction
+function GitDiffStaged()
+    :silent execute '!git diff --staged --color=always -- ' . expand('%:p') . ' | less --RAW-CONTROL-CHARS'
+    :redraw!
+endfunction
 
 " Toggle fold column
 function ToggleFoldColumn()
@@ -162,44 +156,46 @@ function ToggleFoldMethod()
 	endif
 endfunction
 
-" Save current session based on current dir
-function! SaveSession()
-  let b:sessiondir = $HOME . "/.vim/sessions" . getcwd()
-  if (filewritable(b:sessiondir) != 2)
-    exe 'silent !mkdir -p ' b:sessiondir
-    redraw!
-  endif
-  let b:filename = b:sessiondir . '/session.vim'
-  exe "mksession! " . b:filename
-endfunction
-" Load session based on current dir
-function! LoadSession()
-  let b:sessiondir = $HOME . "/.vim/sessions" . getcwd()
-  let b:sessionfile = b:sessiondir . "/session.vim"
-  if (filereadable(b:sessionfile))
-    exe 'source ' b:sessionfile
+" See https://vim.fandom.com/wiki/Make_search_results_appear_in_the_middle_of_the_screen
+function s:SearchMode()
+  if !exists('s:searchmode') || s:searchmode == 0
+    echo 'Search next: scroll hit to middle if not on same page'
+    nnoremap <silent> n n:call <SID>MaybeMiddle()<CR>
+    nnoremap <silent> N N:call <SID>MaybeMiddle()<CR>
+    let s:searchmode = 1
+  elseif s:searchmode == 1
+    echo 'Search next: scroll hit to middle'
+    nnoremap n nzz
+    nnoremap N Nzz
+    let s:searchmode = 2
   else
-    echo "No session loaded."
+    echo 'Search next: normal'
+    nunmap n
+    nunmap N
+    let s:searchmode = 0
+  endif
+endfunction
+" If cursor is in first or last line of window, scroll to middle line.
+function s:MaybeMiddle()
+  if winline() == 1 || winline() == winheight(0)
+    normal! zz
   endif
 endfunction
 
 " Compatible with ranger 1.4.2 through 1.7.*
 "
-" Add ranger as a file chooser in vim
-"
-" If you add this code to the .vimrc, ranger can be started using the command
-" ":RangerChooser" or the keybinding "<leader>r".  Once you select one or more
-" files, press enter and ranger will quit again and vim will open the selected
-" files.
-function! RangeChooser()
+" Add ranger as a file chooser in vim.
+" Starts in the current file's directory.
+" Usage: :RangerChooser
+function! RangerChooser()
     let temp = tempname()
     " The option "--choosefiles" was added in ranger 1.5.1. Use the next line
     " with ranger 1.4.2 through 1.5.0 instead.
     "exec 'silent !ranger --choosefile=' . shellescape(temp)
     if has("gui_running")
-        exec 'silent !xterm -e ranger --choosefiles=' . shellescape(temp)
+        exec 'silent !xterm -e ranger --choosefiles=' . shellescape(temp) . ' ' . expand('%:p:h')
     else
-        exec 'silent !ranger --choosefiles=' . shellescape(temp)
+        exec 'silent !ranger --choosefiles=' . shellescape(temp) . ' ' . expand('%:p:h') 
     endif
     if !filereadable(temp)
         redraw!
@@ -220,57 +216,11 @@ function! RangeChooser()
     endfor
     redraw!
 endfunction
-command! -bar RangerChooser call RangeChooser()
-
-" See https://vim.fandom.com/wiki/Make_search_results_appear_in_the_middle_of_the_screen
-function s:SearchMode()
-  if !exists('s:searchmode') || s:searchmode == 0
-    echo 'Search next: scroll hit to middle if not on same page'
-    nnoremap <silent> n n:call <SID>MaybeMiddle()<CR>
-    nnoremap <silent> N N:call <SID>MaybeMiddle()<CR>
-    let s:searchmode = 1
-  elseif s:searchmode == 1
-    echo 'Search next: scroll hit to middle'
-    nnoremap n nzz
-    nnoremap N Nzz
-    let s:searchmode = 2
-  else
-    echo 'Search next: normal'
-    nunmap n
-    nunmap N
-    let s:searchmode = 0
-  endif
-endfunction
-
-" If cursor is in first or last line of window, scroll to middle line.
-function s:MaybeMiddle()
-  if winline() == 1 || winline() == winheight(0)
-    normal! zz
-  endif
-endfunction
-
-
-" Display an error message.
-function! s:Warn(msg)
-  echohl ErrorMsg
-  echomsg a:msg
-  echohl NONE
-endfunction
-
+command! -bar RangerChooser call RangerChooser()
 
 """""""""""""""""""""""""""""""""""
 "           Auto commands
 "
-
-" Delete buffer while keeping window layout (don't close buffer's windows).
-" Version 2008-11-18 from http://vim.wikia.com/wiki/VimTip165
-if v:version < 700 || exists('loaded_bclose') || &cp
-  finish
-endif
-let loaded_bclose = 1
-if !exists('bclose_multiple')
-  let bclose_multiple = 1
-endif
 
 augroup AutoSaveFolds
   autocmd!
@@ -290,53 +240,45 @@ endif
 "           Mappings
 "
 
-"""
-" Leader
-nmap <silent> <Leader>w :set wrap!<CR>
-" Git Diff
-nmap <silent> <leader>gd :call GitDiff()<CR>
-" Cursor to the end of last operated text or end of putted text
-nmap <silent> <leader>l `[
-" Folding
-nmap <silent> <leader>f :call ToggleFoldColumn()<CR>
-
-
 " Clear highlight
 nmap <silent> <F1> :noh<CR>
 " Switch to last buffer visited
 nmap <silent> <F2> :b#<CR>
+" Toggle wrap
+nmap <silent> <F3> :set wrap!<CR>
 " (Plugin bufkill) Delete current buffer without losing window/split
 nmap <silent> <F4> :BD<CR>
-" Print full path of current file
-nmap <silent> <F5> :echo expand('%:p')<CR>
+" Echo full path of current file's directory
+nmap <F5> :echo expand('%:p:h')<CR>
+" Echo full path of current file
+nmap <F6> :echo expand('%:p')<CR>
+" Tabs
+nmap <silent> <C-k> :tabprevious<CR>
+nmap <silent> <C-j> :tabnext<CR>
 " Folding
 nmap <silent> <C-m> za
-" Toggle line wrapping
-nmap <silent> <F11> :call ToggleFoldMethod()<CR>
 " FuzzyFinder
 nmap <C-b> :Buffers<CR>
 nmap <C-n> :Files<CR>
 nmap <C-f> :Lines<CR>
-nmap <C-g> :BLines<CR>
 nmap <C-t> :Tags<CR>
+nmap <C-g> :History<CR>
 " Saving & Exitting
 nmap <C-p> :w<CR>
-" Scrolling
-nmap <silent> <C-j> <C-e><C-e>
-nmap <silent> <C-k> <C-y><C-y>
-nmap <silent> <F6> zh
-nmap <silent> <F7> zl
+nmap <silent> <F7> zh
+nmap <silent> <F8> zl
 " Copy-paste
 nmap <silent> <F9> "+yy
 vmap <silent> <F9> "+y
 nmap <silent> <F10> "+P
 vmap <silent> <F10> "+P
-" Select pasted text. See https://vim.fandom.com/wiki/Selecting_your_pasted_text
-nnoremap <expr> gp '`[' . strpart(getregtype(), 0, 1) . '`]'
 " See https://vim.fandom.com/wiki/Move_cursor_by_display_lines_when_wrapping
 nnoremap j gj
-nnoremap k gk
 vnoremap j gj
+nnoremap k gk
 vnoremap k gk
-
-nmap <C-e> <C-w>w
+" See https://vim.fandom.com/wiki/Selecting_your_pasted_text
+nnoremap <expr> gp "'[" . strpart(getregtype(), 0, 1) . "']"
+nnoremap <expr> gP "`[" . strpart(getregtype(), 0, 1) . "`]"
+" Switch between search modes
+nnoremap <silent> <leader>n :call <SID>SearchMode()<CR>

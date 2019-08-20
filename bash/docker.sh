@@ -7,3 +7,4 @@ function docker_bash {
 }
 
 alias 'db'='docker_bash'
+alias 'dpa'='docker ps -a'
