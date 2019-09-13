@@ -1,60 +1,47 @@
-#
-# [previous .bashrc content goes here]
-#
+export EDITOR=vim
 
-##
-## Suggested
-##
+stty -ixon # disable Ctrl-S
 
-#export EDITOR=vim
-#
-## set to 1 to enable NVM
-#export NVM_AUTOLOAD=1
-#
-#stty -ixon # disable Ctrl-S
-#
-## avoid Ctrl-D spam exitting shells
-#set -o ignoreeof
-#
-#export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --follow --glob "!.git/*"'
-#
-#alias sl='ls'
-#alias lr='ls -lathr'
-#
-#alias t='tmux'
-#alias tl='tmux list-sessions'
-#alias ta='tmux a -t'
-#
-#function validate_fzf_choice { 
-#    case "$1" in
-#        "") return 1;; 
-#        + ) return 1;;
-#        +\n) return 1;;
-#        +\t) return 1;;
-#        *) return 0;;
-#    esac
-#}
-#
-#function Suspend { # put system in suspend (sleep) mode
-#    sudo sleep 0 && i3lock -c 000000 && sudo systemctl suspend
-#}
-#
-#function XrandrHDMI-0 {
-#    xrandr --output HDMI-0 --mode 1920x1080 --output DVI-D-0 off
-#}
-#
-#function XrandrAll {
-#    xrandr --output HDMI-0 --mode 1920x1080 --primary --output DVI-D-0 --mode 1920x1080 --right-of HDMI-0 --rotate left
-#}
-#
-## this should be at the end of .bashrc
-##  because some scripts use variables and functions declared above
-#if [ -d ~/.bashrc.d ]; then
-#  for i in ~/.bashrc.d/*.sh; do
-#    if [ -r $i ]; then
-#      . $i
-#    fi
-#  done
-#  unset i
-#fi
-#
+# avoid Ctrl-D spam exitting shells
+set -o ignoreeof
+
+export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --follow --glob "!.git/*"'
+
+alias sl='ls'
+alias lr='ls -lathr'
+
+alias t='tmux'
+alias tl='tmux list-sessions'
+alias ta='tmux a -t'
+
+alias rg80='rg -M 80'
+
+function treel { # tree view current directory
+    [ -n "$1" ] && DIR="$1" || DIR="."
+    tree -DCf $DIR | less -rS
+}
+
+function tts {
+    tmux new-session -t "$1" -s "$2"
+}
+
+function tlr { # tail the last modified file in current folder
+    local FILE="$(ls -At | head -n 1)"
+    echo "---- ${FILE}:"
+    tail -n 30 -f "$FILE"
+}
+
+function vlr { # edit last modified file in current folder
+    local FILE="$(ls -At | head -n 1)"
+    vim "$FILE"
+}
+
+function validate_fzf_choice { 
+    case "$1" in
+        "") return 1;; 
+        + ) return 1;;
+        +\n) return 1;;
+        +\t) return 1;;
+        *) return 0;;
+    esac
+}

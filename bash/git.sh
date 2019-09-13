@@ -16,6 +16,7 @@ alias 'Gs'='git status'
 alias 'Gl'='git log'
 alias 'Gb'='git branch'
 alias 'Gcb'='git checkout -b'
+alias 'Gd'='git diff'
 alias 'Gds'='git diff --staged'
 # Exits with status 0 if inside a git repository
 function Isgitrepo {

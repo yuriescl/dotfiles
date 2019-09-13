@@ -13,6 +13,8 @@ set expandtab
 set hidden
 set number
 set autoindent
+set nosmartindent
+set nocindent
 set showmode
 set showcmd
 set hlsearch
@@ -72,26 +74,26 @@ call plug#end()
 runtime macros/matchit.vim
 
 filetype plugin on
-filetype plugin indent on
+filetype plugin indent off
 
 syntax enable
 
 colorscheme monokai
 
 " Status line colors
-hi StatusLine ctermbg=147 ctermfg=0
-hi StatusLineNC ctermbg=18 ctermfg=15
+hi StatusLine ctermbg=147 ctermfg=232
+hi StatusLineNC ctermbg=18 ctermfg=16
 
 " remove netrw directory banner
 let g:netrw_banner = 0
 
-" (Plugin Python syntax) 
+" (Plugin python-syntax) 
 let g:python_highlight_all = 1
 
-" (Plugin FZF) Disable jumping to existing windows
+" (Plugin fzf) Disable jumping to existing windows
 let g:fzf_buffers_jump = 0
 
-" Disable automatic session saving
+" (Plugin vim-session) Disable automatic session saving
 let g:session_autosave = 'no'
 
 " (Plugin Emmet)
@@ -104,8 +106,8 @@ let g:closetag_shortcut = '<leader>>'
 autocmd FileType html,css EmmetInstall
 
 " Cursor column/line highlight
-:hi CursorLine   cterm=NONE ctermbg=0 
-:hi CursorColumn cterm=NONE ctermbg=0
+:hi CursorLine   cterm=NONE ctermbg=237
+:hi CursorColumn cterm=NONE ctermbg=237
 
 
 """""""""""""""""""""""""""""""""""
@@ -131,10 +133,12 @@ function GitDiff()
     :silent execute '!git diff --color=always -- ' . expand('%:p') . ' | less --RAW-CONTROL-CHARS'
     :redraw!
 endfunction
+command! -bar GitDiff call GitDiff()
 function GitDiffStaged()
     :silent execute '!git diff --staged --color=always -- ' . expand('%:p') . ' | less --RAW-CONTROL-CHARS'
     :redraw!
 endfunction
+command! -bar GitDiffStaged call GitDiffStaged()
 
 " Toggle fold column
 function ToggleFoldColumn()
@@ -144,6 +148,7 @@ function ToggleFoldColumn()
         set foldcolumn=2
     endif
 endfunction
+command! -bar ToggleFoldColumn call ToggleFoldColumn()
 
 " Toggles between manual and syntax folding
 function ToggleFoldMethod()
@@ -155,6 +160,29 @@ function ToggleFoldMethod()
 		echo 'foldmethod=manual'
 	endif
 endfunction
+command! -bar ToggleFoldMethod call ToggleFoldMethod()
+
+" Echo File/dir paths
+function EchoRelativeFilePath()
+    echo @%
+endfunction
+command! -bar EchoRelativeFilePath call EchoRelativeFilePath()
+function EchoFileName()
+    echo expand('%:t')
+endfunction
+command! -bar EchoFileName call EchoFileName()
+function EchoFullFilePath()
+    echo expand("%:p")
+endfunction
+command! -bar EchoFullFilePath call EchoFullFilePath()
+function EchoDirName()
+    echo expand('%:p:h:t')
+endfunction
+command! -bar EchoDirName call EchoDirName()
+function EchoFullDirPath()
+    echo expand('%:p:h')
+endfunction
+command! -bar EchoFullDirPath call EchoFullDirPath()
 
 " See https://vim.fandom.com/wiki/Make_search_results_appear_in_the_middle_of_the_screen
 function s:SearchMode()
@@ -248,19 +276,13 @@ nmap <silent> <F2> :b#<CR>
 nmap <silent> <F3> :set wrap!<CR>
 " (Plugin bufkill) Delete current buffer without losing window/split
 nmap <silent> <F4> :BD<CR>
-" Echo full path of current file's directory
-nmap <F5> :echo expand('%:p:h')<CR>
-" Echo full path of current file
-nmap <F6> :echo expand('%:p')<CR>
 " Tabs
-nmap <silent> <C-k> :tabprevious<CR>
-nmap <silent> <C-j> :tabnext<CR>
-" Folding
-nmap <silent> <C-m> za
+nmap <silent> <F5> :tabprevious<CR>
+nmap <silent> <F6> :tabnext<CR>
 " FuzzyFinder
 nmap <C-b> :Buffers<CR>
 nmap <C-n> :Files<CR>
-nmap <C-f> :Lines<CR>
+nmap <C-f> :Rg<CR>
 nmap <C-t> :Tags<CR>
 nmap <C-g> :History<CR>
 " Saving & Exitting
@@ -282,3 +304,8 @@ nnoremap <expr> gp "'[" . strpart(getregtype(), 0, 1) . "']"
 nnoremap <expr> gP "`[" . strpart(getregtype(), 0, 1) . "`]"
 " Switch between search modes
 nnoremap <silent> <leader>n :call <SID>SearchMode()<CR>
+" Etc
+nmap <c-j> gj
+vmap <c-j> gj
+nmap <c-k> gk
+vmap <c-k> gk
