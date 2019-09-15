@@ -8,6 +8,7 @@ set backupdir=/tmp//
 set directory=/tmp//
 set undodir=/tmp//
 set keywordprg=rg
+set nocompatible
 set mouse=
 set expandtab
 set hidden
@@ -60,21 +61,16 @@ call plug#begin('~/.vim/plugged')
   Plug 'junegunn/fzf.vim'
   Plug 'vim-python/python-syntax'
   Plug 'yuriescl/vim-colorscheme'
-  Plug 'scrooloose/nerdcommenter'
   Plug 'danro/rename.vim'
   Plug 'qpkorr/vim-bufkill'
-  Plug 'altercation/vim-colors-solarized'
   Plug 'alvan/vim-closetag'
   Plug 'mattn/emmet-vim'
-  Plug 'xolox/vim-misc'
-  Plug 'xolox/vim-session'
-  Plug 'majutsushi/tagbar'
 call plug#end()
 
 runtime macros/matchit.vim
 
 filetype plugin on
-filetype plugin indent off
+filetype plugin indent on
 
 syntax enable
 
@@ -93,9 +89,6 @@ let g:python_highlight_all = 1
 " (Plugin fzf) Disable jumping to existing windows
 let g:fzf_buffers_jump = 0
 
-" (Plugin vim-session) Disable automatic session saving
-let g:session_autosave = 'no'
-
 " (Plugin Emmet)
 let g:user_emmet_mode='i' " Enable only in insert mode
 let g:user_emmet_install_global = 0 " Enable just for html/css files
@@ -103,7 +96,7 @@ let g:user_emmet_install_global = 0 " Enable just for html/css files
 " (Plugin vim-closetag) Shortcut for closing tags, default is '>'
 let g:closetag_shortcut = '<leader>>'
 
-autocmd FileType html,css EmmetInstall
+autocmd FileType html,htmldjango,css EmmetInstall
 
 " Cursor column/line highlight
 :hi CursorLine   cterm=NONE ctermbg=237
@@ -262,6 +255,9 @@ if has("autocmd")
   au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
     \| exe "normal! g'\"" | endif
 endif
+
+" Filetype-specific
+autocmd FileType html,htmldjango setlocal tabstop=2 shiftwidth=2
 
 
 """""""""""""""""""""""""""""""""""
