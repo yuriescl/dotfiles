@@ -1,19 +1,19 @@
 # Current setup
 
-OS: Debian 10 + Xfce4
-Terminal: xfce4-terminal + tmux + z + fzf + rip grep + ranger (`apt install tmux ranger`)
-Text Editor: vim + ctags (`apt install vim-gtk ctags`)
-Window Manager: i3wm (`apt install i3 i3status i3lock`)
-Window Manager utils: xautolock, pasystray, rofi, dunst (`apt install xautolock pasystray rofi dunst`)
-File Manager: PCManFM (`apt install pcmanfm`)
-Screenshots: flameshot (`apt install flameshot`)
-Screen drawing: Gromit-MPX (`apt install gromit-mpx`)
-Screen Recording/Streaming: Open Broadcaster Software (OBS) (`apt install obs-studio`)
-Media: GIMP + VLC + Audacity (`apt install gimp vlc audacity`)
-Passwords: KeePassXC (`apt install keepassxc`)
-Torrents: Qbittorrent (`apt install qbittorrent`)
-VPN: ExpressVPN
-Nodejs: nvm
+OS: Debian 10 + Xfce4  
+Terminal: xfce4-terminal + tmux + z + fzf + rip grep + ranger (`apt install tmux ranger`)  
+Text Editor: vim + ctags (`apt install vim-gtk ctags`)  
+Window Manager: i3wm (`apt install i3 i3status i3lock`)  
+Window Manager utils: xautolock, pasystray, rofi, dunst (`apt install xautolock pasystray rofi dunst`)  
+File Manager: PCManFM (`apt install pcmanfm`)  
+Screenshots: flameshot (`apt install flameshot`)  
+Screen drawing: Gromit-MPX (`apt install gromit-mpx`)  
+Screen Recording/Streaming: Open Broadcaster Software (OBS) (`apt install obs-studio`)  
+Media: GIMP + VLC + Audacity (`apt install gimp vlc audacity`)  
+Passwords: KeePassXC (`apt install keepassxc`)  
+Torrents: Qbittorrent (`apt install qbittorrent`)  
+VPN: ExpressVPN  
+Nodejs: nvm  
 
 # Disable Bell (beep)
 
