@@ -1,7 +1,7 @@
 # Current setup
 
 **OS**: Debian 10 + Xfce4  
-**Terminal**: xfce4-terminal + tmux + z + fzf + rip grep + ranger (`apt install tmux ranger`)  
+**Terminal**: xfce4-terminal + tmux + z + fzf + ripgrep + ranger (`apt install tmux ranger`)  
 **Text Editor**: vim + ctags (`apt install vim-gtk ctags`)  
 **Window Manager**: i3wm (`apt install i3 i3status i3lock`)  
 **Window Manager utils**: xautolock, pasystray, rofi, dunst (`apt install xautolock pasystray rofi dunst`)  
