@@ -18,6 +18,7 @@ alias 'Gb'='git branch'
 alias 'Gcb'='git checkout -b'
 alias 'Gd'='git diff'
 alias 'Gds'='git diff --staged'
+alias 'Gprune'='git remote prune origin'
 # Exits with status 0 if inside a git repository
 function Isgitrepo {
     git rev-parse --is-inside-work-tree 2>/dev/null 1>/dev/null

@@ -1,0 +1,139 @@
+" Note: default <leader> is usually \
+let mapleader = "\\"
+
+set tabstop=4
+set shiftwidth=4
+set laststatus=2
+set mouse=
+set expandtab
+set hidden
+set number
+set autoindent
+set nosmartindent
+set nocindent
+set showmode
+set showcmd
+set hlsearch
+set incsearch
+set ruler
+set nowrap
+set ignorecase
+set smartcase
+set foldmethod=manual
+set foldnestmax=1
+set splitright
+set splitbelow
+set vb t_vb=     " no visual bell & flash
+
+" Statusline
+set statusline=
+set statusline+=[%n]\                                  "buffernr
+set statusline+=%<%F\                                  "File+path
+set statusline+=%m%r%w\                                "Modified? Readonly? 
+set statusline+=%=%y\                                  "FileType
+set statusline+=%{''.(&fenc!=''?&fenc:&enc).''}        "Encoding
+set statusline+=%{(&bomb?\",BOM\":\"\")}\              "Encoding2
+set statusline+=%{&ff}\                                "FileFormat (dos/unix..) 
+set statusline+=r:%l/%L\                               "Rownumber/total (%)
+set statusline+=c:%c\                                  "Colnr
+set statusline+=%P\                                    "Top/bot.
+
+syntax enable
+colorscheme elflord
+
+" remove netrw directory banner
+let g:netrw_banner = 0
+
+" Echo File/dir paths
+function EchoRelativeFilePath()
+    echo @%
+endfunction
+command! -bar EchoRelativeFilePath call EchoRelativeFilePath()
+function EchoFileName()
+    echo expand('%:t')
+endfunction
+command! -bar EchoFileName call EchoFileName()
+function EchoFullFilePath()
+    echo expand("%:p")
+endfunction
+command! -bar EchoFullFilePath call EchoFullFilePath()
+function EchoDirName()
+    echo expand('%:p:h:t')
+endfunction
+command! -bar EchoDirName call EchoDirName()
+function EchoFullDirPath()
+    echo expand('%:p:h')
+endfunction
+command! -bar EchoFullDirPath call EchoFullDirPath()
+
+" See https://vim.fandom.com/wiki/Make_search_results_appear_in_the_middle_of_the_screen
+function s:SearchMode()
+  if !exists('s:searchmode') || s:searchmode == 0
+    echo 'Search next: scroll hit to middle if not on same page'
+    nnoremap <silent> n n:call <SID>MaybeMiddle()<CR>
+    nnoremap <silent> N N:call <SID>MaybeMiddle()<CR>
+    let s:searchmode = 1
+  elseif s:searchmode == 1
+    echo 'Search next: scroll hit to middle'
+    nnoremap n nzz
+    nnoremap N Nzz
+    let s:searchmode = 2
+  else
+    echo 'Search next: normal'
+    nunmap n
+    nunmap N
+    let s:searchmode = 0
+  endif
+endfunction
+" If cursor is in first or last line of window, scroll to middle line.
+function s:MaybeMiddle()
+  if winline() == 1 || winline() == winheight(0)
+    normal! zz
+  endif
+endfunction
+
+
+"""""""""""""""""""""""""""""""""""
+"           Auto commands
+"
+
+" Uncomment the following to have Vim jump to the last position when                                                       
+" reopening a file
+if has("autocmd")
+  au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
+    \| exe "normal! g'\"" | endif
+endif
+
+"""""""""""""""""""""""""""""""""""
+"           Mappings
+"
+
+nmap <silent> <F1> :noh<CR>
+nmap <silent> <F2> :b#<CR>
+nmap <silent> <F3> :set wrap!<CR>
+nmap <silent> <F5> :tabprevious<CR>
+nmap <silent> <F6> :tabnext<CR>
+nmap <C-p> :w<CR>
+nmap <silent> <F7> zh
+nmap <silent> <F8> zl
+nmap <silent> <F9> "+yy
+vmap <silent> <F9> "+y
+nmap <silent> <F10> "+P
+vmap <silent> <F10> "+P
+
+" See https://vim.fandom.com/wiki/Move_cursor_by_display_lines_when_wrapping
+nnoremap j gj
+vnoremap j gj
+nnoremap k gk
+vnoremap k gk
+
+" See https://vim.fandom.com/wiki/Selecting_your_pasted_text
+nnoremap <expr> gp "'[" . strpart(getregtype(), 0, 1) . "']"
+nnoremap <expr> gP "`[" . strpart(getregtype(), 0, 1) . "`]"
+" Switch between search modes
+nnoremap <silent> <leader>n :call <SID>SearchMode()<CR>
+
+nmap <c-j> gj
+vmap <c-j> gj
+nmap <c-k> gk
+vmap <c-k> gk

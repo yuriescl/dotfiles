@@ -1,147 +1,86 @@
-# ~/.config/i3/config
-
-######## GENERAL ########
+# Default location of this file: ~/.config/i3/config
 
 set $mod Mod1
 
 font xft:DejaVu Sans Mono Book 11
 
-# Use Mouse+$mod to drag floating windows to their wanted position
-floating_modifier $mod
-
-# Disable mouse scroll wheel
 bindsym button4 nop
 bindsym button5 nop
 
+floating_modifier $mod
+
 hide_edge_borders both
 workspace_layout tabbed
-
-# Disable focus change when moving the mouse
 focus_follows_mouse no
 
-# reload the configuration file
 bindsym $mod+Shift+c reload
-# restart i3 inplace (preserves your layout/sessinumber on, can be used to upgrade i3)
 bindsym $mod+Shift+r restart
-# exit i3 (logs you out of your X session)
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
-
-######## WINDOWS ########
-
-# kill focused window
 bindsym $mod+Shift+q kill
 
-# change focus
 bindsym $mod+h focus left
 bindsym $mod+j focus down
 bindsym $mod+k focus up
 bindsym $mod+l focus right
-
-# navigate between root parents
-bindsym $mod+i focus parent, focus parent, focus parent, focus parent, focus child, focus child, focus left
-bindsym $mod+o focus parent, focus parent, focus parent, focus parent, focus child, focus child, focus right
-
-# move focused window
 bindsym $mod+Shift+h move left
 bindsym $mod+Shift+j move down
 bindsym $mod+Shift+k move up
 bindsym $mod+Shift+l move right
 
-# split in horizontal orientation
 bindsym $mod+c split v
-
-# split in vertical orientation
 bindsym $mod+v split h
 
-# enter fullscreen mode for the focused container
-bindsym $mod+Shift+f fullscreen toggle
+bindsym $mod+i focus parent, focus parent, focus parent, focus parent, focus child, focus child, focus left
+bindsym $mod+o focus parent, focus parent, focus parent, focus parent, focus child, focus child, focus right
 
-# change container layout (stacked, tabbed, toggle split)
 bindsym $mod+w layout tabbed
 bindsym $mod+e layout toggle split
-
-# toggle tiling / floating
 bindsym $mod+Shift+space floating toggle
-
-# change focus between tiling / floating windows
 bindsym $mod+space focus mode_toggle
-
-# focus the parent container
+bindsym $mod+Shift+f fullscreen toggle
 bindsym $mod+a focus parent
 
-# resize window (you can also use the mouse for that)
 mode "resize" {
-        # These bindings trigger as soon as you enter the resize mode
-
-        # Pressing left will shrink the window’s width.
-        # Pressing right will grow the window’s width.
-        # Pressing up will shrink the window’s height.
-        # Pressing down will grow the window’s height.
         bindsym h resize shrink width 10 px or 10 ppt
         bindsym j resize grow height 10 px or 10 ppt
         bindsym k resize shrink height 10 px or 10 ppt
         bindsym l resize grow width 10 px or 10 ppt
 
-        # same bindings, but for the arrow keys
         bindsym Left resize shrink width 10 px or 10 ppt
         bindsym Down resize grow height 10 px or 10 ppt
         bindsym Up resize shrink height 10 px or 10 ppt
         bindsym Right resize grow width 10 px or 10 ppt
 
-        # back to normal: Enter or Escape
         bindsym Return mode "default"
         bindsym Escape mode "default"
 }
 
 bindsym $mod+r mode "resize"
 
-## On-the-fly titles
-
-# Dynamically set current container's title
 bindsym $mod+t exec i3-input -F 'exec ~/opt/scripts/i3/i3-title_format.sh "%s"' -P 'Set title: '
 bindsym $mod+Shift+t exec i3-input -F 'exec ~/opt/scripts/i3/i3-parent-title_format.sh "%s"' -P 'Set parent title: '
-
-# Go to window containing title (matches using similarity score)
 bindsym $mod+x exec i3-input -F 'exec ~/opt/scripts/i3/i3-focus-title.sh "%s" 5' -P 'Focus title: '
-
-## On-the-fly marks
-
-# Dynamically set current container's mark
 bindsym $mod+b exec i3-input -F 'exec ~/opt/scripts/i3/i3-create-mark.sh "%s"' -P 'Set mark: '
-
-# Go to window containing mark
 bindsym $mod+n exec i3-input -F 'exec ~/opt/scripts/i3/i3-focus-mark.sh "%s"' -P 'Focus mark: '
 
-## Jump to apps
-
-# Focus window with mark = "f"
 bindsym $mod+f [con_mark="^f$"] focus
-
-# Focus window with mark = "u"
-#bindsym $mod+u [con_mark="^u$"] focus
 bindsym $mod+u [class="Hubstaff"] focus
-
-# Focus Sublime Text's window
 bindsym $mod+s [class="Spotify"] focus
 
+for_window [title="Qalculate!"] floating enable
 
-## Floating windows
+######################################################
 
-for_window [title="Calculator"] floating enable
-
-######## WORKSPACES ########
-
-workspace 1 output HDMI-0
-workspace 2 output DVI-D-0
-workspace 3 output DVI-D-0
-workspace 4 output HDMI-0
-workspace 5 output DVI-D-0
-workspace 6 output DVI-D-0
-workspace 7 output HDMI-0
-workspace 8 output HDMI-0
-workspace 9 output HDMI-0
-workspace 10 output HDMI-0
-
+workspace 1 output HDMI-1
+workspace 2 output DP-1
+workspace 3 output DVI-D-1
+workspace 4 output HDMI-1
+workspace 5 output DP-1
+workspace 6 output DVI-D-1
+workspace 7 output HDMI-1
+workspace 8 output HDMI-1
+workspace 9 output DP-1
+workspace 10 output DVI-D-1
 
 set $ws1 1
 set $ws2 2
@@ -154,7 +93,6 @@ set $ws8 8
 set $ws9 9
 set $ws10 10
 
-# switch to workspace
 bindsym $mod+1 workspace $ws1
 bindsym $mod+2 workspace $ws2
 bindsym $mod+3 workspace $ws3
@@ -166,7 +104,6 @@ bindsym $mod+8 workspace $ws8
 bindsym $mod+9 workspace $ws9
 bindsym $mod+0 workspace $ws10
 
-# move focused container to workspace
 bindsym $mod+Shift+1 move container to workspace $ws1
 bindsym $mod+Shift+2 move container to workspace $ws2
 bindsym $mod+Shift+3 move container to workspace $ws3
@@ -178,11 +115,10 @@ bindsym $mod+Shift+8 move container to workspace $ws8
 bindsym $mod+Shift+9 move container to workspace $ws9
 bindsym $mod+Shift+0 move container to workspace $ws10
 
-# Move back and forth between current and last workspace
-bindsym $mod+q [con_mark=_last] focus
 bindsym $mod+Tab workspace back_and_forth
 
-######## COLORS ########
+######################################################
+
 # class                 border  backgr. text    indicator child_border
 client.focused          #600000 #ffa14f #000000 #2e9ef4   #285577
 client.focused_inactive #600000 #562600 #ffffff #484e50   #5f676a
@@ -192,11 +128,8 @@ client.placeholder      #000000 #0c0c0c #ffffff #000000   #0c0c0c
 
 client.background       #ffffff
 
-######## STATUS BAR ########
-# Start i3bar to display a workspace bar (plus the system information i3status
-# finds out, if available)
 bar {
-    tray_output HDMI-0
+    tray_output HDMI-1
     bindsym button4 nop
     bindsym button5 nop
     status_command i3status
@@ -207,48 +140,40 @@ bar {
     }
 }
 
-######## APPLICATIONS ########
 
-# start a terminal
-bindsym $mod+Return exec gnome-terminal
+######################################################
 
-# start rofi (a program launcher)
-bindsym $mod+d exec rofi -show run
-bindsym $mod+Shift+d exec rofi -show drun
-bindsym $mod+Shift+w exec rofi -show window
-
-# lock screen
-bindsym $mod+ccedilla exec i3lock -c 000000
-
-
-######## CONTROLS ########
-
-# Ubuntu with USB headset
 bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 1 +5% # increase sound volume
 bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 1 -5% # decrease sound volume
 bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 1 toggle # mute sound
-
-# Debian with standard audio output
 #bindsym $mod+equal exec amixer -q set Master 3%+ unmute
 #bindsym $mod+minus exec amixer -q set Master 3%- unmute
 #bindsym $mod+m exec amixer -q set Master toggle
 
-
-# Media/Action keys
 bindsym XF86AudioPlay exec playerctl play-pause # toggle (same button for both)
-#bindsym XF86AudioPlay exec playerctl play
-#bindsym XF86AudioPause exec playerctl pause
 bindsym XF86AudioNext exec playerctl next
 bindsym XF86AudioPrev exec playerctl previous
 
-bindsym --release Print exec gnome-screenshot -f "~/Pictures/Screenshot_$(date +%Y-%m-%d_%H-%M-%S).png"
-bindsym --release Shift+Print exec gnome-screenshot --interactive
+bindsym --release Print exec xfce4-screenshooter
 bindsym --release Control+Print exec flameshot gui
 
 
-######## STARTUP ########
+######################################################
 
-exec --no-startup-id xrandr --output HDMI-0 --mode 1920x1080 --primary --output DVI-D-0 --mode 1920x1080 --right-of HDMI-0 --rotate left
+bindsym $mod+Return exec xfce4-terminal
+
+bindsym $mod+d exec rofi -show run
+bindsym $mod+Shift+d exec rofi -show drun
+bindsym $mod+Shift+w exec rofi -show window
+
+bindsym $mod+ccedilla exec i3lock -c 000000
+
+######################################################
+
+exec --no-startup-id xsetroot -solid "#000000" # desktop background solid color
+exec --no-startup-id setxkbmap -model abnt2 -layout br -variant abnt2
+
+exec --no-startup-id xrandr --output HDMI-1 --mode 1920x1080 --output DP-1 --mode 1920x1080 --right-of HDMI-1 --rotate right --output DVI-D-1 --mode 1920x1080 --right-of DP-1 --rotate right
 
 # Lock screen after 10min of inactivity
 exec --no-startup-id xautolock -time 10 -locker 'i3lock -c 000000'
@@ -257,5 +182,5 @@ exec --no-startup-id xautolock -time 10 -locker 'i3lock -c 000000'
 exec --no-startup-id dunst # notifications
 exec --no-startup-id nm-applet # network manager
 exec --no-startup-id pasystray # volume
-#exec --no-startup-id ~/opt/dropbox-dist/dropboxd # dropbox
 exec --no-startup-id /opt/yuri/pcloud
+

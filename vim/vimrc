@@ -4,9 +4,6 @@ let mapleader = "\\"
 set tabstop=4
 set shiftwidth=4
 set laststatus=2
-set backupdir=/tmp//
-set directory=/tmp//
-set undodir=/tmp//
 set keywordprg=rg
 set nocompatible
 set mouse=
@@ -39,7 +36,7 @@ set statusline=
 set statusline+=[%n]\                                  "buffernr
 set statusline+=%<%F\                                  "File+path
 set statusline+=%m%r%w\                                "Modified? Readonly? 
-set statusline+=%=%y\                                    "FileType
+set statusline+=%=%y\                                  "FileType
 set statusline+=%{''.(&fenc!=''?&fenc:&enc).''}        "Encoding
 set statusline+=%{(&bomb?\",BOM\":\"\")}\              "Encoding2
 set statusline+=%{&ff}\                                "FileFormat (dos/unix..) 
@@ -264,43 +261,37 @@ autocmd FileType html,htmldjango setlocal tabstop=2 shiftwidth=2
 "           Mappings
 "
 
-" Clear highlight
 nmap <silent> <F1> :noh<CR>
-" Switch to last buffer visited
 nmap <silent> <F2> :b#<CR>
-" Toggle wrap
 nmap <silent> <F3> :set wrap!<CR>
-" (Plugin bufkill) Delete current buffer without losing window/split
 nmap <silent> <F4> :BD<CR>
-" Tabs
 nmap <silent> <F5> :tabprevious<CR>
 nmap <silent> <F6> :tabnext<CR>
-" FuzzyFinder
 nmap <C-b> :Buffers<CR>
 nmap <C-n> :Files<CR>
 nmap <C-f> :Rg<CR>
 nmap <C-t> :Tags<CR>
 nmap <C-g> :History<CR>
-" Saving & Exitting
 nmap <C-p> :w<CR>
 nmap <silent> <F7> zh
 nmap <silent> <F8> zl
-" Copy-paste
 nmap <silent> <F9> "+yy
 vmap <silent> <F9> "+y
 nmap <silent> <F10> "+P
 vmap <silent> <F10> "+P
+
 " See https://vim.fandom.com/wiki/Move_cursor_by_display_lines_when_wrapping
 nnoremap j gj
 vnoremap j gj
 nnoremap k gk
 vnoremap k gk
+
 " See https://vim.fandom.com/wiki/Selecting_your_pasted_text
 nnoremap <expr> gp "'[" . strpart(getregtype(), 0, 1) . "']"
 nnoremap <expr> gP "`[" . strpart(getregtype(), 0, 1) . "`]"
 " Switch between search modes
 nnoremap <silent> <leader>n :call <SID>SearchMode()<CR>
-" Etc
+
 nmap <c-j> gj
 vmap <c-j> gj
 nmap <c-k> gk
