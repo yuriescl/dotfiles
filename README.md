@@ -1,8 +1,21 @@
-# My config files
+# Current setup
 
-*Note: do not just copy/paste commands without understanding them first, they can potentially override your current configs.*
+OS: Debian 10 + Xfce4
+Terminal: xfce4-terminal + tmux + z + fzf + rip grep + ranger (`apt install tmux ranger`)
+Text Editor: vim + ctags (`apt install vim-gtk ctags`)
+Window Manager: i3wm (`apt install i3 i3status i3lock`)
+Window Manager utils: xautolock, pasystray, rofi, dunst (`apt install xautolock pasystray rofi dunst`)
+File Manager: PCManFM (`apt install pcmanfm`)
+Screenshots: flameshot (`apt install flameshot`)
+Screen drawing: Gromit-MPX (`apt install gromit-mpx`)
+Screen Recording/Streaming: Open Broadcaster Software (OBS) (`apt install obs-studio`)
+Media: GIMP + VLC + Audacity (`apt install gimp vlc audacity`)
+Passwords: KeePassXC (`apt install keepassxc`)
+Torrents: Qbittorrent (`apt install qbittorrent`)
+VPN: ExpressVPN
+Nodejs: nvm
 
-## Bell (beep)
+# Disable Bell (beep)
 
 See https://wiki.archlinux.org/index.php/PC_speaker#Disable_PC_Speaker
 
@@ -14,46 +27,14 @@ echo "xset -b" >> /etc/xprofile
 echo "set bell-style none" >> ~/.inputrc
 ```
 
-## i3
+# Fonts
 
-####  i3 config
-*There are hardcoded paths in i3 config.*
-```bash
-cp i3/i3.conf ~/.config/i3/config
-```
-
-####  i3 status
-```bash
-cp i3/i3-status.conf ~/.config/i3status/config
-```
-
-## Vim
-
-```bash
-cp vim/vimrc ~/.vimrc
-```
-
-## Tmux
-
-```bash
-cp tmux/tmux.conf ~/.tmux.conf
-```
-## Fonts
-
-In Debian 9, font rendering is not that great by default. It can be customized using `fontconfig` and `xrdb`.<br>
-*Also check the font configuration settings in your Desktop Environment.*
-
-### fontconfig
-
-```bash
-cp fonts/fonts.conf ~/.config/fontconfig/fonts.conf
-```
-
-### xrdb
+In Debian, font rendering is not that great by default. It can be
+customized using `fontconfig` and `xrdb`.<br>
 
 ```bash
 # check your current settings
 xrdb -query
-
+cp fonts/fonts.conf ~/.config/fontconfig/fonts.conf
 cp fonts/Xresources-fonts ~/.Xresources
 ```
