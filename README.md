@@ -1,7 +1,7 @@
 # Current setup
 
 **OS**: Debian 10 + Xfce4  
-**Terminal**: xfce4-terminal + tmux + z + fzf + ripgrep + ranger (`apt install tmux ranger`)  
+**Terminal**: xfce4-terminal + tmux + [z](https://github.com/rupa/z) + [fzf](https://github.com/junegunn/fzf) + [ripgrep](https://github.com/BurntSushi/ripgrep) + ranger (`apt install tmux ranger`)  
 **Text Editor**: vim + ctags (`apt install vim-gtk ctags`)  
 **Window Manager**: i3wm (`apt install i3 i3status i3lock`)  
 **Window Manager utils**: xautolock, pasystray, rofi, dunst, playerctl (`apt install xautolock pasystray rofi dunst playerctl`)  
@@ -13,7 +13,7 @@
 **Passwords**: KeePassXC (`apt install keepassxc`)  
 **Torrents**: Qbittorrent (`apt install qbittorrent`)  
 **VPN**: ExpressVPN  
-**Nodejs**: nvm  
+**Nodejs**: [nvm](https://github.com/nvm-sh/nvm)  
 
 # Disable Bell (beep)
 
