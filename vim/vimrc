@@ -5,6 +5,9 @@ set tabstop=4
 set shiftwidth=4
 set laststatus=2
 set keywordprg=rg
+set backupdir=/tmp//
+set directory=/tmp//
+set undodir=/tmp//
 set nocompatible
 set mouse=
 set expandtab
