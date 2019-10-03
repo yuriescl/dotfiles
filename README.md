@@ -2,7 +2,7 @@
 
 **OS**: Debian 10 + Xfce4  
 **Terminal**: xfce4-terminal + tmux + [z](https://github.com/rupa/z) + [fzf](https://github.com/junegunn/fzf) + [ripgrep](https://github.com/BurntSushi/ripgrep) + ranger (`apt install tmux ranger`)  
-**Text Editor**: Sublime Text 3 / vim
+**Text Editor**: Sublime Text 3 / vim  
 **Window Manager**: i3wm (`apt install i3 i3status i3lock`)  
 **Window Manager utils**: xautolock, pasystray, rofi, dunst, playerctl (`apt install xautolock pasystray rofi dunst playerctl`)  
 **File Manager**: PCManFM (`apt install pcmanfm`)  
