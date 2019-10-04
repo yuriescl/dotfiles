@@ -33,8 +33,8 @@ In Debian, font rendering is not that great by default. It can be
 customized using `fontconfig` and `xrdb`.<br>
 
 ```bash
-# check your current settings
-xrdb -query
+xrdb -query  # check current config
+mkdir -p ~/.config/fontconfig
 cp fonts/fonts.conf ~/.config/fontconfig/fonts.conf
 cp fonts/Xresources-fonts ~/.Xresources
 ```
