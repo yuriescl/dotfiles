@@ -1,8 +1,8 @@
 # Current setup
 
-**OS**: Debian 10 + Xfce4  
-**Terminal**: xfce4-terminal + tmux + [z](https://github.com/rupa/z) + [fzf](https://github.com/junegunn/fzf) + [ripgrep](https://github.com/BurntSushi/ripgrep) + ranger (`apt install tmux ranger`)  
-**Text Editor**: neovim + Sublime Text 3  
+**OS**: Ubuntu 18.04  (Gnome 3)
+**Terminal**: gnome-terminal + tmux + [z](https://github.com/rupa/z) + [fzf](https://github.com/junegunn/fzf) + [ripgrep](https://github.com/BurntSushi/ripgrep) + ranger (`apt install tmux ranger`)  
+**Text Editor**: neovim / Sublime Text 3  
 **Window Manager**: i3wm (`apt install i3 i3status i3lock`)  
 **Window Manager utils**: xautolock, pasystray, rofi, dunst, playerctl (`apt install xautolock pasystray rofi dunst playerctl`)  
 **File Manager**: PCManFM (`apt install pcmanfm`)  
