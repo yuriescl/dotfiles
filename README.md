@@ -1,8 +1,8 @@
 # Current setup
 
 **OS**: Ubuntu 18.04 (Gnome 3)  
-**Terminal**: gnome-terminal + tmux + [z](https://github.com/rupa/z) + [fzf](https://github.com/junegunn/fzf) + [ripgrep](https://github.com/BurntSushi/ripgrep) + ranger (`apt install tmux ranger`)  
-**Text Editor**: VSCode + vim emulator / neovim  
+**Terminal**: gnome-terminal / VSCode (embed terminal) + tmux + [z](https://github.com/rupa/z) + [fzf](https://github.com/junegunn/fzf) + [ripgrep](https://github.com/BurntSushi/ripgrep) + ranger (`apt install tmux ranger`)  
+**Text Editor**: VSCode / neovim  
 **Screenshots**: flameshot (`apt install flameshot`)  
 **Screen drawing**: Gromit-MPX (`apt install gromit-mpx`)  
 **Screen Recording/Streaming**: Open Broadcaster Software (OBS) (`apt install obs-studio`)  
