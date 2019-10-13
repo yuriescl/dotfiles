@@ -1,6 +1,6 @@
 # Current setup
 
-**OS**: Ubuntu 18.04 (Gnome 3)  
+**OS**: Manjaro 18.1 (Gnome 3)  
 **Terminal**: gnome-terminal / VSCode (embed terminal) + tmux + [z](https://github.com/rupa/z) + [fzf](https://github.com/junegunn/fzf) + [ripgrep](https://github.com/BurntSushi/ripgrep) + ranger (`apt install tmux ranger`)  
 **Text Editor**: VSCode / neovim  
 **Screenshots**: flameshot (`apt install flameshot`)  
@@ -19,7 +19,6 @@ See https://wiki.archlinux.org/index.php/PC_speaker#Disable_PC_Speaker
 To disable all bell sounds:
 ```bash
 echo "blacklist pcspkr" > /etc/modprobe.d/nobeep.conf
-echo "setterm -blength 0" > /etc/profile.d/disable-beep.sh
 echo "xset -b" >> /etc/xprofile
 echo "set bell-style none" >> ~/.inputrc
 ```
