@@ -1,14 +1,13 @@
 # Current setup
 
 **OS**: Manjaro 18.1 (Gnome 3)  
-**Terminal**: gnome-terminal / VSCode (embed terminal) + tmux + [z](https://github.com/rupa/z) + [fzf](https://github.com/junegunn/fzf) + [ripgrep](https://github.com/BurntSushi/ripgrep) + ranger (`apt install tmux ranger`)  
-**Text Editor**: VSCode / neovim  
-**Screenshots**: flameshot (`apt install flameshot`)  
-**Screen drawing**: Gromit-MPX (`apt install gromit-mpx`)  
-**Screen Recording/Streaming**: Open Broadcaster Software (OBS) (`apt install obs-studio`)  
-**Media**: GIMP + VLC + Audacity (`apt install gimp vlc audacity`)  
-**Passwords**: KeePassXC (`apt install keepassxc`)  
-**Torrents**: Qbittorrent (`apt install qbittorrent`)  
+**Terminal**: gnome-terminal / VSCode (embed terminal) + tmux + [z](https://github.com/rupa/z) + [fzf](https://github.com/junegunn/fzf) + [ripgrep](https://github.com/BurntSushi/ripgrep) + ranger (`pacman -S tmux ranger ripgrep`)  
+**Text Editor**: VSCode / neovim (`pacman -S code neovim`)  
+**Screenshots**: flameshot (`pacman -S flameshot`)  
+**Screen Recording/Streaming**: Open Broadcaster Software (OBS) (`pacman -S obs-studio`)  
+**Media**: GIMP + VLC + Audacity (`pacman -S gimp vlc audacity`)  
+**Passwords**: KeePassXC (`pacman -S keepassxc`)  
+**Torrents**: Qbittorrent (`pacman -S qbittorrent`)  
 **VPN**: ExpressVPN  
 **Nodejs**: [nvm](https://github.com/nvm-sh/nvm)  
 
