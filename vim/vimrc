@@ -22,7 +22,6 @@ set hlsearch
 set incsearch
 set ruler
 set cursorline
-set cursorcolumn
 set nowrap
 set listchars=space:·,tab:»\ ,extends:›,precedes:‹,nbsp:·,trail:·,eol:$
 set ignorecase
@@ -63,8 +62,6 @@ call plug#begin('~/.vim/plugged')
   Plug 'yuriescl/vim-colorscheme'
   Plug 'danro/rename.vim'
   Plug 'qpkorr/vim-bufkill'
-  Plug 'alvan/vim-closetag'
-  Plug 'mattn/emmet-vim'
 call plug#end()
 
 runtime macros/matchit.vim
@@ -89,37 +86,10 @@ let g:python_highlight_all = 1
 " (Plugin fzf) Disable jumping to existing windows
 let g:fzf_buffers_jump = 0
 
-" (Plugin Emmet)
-let g:user_emmet_mode='i' " Enable only in insert mode
-let g:user_emmet_install_global = 0 " Enable just for html/css files
-
-" (Plugin vim-closetag) Shortcut for closing tags, default is '>'
-let g:closetag_shortcut = '<leader>>'
-
-autocmd FileType html,htmldjango,css EmmetInstall
-
-" Cursor column/line highlight
-:hi CursorLine   cterm=NONE ctermbg=237
-:hi CursorColumn cterm=NONE ctermbg=237
-
 
 """""""""""""""""""""""""""""""""""
 "           Functions
 "
-
-function EnableCursorHighlight()
-   setlocal cursorline
-   setlocal cursorcolumn
-endfunction
-function DisableCursorHighlight()
-   setlocal nocursorline
-   setlocal nocursorcolumn
-endfunction
-augroup CursorLine
-  au!
-  au VimEnter,WinEnter,BufWinEnter * call EnableCursorHighlight()
-  au WinLeave * call DisableCursorHighlight()
-augroup END
 
 " Show git diff of current file
 function GitDiff()
@@ -242,12 +212,6 @@ command! -bar RangerChooser call RangerChooser()
 """""""""""""""""""""""""""""""""""
 "           Auto commands
 "
-
-augroup AutoSaveFolds
-  autocmd!
-  autocmd BufWinLeave ?* mkview
-  autocmd BufWinEnter ?* silent loadview
-augroup END
 
 " Uncomment the following to have Vim jump to the last position when                                                       
 " reopening a file

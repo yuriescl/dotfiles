@@ -104,23 +104,6 @@ if has("autocmd")
     \| exe "normal! g'\"" | endif
 endif
 
-"""""""""""""""""""""""""""""""""""
-"           Mappings
-"
-
-nmap <silent> <F1> :noh<CR>
-nmap <silent> <F2> :b#<CR>
-nmap <silent> <F3> :set wrap!<CR>
-nmap <silent> <F5> :tabprevious<CR>
-nmap <silent> <F6> :tabnext<CR>
-nmap <C-p> :w<CR>
-nmap <silent> <F7> zh
-nmap <silent> <F8> zl
-nmap <silent> <F9> "+yy
-vmap <silent> <F9> "+y
-nmap <silent> <F10> "+P
-vmap <silent> <F10> "+P
-
 " See https://vim.fandom.com/wiki/Move_cursor_by_display_lines_when_wrapping
 nnoremap j gj
 vnoremap j gj
