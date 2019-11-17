@@ -173,6 +173,22 @@ function s:MaybeMiddle()
   endif
 endfunction
 
+function! OpenRanger()
+  let rangerCallback = { 'name': 'ranger' }
+  let b:temp = tempname()
+  function! rangerCallback.on_exit(id, code, type)
+    try
+      if filereadable(b:temp)
+          exec 'edit ' . readfile(b:temp)[0]
+          call system('rm ' . b:temp)
+      endif
+    endtry
+  endfunction
+  enew
+  call termopen('ranger --choosefile=' . b:temp, rangerCallback)
+  startinsert
+endfunction
+
 " Compatible with ranger 1.4.2 through 1.7.*
 "
 " Add ranger as a file chooser in vim.
@@ -207,7 +223,7 @@ function! RangerChooser()
     endfor
     redraw!
 endfunction
-command! -bar RangerChooser call RangerChooser()
+command! -bar R call RangerChooser()
 
 """""""""""""""""""""""""""""""""""
 "           Auto commands
