@@ -23,7 +23,8 @@ set incsearch
 set ruler
 set cursorline
 set nowrap
-set listchars=space:·,tab:»\ ,extends:›,precedes:‹,nbsp:·,trail:·,eol:$
+set lcs=extends:›,precedes:‹
+set list
 set ignorecase
 set smartcase
 set foldmethod=manual
@@ -32,19 +33,8 @@ set splitright
 set splitbelow
 set vb t_vb=     " no visual bell & flash
 set tags=./tags,tags  " look for the tags file in current directory, then globally
-
-" Statusline
-set statusline=
-set statusline+=[%n]\                                  "buffernr
-set statusline+=%<%F\                                  "File+path
-set statusline+=%m%r%w\                                "Modified? Readonly? 
-set statusline+=%=%y\                                  "FileType
-set statusline+=%{''.(&fenc!=''?&fenc:&enc).''}        "Encoding
-set statusline+=%{(&bomb?\",BOM\":\"\")}\              "Encoding2
-set statusline+=%{&ff}\                                "FileFormat (dos/unix..) 
-set statusline+=r:%l/%L\                               "Rownumber/total (%)
-set statusline+=c:%c\                                  "Colnr
-set statusline+=%P\                                    "Top/bot.
+set updatetime=750
+set wildmode=longest,list
 
 "
 " Plugins
@@ -62,7 +52,21 @@ call plug#begin('~/.vim/plugged')
   Plug 'yuriescl/vim-colorscheme'
   Plug 'danro/rename.vim'
   Plug 'qpkorr/vim-bufkill'
+  Plug 'majutsushi/tagbar'
 call plug#end()
+
+" Statusline
+set statusline=
+set statusline+=[%n]\                                  "buffernr
+set statusline+=%<%F\                                  "File+path
+set statusline+=%m%r%w\                                "Modified? Readonly? 
+set statusline+=%=%y\                                    "FileType
+set statusline+=%{''.(&fenc!=''?&fenc:&enc).''}        "Encoding
+set statusline+=%{(&bomb?\",BOM\":\"\")}\              "Encoding2
+set statusline+=%{&ff}\                                "FileFormat (dos/unix..) 
+set statusline+=r:%l/%L\                               "Rownumber/total (%)
+set statusline+=c:%c\                                  "Colnr
+set statusline+=%P\                                    "Top/bot.
 
 runtime macros/matchit.vim
 
@@ -85,6 +89,12 @@ let g:python_highlight_all = 1
 
 " (Plugin fzf) Disable jumping to existing windows
 let g:fzf_buffers_jump = 0
+
+" (Plugin tagbar)
+let g:tagbar_width = 25
+let g:tagbar_compact = 1
+let g:tagbar_indent = 1
+let g:tagbar_sort = 0
 
 
 """""""""""""""""""""""""""""""""""
@@ -112,6 +122,18 @@ function ToggleFoldColumn()
     endif
 endfunction
 command! -bar ToggleFoldColumn call ToggleFoldColumn()
+
+
+function ToggleSetList()
+  if !exists('s:setlist') || s:setlist == 0
+    set listchars=space:·,tab:»\ ,extends:›,precedes:‹,nbsp:·,trail:·,eol:$
+    let s:setlist = 1
+  else
+    set listchars=extends:›,precedes:‹
+    let s:setlist = 0
+  endif
+endfunction
+command! -bar ToggleSetList call ToggleSetList()
 
 " Toggles between manual and syntax folding
 function ToggleFoldMethod()
@@ -173,22 +195,6 @@ function s:MaybeMiddle()
   endif
 endfunction
 
-function! OpenRanger()
-  let rangerCallback = { 'name': 'ranger' }
-  let b:temp = tempname()
-  function! rangerCallback.on_exit(id, code, type)
-    try
-      if filereadable(b:temp)
-          exec 'edit ' . readfile(b:temp)[0]
-          call system('rm ' . b:temp)
-      endif
-    endtry
-  endfunction
-  enew
-  call termopen('ranger --choosefile=' . b:temp, rangerCallback)
-  startinsert
-endfunction
-
 " Compatible with ranger 1.4.2 through 1.7.*
 "
 " Add ranger as a file chooser in vim.
@@ -247,21 +253,14 @@ autocmd FileType html,htmldjango setlocal tabstop=2 shiftwidth=2
 nmap <silent> <F1> :noh<CR>
 nmap <silent> <F2> :b#<CR>
 nmap <silent> <F3> :set wrap!<CR>
-nmap <silent> <F4> :BD<CR>
-nmap <silent> <F5> :tabprevious<CR>
-nmap <silent> <F6> :tabnext<CR>
+nmap <silent> <F4> :TagbarToggle<CR>
 nmap <C-b> :Buffers<CR>
 nmap <C-n> :Files<CR>
 nmap <C-f> :Rg<CR>
 nmap <C-t> :Tags<CR>
 nmap <C-g> :History<CR>
 nmap <C-p> :w<CR>
-nmap <silent> <F7> zh
-nmap <silent> <F8> zl
-nmap <silent> <F9> "+yy
-vmap <silent> <F9> "+y
-nmap <silent> <F10> "+P
-vmap <silent> <F10> "+P
+nmap <C-q> :BD<CR>
 
 " See https://vim.fandom.com/wiki/Move_cursor_by_display_lines_when_wrapping
 nnoremap j gj
