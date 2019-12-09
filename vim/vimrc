@@ -60,11 +60,6 @@ set statusline=
 set statusline+=[%n]\                                  "buffernr
 set statusline+=%<%F\                                  "File+path
 set statusline+=%m%r%w\                                "Modified? Readonly? 
-set statusline+=%=%y\                                    "FileType
-set statusline+=%{''.(&fenc!=''?&fenc:&enc).''}        "Encoding
-set statusline+=%{(&bomb?\",BOM\":\"\")}\              "Encoding2
-set statusline+=%{&ff}\                                "FileFormat (dos/unix..) 
-set statusline+=r:%l/%L\                               "Rownumber/total (%)
 set statusline+=c:%c\                                  "Colnr
 set statusline+=%P\                                    "Top/bot.
 
@@ -135,15 +130,43 @@ function ToggleSetList()
 endfunction
 command! -bar ToggleSetList call ToggleSetList()
 
+function ToggleStatusLine()
+  if !exists('s:statusline') || s:statusline == 0
+    set statusline=
+    "set statusline+=[%n]\                                  "buffernr
+    set statusline+=%<%F\                                  "File+path
+    set statusline+=%m%r%w\                                "Modified? Readonly? 
+    set statusline+=%=%y\                                  "FileType
+    set statusline+=%{''.(&fenc!=''?&fenc:&enc).''}        "Encoding
+    set statusline+=%{(&bomb?\",BOM\":\"\")}\              "Encoding2
+    set statusline+=%{&ff}\                                "FileFormat (dos/unix..) 
+    set statusline+=r:%l/%L\                               "Rownumber/total (%)
+    set statusline+=c:%c\                                  "Colnr
+    set statusline+=%P\                                    "Top/bot.
+
+    let s:statusline = 1
+  else
+    set statusline=
+    "set statusline+=[%n]\                                  "buffernr
+    set statusline+=%<%F\                                  "File+path
+    set statusline+=%m%r%w\                                "Modified? Readonly? 
+    set statusline+=%=c:%c\                                "Colnr
+    set statusline+=%P\                                    "Top/bot.
+
+    let s:statusline = 0
+  endif
+endfunction
+command! -bar ToggleStatusLine call ToggleStatusLine()
+
 " Toggles between manual and syntax folding
 function ToggleFoldMethod()
-	if (&foldmethod == 'manual')
-		setlocal foldmethod=syntax
-		echo 'foldmethod=syntax'
-	else
-		setlocal foldmethod=manual
-		echo 'foldmethod=manual'
-	endif
+  if (&foldmethod == 'manual')
+    setlocal foldmethod=syntax
+    echo 'foldmethod=syntax'
+  else
+    setlocal foldmethod=manual
+    echo 'foldmethod=manual'
+  endif
 endfunction
 command! -bar ToggleFoldMethod call ToggleFoldMethod()
 
@@ -168,6 +191,16 @@ function EchoFullDirPath()
     echo expand('%:p:h')
 endfunction
 command! -bar EchoFullDirPath call EchoFullDirPath()
+
+function FzfFiles()
+    let isgitrepo = system('git rev-parse --is-inside-work-tree 2>/dev/null 1>/dev/null && echo -n "true" || echo -n "false"')
+    if isgitrepo == 'true'
+        :GFiles
+    else
+        :Files
+    endif
+endfunction
+command! -bar FzfFiles call FzfFiles()
 
 " See https://vim.fandom.com/wiki/Make_search_results_appear_in_the_middle_of_the_screen
 function s:SearchMode()
@@ -250,13 +283,20 @@ autocmd FileType html,htmldjango setlocal tabstop=2 shiftwidth=2
 "           Mappings
 "
 
+nmap <leader>p :set paste<CR>"+p:set paste!<CR>
+vmap <leader>p :set paste<CR>"+p:set paste!<CR>
+nmap <leader>P :set paste<CR>"+P:set paste!<CR>
+vmap <leader>P :set paste<CR>"+P:set paste!<CR>
+nmap <leader>yy v^$"+y
+vmap <leader>y "+y
+
 nmap <silent> <F1> :noh<CR>
-nmap <silent> <F2> :b#<CR>
 nmap <silent> <F3> :set wrap!<CR>
 nmap <silent> <F4> :TagbarToggle<CR>
 nmap <C-b> :Buffers<CR>
+nmap <C-e> :FzfFiles<CR>
 nmap <C-n> :Files<CR>
-nmap <C-f> :Rg<CR>
+nmap <C-f> :History:<CR>
 nmap <C-t> :Tags<CR>
 nmap <C-g> :History<CR>
 nmap <C-p> :w<CR>
@@ -278,3 +318,5 @@ nmap <c-j> gj
 vmap <c-j> gj
 nmap <c-k> gk
 vmap <c-k> gk
+
+vmap $ $h
