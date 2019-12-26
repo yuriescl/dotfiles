@@ -284,9 +284,7 @@ autocmd FileType html,htmldjango setlocal tabstop=2 shiftwidth=2
 "
 
 nmap <leader>p :set paste<CR>"+p:set paste!<CR>
-vmap <leader>p :set paste<CR>"+p:set paste!<CR>
 nmap <leader>P :set paste<CR>"+P:set paste!<CR>
-vmap <leader>P :set paste<CR>"+P:set paste!<CR>
 nmap <leader>yy v^$"+y
 vmap <leader>y "+y
 
