@@ -3,12 +3,14 @@ let mapleader = "\\"
 
 set tabstop=4
 set shiftwidth=4
+set softtabstop=0
 set laststatus=2
 set keywordprg=rg
 set backupdir=/tmp//
 set directory=/tmp//
 set undodir=/tmp//
 set nocompatible
+set colorcolumn=80
 set mouse=
 set expandtab
 set hidden
@@ -29,30 +31,24 @@ set ignorecase
 set smartcase
 set foldmethod=manual
 set foldnestmax=1
-set splitright
-set splitbelow
+set nomodeline
 set vb t_vb=     " no visual bell & flash
 set tags=./tags,tags  " look for the tags file in current directory, then globally
 set updatetime=750
 set wildmode=longest,list
+set scrolloff=999
 
-"
-" Plugins
-"
-" To install vim-plug:
-"
-"  curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
-"   https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-"
-" Then call :PlugInstall to install the plugins.
-call plug#begin('~/.vim/plugged')
+call plug#begin(stdpath('data') . '/plugged')
   Plug '~/opt/fzf'  " path to fzf
   Plug 'junegunn/fzf.vim'
+  Plug 'danro/rename.vim'
   Plug 'vim-python/python-syntax'
   Plug 'yuriescl/vim-colorscheme'
-  Plug 'danro/rename.vim'
   Plug 'qpkorr/vim-bufkill'
   Plug 'majutsushi/tagbar'
+  Plug 'rbgrouleff/bclose.vim'
+  Plug 'francoiscabrol/ranger.vim'
+  Plug 'jremmen/vim-ripgrep'
 call plug#end()
 
 " Statusline
@@ -66,7 +62,8 @@ set statusline+=%P\                                    "Top/bot.
 runtime macros/matchit.vim
 
 filetype plugin on
-filetype plugin indent on
+filetype plugin indent off
+filetype indent off
 
 syntax enable
 
@@ -74,7 +71,7 @@ colorscheme monokai
 
 " Status line colors
 hi StatusLine ctermbg=147 ctermfg=232
-hi StatusLineNC ctermbg=18 ctermfg=16
+hi StatusLineNC ctermbg=18 ctermfg=15
 
 " remove netrw directory banner
 let g:netrw_banner = 0
@@ -84,6 +81,7 @@ let g:python_highlight_all = 1
 
 " (Plugin fzf) Disable jumping to existing windows
 let g:fzf_buffers_jump = 0
+let $FZF_DEFAULT_COMMAND='rg -F --files --no-ignore --hidden --glob "!.git/*"'
 
 " (Plugin tagbar)
 let g:tagbar_width = 25
@@ -91,22 +89,13 @@ let g:tagbar_compact = 1
 let g:tagbar_indent = 1
 let g:tagbar_sort = 0
 
+" (Plugin ranger)
+let g:ranger_map_keys = 0  " disable the default key mapping
+
 
 """""""""""""""""""""""""""""""""""
 "           Functions
 "
-
-" Show git diff of current file
-function GitDiff()
-    :silent execute '!git diff --color=always -- ' . expand('%:p') . ' | less --RAW-CONTROL-CHARS'
-    :redraw!
-endfunction
-command! -bar GitDiff call GitDiff()
-function GitDiffStaged()
-    :silent execute '!git diff --staged --color=always -- ' . expand('%:p') . ' | less --RAW-CONTROL-CHARS'
-    :redraw!
-endfunction
-command! -bar GitDiffStaged call GitDiffStaged()
 
 " Toggle fold column
 function ToggleFoldColumn()
@@ -202,67 +191,6 @@ function FzfFiles()
 endfunction
 command! -bar FzfFiles call FzfFiles()
 
-" See https://vim.fandom.com/wiki/Make_search_results_appear_in_the_middle_of_the_screen
-function s:SearchMode()
-  if !exists('s:searchmode') || s:searchmode == 0
-    echo 'Search next: scroll hit to middle if not on same page'
-    nnoremap <silent> n n:call <SID>MaybeMiddle()<CR>
-    nnoremap <silent> N N:call <SID>MaybeMiddle()<CR>
-    let s:searchmode = 1
-  elseif s:searchmode == 1
-    echo 'Search next: scroll hit to middle'
-    nnoremap n nzz
-    nnoremap N Nzz
-    let s:searchmode = 2
-  else
-    echo 'Search next: normal'
-    nunmap n
-    nunmap N
-    let s:searchmode = 0
-  endif
-endfunction
-" If cursor is in first or last line of window, scroll to middle line.
-function s:MaybeMiddle()
-  if winline() == 1 || winline() == winheight(0)
-    normal! zz
-  endif
-endfunction
-
-" Compatible with ranger 1.4.2 through 1.7.*
-"
-" Add ranger as a file chooser in vim.
-" Starts in the current file's directory.
-" Usage: :RangerChooser
-function! RangerChooser()
-    let temp = tempname()
-    " The option "--choosefiles" was added in ranger 1.5.1. Use the next line
-    " with ranger 1.4.2 through 1.5.0 instead.
-    "exec 'silent !ranger --choosefile=' . shellescape(temp)
-    if has("gui_running")
-        exec 'silent !xterm -e ranger --choosefiles=' . shellescape(temp) . ' ' . expand('%:p:h')
-    else
-        exec 'silent !ranger --choosefiles=' . shellescape(temp) . ' ' . expand('%:p:h') 
-    endif
-    if !filereadable(temp)
-        redraw!
-        " Nothing to read.
-        return
-    endif
-    let names = readfile(temp)
-    if empty(names)
-        redraw!
-        " Nothing to open.
-        return
-    endif
-    " Edit the first item.
-    exec 'edit ' . fnameescape(names[0])
-    " Add any remaning items to the arg list/buffer list.
-    for name in names[1:]
-        exec 'argadd ' . fnameescape(name)
-    endfor
-    redraw!
-endfunction
-command! -bar R call RangerChooser()
 
 """""""""""""""""""""""""""""""""""
 "           Auto commands
@@ -278,7 +206,6 @@ endif
 " Filetype-specific
 autocmd FileType html,htmldjango setlocal tabstop=2 shiftwidth=2
 
-
 """""""""""""""""""""""""""""""""""
 "           Mappings
 "
@@ -293,28 +220,35 @@ nmap <silent> <F3> :set wrap!<CR>
 nmap <silent> <F4> :TagbarToggle<CR>
 nmap <C-b> :Buffers<CR>
 nmap <C-e> :FzfFiles<CR>
-nmap <C-n> :Files<CR>
-nmap <C-f> :History:<CR>
-nmap <C-t> :Tags<CR>
+nmap <C-f> :Rg 
 nmap <C-g> :History<CR>
-nmap <C-p> :w<CR>
-nmap <C-q> :BD<CR>
+nmap <C-n> :Files<CR>
+nmap <silent> <C-p> :w<CR>
+nmap <silent> <C-q> :q<CR>
+nmap <C-t> :Tags<CR>
+nmap <silent> <C-x> :BD<CR>
 
 " See https://vim.fandom.com/wiki/Move_cursor_by_display_lines_when_wrapping
-nnoremap j gj
-vnoremap j gj
-nnoremap k gk
-vnoremap k gk
+nmap <silent> j gj
+vmap <silent> j gj
+nmap <silent> k gk
+vmap <silent> k gk
 
 " See https://vim.fandom.com/wiki/Selecting_your_pasted_text
-nnoremap <expr> gp "'[" . strpart(getregtype(), 0, 1) . "']"
-nnoremap <expr> gP "`[" . strpart(getregtype(), 0, 1) . "`]"
+nmap <expr> gp "'[" . strpart(getregtype(), 0, 1) . "']"
+nmap <expr> gP "`[" . strpart(getregtype(), 0, 1) . "`]"
 " Switch between search modes
-nnoremap <silent> <leader>n :call <SID>SearchMode()<CR>
+nmap <silent> <leader>n :call <SID>SearchMode()<CR>
 
-nmap <c-j> gj
-vmap <c-j> gj
-nmap <c-k> gk
-vmap <c-k> gk
+nmap <silent> <c-j> gj
+vmap <silent> <c-j> gj
+nmap <silent> <c-k> gk
+vmap <silent> <c-k> gk
 
-vmap $ $h
+vmap <silent> $ $h
+
+nmap <silent> K <Nop>
+vmap <silent> K <Nop>
+vmap <silent> J <Nop>
+
+command! R Ranger

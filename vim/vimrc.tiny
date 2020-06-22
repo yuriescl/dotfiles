@@ -3,12 +3,14 @@ let mapleader = "\\"
 
 set tabstop=4
 set shiftwidth=4
+set softtabstop=0
 set laststatus=2
 set keywordprg=rg
 set backupdir=/tmp//
 set directory=/tmp//
 set undodir=/tmp//
 set nocompatible
+set colorcolumn=80
 set mouse=
 set expandtab
 set hidden
@@ -29,12 +31,12 @@ set ignorecase
 set smartcase
 set foldmethod=manual
 set foldnestmax=1
-set splitright
-set splitbelow
+set nomodeline
 set vb t_vb=     " no visual bell & flash
 set tags=./tags,tags  " look for the tags file in current directory, then globally
 set updatetime=750
 set wildmode=longest,list
+set scrolloff=999
 
 " Statusline
 set statusline=
@@ -44,213 +46,33 @@ set statusline+=%m%r%w\                                "Modified? Readonly?
 set statusline+=c:%c\                                  "Colnr
 set statusline+=%P\                                    "Top/bot.
 
-runtime macros/matchit.vim
-
-filetype plugin on
-filetype plugin indent on
-
 syntax enable
 
 colorscheme elflord
 
 " Status line colors
 hi StatusLine ctermbg=147 ctermfg=232
-hi StatusLineNC ctermbg=18 ctermfg=16
-
-" remove netrw directory banner
-let g:netrw_banner = 0
-
-"""""""""""""""""""""""""""""""""""
-"           Functions
-"
-
-" Toggle fold column
-function ToggleFoldColumn()
-    if (&foldcolumn != 0)
-        set foldcolumn=0
-    else
-        set foldcolumn=2
-    endif
-endfunction
-command! -bar ToggleFoldColumn call ToggleFoldColumn()
-
-
-function ToggleSetList()
-  if !exists('s:setlist') || s:setlist == 0
-    set listchars=space:·,tab:»\ ,extends:›,precedes:‹,nbsp:·,trail:·,eol:$
-    let s:setlist = 1
-  else
-    set listchars=extends:›,precedes:‹
-    let s:setlist = 0
-  endif
-endfunction
-command! -bar ToggleSetList call ToggleSetList()
-
-function ToggleStatusLine()
-  if !exists('s:statusline') || s:statusline == 0
-    set statusline=
-    "set statusline+=[%n]\                                  "buffernr
-    set statusline+=%<%F\                                  "File+path
-    set statusline+=%m%r%w\                                "Modified? Readonly? 
-    set statusline+=%=%y\                                  "FileType
-    set statusline+=%{''.(&fenc!=''?&fenc:&enc).''}        "Encoding
-    set statusline+=%{(&bomb?\",BOM\":\"\")}\              "Encoding2
-    set statusline+=%{&ff}\                                "FileFormat (dos/unix..) 
-    set statusline+=r:%l/%L\                               "Rownumber/total (%)
-    set statusline+=c:%c\                                  "Colnr
-    set statusline+=%P\                                    "Top/bot.
-
-    let s:statusline = 1
-  else
-    set statusline=
-    "set statusline+=[%n]\                                  "buffernr
-    set statusline+=%<%F\                                  "File+path
-    set statusline+=%m%r%w\                                "Modified? Readonly? 
-    set statusline+=%=c:%c\                                "Colnr
-    set statusline+=%P\                                    "Top/bot.
-
-    let s:statusline = 0
-  endif
-endfunction
-command! -bar ToggleStatusLine call ToggleStatusLine()
-
-" Toggles between manual and syntax folding
-function ToggleFoldMethod()
-  if (&foldmethod == 'manual')
-    setlocal foldmethod=syntax
-    echo 'foldmethod=syntax'
-  else
-    setlocal foldmethod=manual
-    echo 'foldmethod=manual'
-  endif
-endfunction
-command! -bar ToggleFoldMethod call ToggleFoldMethod()
-
-" Echo File/dir paths
-function EchoRelativeFilePath()
-    echo @%
-endfunction
-command! -bar EchoRelativeFilePath call EchoRelativeFilePath()
-function EchoFileName()
-    echo expand('%:t')
-endfunction
-command! -bar EchoFileName call EchoFileName()
-function EchoFullFilePath()
-    echo expand("%:p")
-endfunction
-command! -bar EchoFullFilePath call EchoFullFilePath()
-function EchoDirName()
-    echo expand('%:p:h:t')
-endfunction
-command! -bar EchoDirName call EchoDirName()
-function EchoFullDirPath()
-    echo expand('%:p:h')
-endfunction
-command! -bar EchoFullDirPath call EchoFullDirPath()
-
-" See https://vim.fandom.com/wiki/Make_search_results_appear_in_the_middle_of_the_screen
-function s:SearchMode()
-  if !exists('s:searchmode') || s:searchmode == 0
-    echo 'Search next: scroll hit to middle if not on same page'
-    nnoremap <silent> n n:call <SID>MaybeMiddle()<CR>
-    nnoremap <silent> N N:call <SID>MaybeMiddle()<CR>
-    let s:searchmode = 1
-  elseif s:searchmode == 1
-    echo 'Search next: scroll hit to middle'
-    nnoremap n nzz
-    nnoremap N Nzz
-    let s:searchmode = 2
-  else
-    echo 'Search next: normal'
-    nunmap n
-    nunmap N
-    let s:searchmode = 0
-  endif
-endfunction
-" If cursor is in first or last line of window, scroll to middle line.
-function s:MaybeMiddle()
-  if winline() == 1 || winline() == winheight(0)
-    normal! zz
-  endif
-endfunction
-
-" Compatible with ranger 1.4.2 through 1.7.*
-"
-" Add ranger as a file chooser in vim.
-" Starts in the current file's directory.
-" Usage: :RangerChooser
-function! RangerChooser()
-    let temp = tempname()
-    " The option "--choosefiles" was added in ranger 1.5.1. Use the next line
-    " with ranger 1.4.2 through 1.5.0 instead.
-    "exec 'silent !ranger --choosefile=' . shellescape(temp)
-    if has("gui_running")
-        exec 'silent !xterm -e ranger --choosefiles=' . shellescape(temp) . ' ' . expand('%:p:h')
-    else
-        exec 'silent !ranger --choosefiles=' . shellescape(temp) . ' ' . expand('%:p:h') 
-    endif
-    if !filereadable(temp)
-        redraw!
-        " Nothing to read.
-        return
-    endif
-    let names = readfile(temp)
-    if empty(names)
-        redraw!
-        " Nothing to open.
-        return
-    endif
-    " Edit the first item.
-    exec 'edit ' . fnameescape(names[0])
-    " Add any remaning items to the arg list/buffer list.
-    for name in names[1:]
-        exec 'argadd ' . fnameescape(name)
-    endfor
-    redraw!
-endfunction
-command! -bar R call RangerChooser()
-
-"""""""""""""""""""""""""""""""""""
-"           Auto commands
-"
-
-" Uncomment the following to have Vim jump to the last position when                                                       
-" reopening a file
-if has("autocmd")
-  au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
-    \| exe "normal! g'\"" | endif
-endif
-
-
-"""""""""""""""""""""""""""""""""""
-"           Mappings
-"
-
-nmap <leader>p :set paste<CR>"+p:set paste!<CR>
-vmap <leader>p :set paste<CR>"+p:set paste!<CR>
-nmap <leader>P :set paste<CR>"+P:set paste!<CR>
-vmap <leader>P :set paste<CR>"+P:set paste!<CR>
-nmap <leader>yy v^$"+y
-vmap <leader>y "+y
-
-nmap <silent> <F1> :noh<CR>
-nmap <silent> <F3> :set wrap!<CR>
+hi StatusLineNC ctermbg=18 ctermfg=15
 
 " See https://vim.fandom.com/wiki/Move_cursor_by_display_lines_when_wrapping
-nnoremap j gj
-vnoremap j gj
-nnoremap k gk
-vnoremap k gk
+nmap <silent> j gj
+vmap <silent> j gj
+nmap <silent> k gk
+vmap <silent> k gk
 
 " See https://vim.fandom.com/wiki/Selecting_your_pasted_text
-nnoremap <expr> gp "'[" . strpart(getregtype(), 0, 1) . "']"
-nnoremap <expr> gP "`[" . strpart(getregtype(), 0, 1) . "`]"
+nmap <expr> gp "'[" . strpart(getregtype(), 0, 1) . "']"
+nmap <expr> gP "`[" . strpart(getregtype(), 0, 1) . "`]"
 " Switch between search modes
-nnoremap <silent> <leader>n :call <SID>SearchMode()<CR>
+nmap <silent> <leader>n :call <SID>SearchMode()<CR>
 
-nmap <c-j> gj
-vmap <c-j> gj
-nmap <c-k> gk
-vmap <c-k> gk
+nmap <silent> <c-j> gj
+vmap <silent> <c-j> gj
+nmap <silent> <c-k> gk
+vmap <silent> <c-k> gk
 
-vmap $ $h
+vmap <silent> $ $h
+
+nmap <silent> K <Nop>
+vmap <silent> K <Nop>
+vmap <silent> J <Nop>
