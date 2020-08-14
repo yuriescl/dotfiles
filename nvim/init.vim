@@ -14,7 +14,7 @@ set colorcolumn=80
 set mouse=
 set expandtab
 set hidden
-set number
+set nonumber
 set autoindent
 set nosmartindent
 set nocindent
@@ -34,12 +34,12 @@ set foldnestmax=1
 set nomodeline
 set vb t_vb=     " no visual bell & flash
 set tags=./tags,tags  " look for the tags file in current directory, then globally
-set updatetime=750
+set updatetime=500
 set wildmode=longest,list
 set scrolloff=999
 
 call plug#begin(stdpath('data') . '/plugged')
-  Plug '~/opt/fzf'  " path to fzf
+  Plug '~/Programs/fzf'  " path to fzf
   Plug 'junegunn/fzf.vim'
   Plug 'danro/rename.vim'
   Plug 'vim-python/python-syntax'
@@ -49,15 +49,9 @@ call plug#begin(stdpath('data') . '/plugged')
   Plug 'rbgrouleff/bclose.vim'
   Plug 'francoiscabrol/ranger.vim'
   Plug 'jremmen/vim-ripgrep'
+  Plug 'drmingdrmer/vim-toggle-quickfix'
+  Plug 'itchyny/vim-gitbranch'
 call plug#end()
-
-" Statusline
-set statusline=
-set statusline+=[%n]\                                  "buffernr
-set statusline+=%<%F\                                  "File+path
-set statusline+=%m%r%w\                                "Modified? Readonly? 
-set statusline+=c:%c\                                  "Colnr
-set statusline+=%P\                                    "Top/bot.
 
 runtime macros/matchit.vim
 
@@ -67,11 +61,20 @@ filetype indent off
 
 syntax enable
 
-colorscheme monokai
+colorscheme mixedmono
 
 " Status line colors
 hi StatusLine ctermbg=147 ctermfg=232
 hi StatusLineNC ctermbg=18 ctermfg=15
+
+set statusline=
+set statusline+=[%{gitbranch#name()}]\ 
+set statusline+=%m%r%w\                                "Modified? Readonly? 
+set statusline+=%<%F\                                  "File+path
+set statusline+=%=
+set statusline+=l:%l\ c:%c\                                  "Colnr
+set statusline+=%P\                                    "Top/bot.
+let s:statusline = 0
 
 " remove netrw directory banner
 let g:netrw_banner = 0
@@ -122,7 +125,6 @@ command! -bar ToggleSetList call ToggleSetList()
 function ToggleStatusLine()
   if !exists('s:statusline') || s:statusline == 0
     set statusline=
-    "set statusline+=[%n]\                                  "buffernr
     set statusline+=%<%F\                                  "File+path
     set statusline+=%m%r%w\                                "Modified? Readonly? 
     set statusline+=%=%y\                                  "FileType
@@ -136,10 +138,11 @@ function ToggleStatusLine()
     let s:statusline = 1
   else
     set statusline=
-    "set statusline+=[%n]\                                  "buffernr
-    set statusline+=%<%F\                                  "File+path
+    set statusline+=[%{gitbranch#name()}]\ 
     set statusline+=%m%r%w\                                "Modified? Readonly? 
-    set statusline+=%=c:%c\                                "Colnr
+    set statusline+=%<%F\                                  "File+path
+    set statusline+=%=
+    set statusline+=c:%c\                                  "Colnr
     set statusline+=%P\                                    "Top/bot.
 
     let s:statusline = 0
@@ -206,6 +209,18 @@ endif
 " Filetype-specific
 autocmd FileType html,htmldjango setlocal tabstop=2 shiftwidth=2
 
+" Triger `autoread` when files changes on disk
+" https://unix.stackexchange.com/questions/149209/refresh-changed-content-of-file-opened-in-vim/383044#383044
+" https://vi.stackexchange.com/questions/13692/prevent-focusgained-autocmd-running-in-command-line-editing-mode
+autocmd FocusGained,BufEnter,CursorHold,CursorHoldI *
+  \ if mode() !~ '\v(c|r.?|!|t)' && getcmdwintype() == '' | checktime | endif
+
+" Notification after file change
+" https://vi.stackexchange.com/questions/13091/autocmd-event-for-autoread
+autocmd FileChangedShellPost *
+  \ echohl WarningMsg | echo "File changed on disk. Buffer reloaded." | echohl None
+
+
 """""""""""""""""""""""""""""""""""
 "           Mappings
 "
@@ -216,15 +231,12 @@ nmap <leader>yy v^$"+y
 vmap <leader>y "+y
 
 nmap <silent> <F1> :noh<CR>
-nmap <silent> <F3> :set wrap!<CR>
 nmap <silent> <F4> :TagbarToggle<CR>
 nmap <C-b> :Buffers<CR>
-nmap <C-e> :FzfFiles<CR>
 nmap <C-f> :Rg 
 nmap <C-g> :History<CR>
 nmap <C-n> :Files<CR>
 nmap <silent> <C-p> :w<CR>
-nmap <silent> <C-q> :q<CR>
 nmap <C-t> :Tags<CR>
 nmap <silent> <C-x> :BD<CR>
 
@@ -237,8 +249,6 @@ vmap <silent> k gk
 " See https://vim.fandom.com/wiki/Selecting_your_pasted_text
 nmap <expr> gp "'[" . strpart(getregtype(), 0, 1) . "']"
 nmap <expr> gP "`[" . strpart(getregtype(), 0, 1) . "`]"
-" Switch between search modes
-nmap <silent> <leader>n :call <SID>SearchMode()<CR>
 
 nmap <silent> <c-j> gj
 vmap <silent> <c-j> gj
@@ -249,6 +259,35 @@ vmap <silent> $ $h
 
 nmap <silent> K <Nop>
 vmap <silent> K <Nop>
+vmap <silent> K <Nop>
 vmap <silent> J <Nop>
+
+" Automatically yank/paste using the system clipboard unless a register is given
+" https://stackoverflow.com/a/13381286/3705710
+"nnoremap <expr> y (v:register ==# '"' ? '"+' : '') . 'y'
+"nnoremap <expr> yy (v:register ==# '"' ? '"+' : '') . 'yy'
+"nnoremap <expr> Y (v:register ==# '"' ? '"+' : '') . 'Y'
+"xnoremap <expr> y (v:register ==# '"' ? '"+' : '') . 'y'
+"xnoremap <expr> Y (v:register ==# '"' ? '"+' : '') . 'Y'
+"nnoremap <expr> d (v:register ==# '"' ? '"+' : '') . 'd'
+"nnoremap <expr> dd (v:register ==# '"' ? '"+' : '') . 'dd'
+"nnoremap <expr> D (v:register ==# '"' ? '"+' : '') . 'D'
+"xnoremap <expr> d (v:register ==# '"' ? '"+' : '') . 'd'
+"xnoremap <expr> D (v:register ==# '"' ? '"+' : '') . 'D'
+"nnoremap <expr> p (v:register ==# '"' ? '"+' : '') . 'p'
+"nnoremap <expr> P (v:register ==# '"' ? '"+' : '') . 'P'
+"xnoremap <expr> p (v:register ==# '"' ? '"+' : '') . 'p'
+"xnoremap <expr> P (v:register ==# '"' ? '"+' : '') . 'P'
+
+nmap <silent> <leader>d "_d
+vmap <silent> <leader>d "_d
+
+nnoremap n nzz
+nnoremap N Nzz
+
+nmap <C-q> <Plug>window:quickfix:loop
+
+nmap <S-h> zH
+nmap <S-l> zL
 
 command! R Ranger
