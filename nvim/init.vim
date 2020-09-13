@@ -51,6 +51,7 @@ call plug#begin(stdpath('data') . '/plugged')
   Plug 'jremmen/vim-ripgrep'
   Plug 'drmingdrmer/vim-toggle-quickfix'
   Plug 'itchyny/vim-gitbranch'
+  Plug 'preservim/nerdtree'
 call plug#end()
 
 runtime macros/matchit.vim
@@ -76,7 +77,6 @@ set statusline+=l:%l\ c:%c\                                  "Colnr
 set statusline+=%P\                                    "Top/bot.
 let s:statusline = 0
 
-" remove netrw directory banner
 let g:netrw_banner = 0
 
 " (Plugin python-syntax) 
@@ -227,18 +227,16 @@ autocmd FileChangedShellPost *
 
 nmap <leader>p :set paste<CR>"+p:set paste!<CR>
 nmap <leader>P :set paste<CR>"+P:set paste!<CR>
-nmap <leader>yy v^$"+y
+nmap <leader>yy m`0v^$"+y``
 vmap <leader>y "+y
 
 nmap <silent> <F1> :noh<CR>
-nmap <silent> <F4> :TagbarToggle<CR>
-nmap <C-b> :Buffers<CR>
-nmap <C-f> :Rg 
-nmap <C-g> :History<CR>
-nmap <C-n> :Files<CR>
+nmap <silent> <F4> :NERDTreeClose<CR>:TagbarToggle<CR>
+nmap <C-b> :NERDTreeClose<CR>:Buffers<CR>
+nmap <C-g> :NERDTreeClose<CR>:History<CR>
+nmap <C-n> :NERDTreeClose<CR>:Files<CR>
 nmap <silent> <C-p> :w<CR>
-nmap <C-t> :Tags<CR>
-nmap <silent> <C-x> :BD<CR>
+nmap <silent> <C-x> :NERDTreeClose<CR>:BD<CR>
 
 " See https://vim.fandom.com/wiki/Move_cursor_by_display_lines_when_wrapping
 nmap <silent> j gj
@@ -262,23 +260,6 @@ vmap <silent> K <Nop>
 vmap <silent> K <Nop>
 vmap <silent> J <Nop>
 
-" Automatically yank/paste using the system clipboard unless a register is given
-" https://stackoverflow.com/a/13381286/3705710
-"nnoremap <expr> y (v:register ==# '"' ? '"+' : '') . 'y'
-"nnoremap <expr> yy (v:register ==# '"' ? '"+' : '') . 'yy'
-"nnoremap <expr> Y (v:register ==# '"' ? '"+' : '') . 'Y'
-"xnoremap <expr> y (v:register ==# '"' ? '"+' : '') . 'y'
-"xnoremap <expr> Y (v:register ==# '"' ? '"+' : '') . 'Y'
-"nnoremap <expr> d (v:register ==# '"' ? '"+' : '') . 'd'
-"nnoremap <expr> dd (v:register ==# '"' ? '"+' : '') . 'dd'
-"nnoremap <expr> D (v:register ==# '"' ? '"+' : '') . 'D'
-"xnoremap <expr> d (v:register ==# '"' ? '"+' : '') . 'd'
-"xnoremap <expr> D (v:register ==# '"' ? '"+' : '') . 'D'
-"nnoremap <expr> p (v:register ==# '"' ? '"+' : '') . 'p'
-"nnoremap <expr> P (v:register ==# '"' ? '"+' : '') . 'P'
-"xnoremap <expr> p (v:register ==# '"' ? '"+' : '') . 'p'
-"xnoremap <expr> P (v:register ==# '"' ? '"+' : '') . 'P'
-
 nmap <silent> <leader>d "_d
 vmap <silent> <leader>d "_d
 
@@ -287,7 +268,10 @@ nnoremap N Nzz
 
 nmap <C-q> <Plug>window:quickfix:loop
 
-nmap <S-h> zH
-nmap <S-l> zL
+nmap <silent> <C-f> :NERDTreeToggle<CR>
+nmap <silent> <C-t> :NERDTreeFind<CR>
+
+nmap <S-h> 2zh
+nmap <S-l> 2zl
 
 command! R Ranger
