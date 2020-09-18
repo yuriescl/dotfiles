@@ -231,12 +231,13 @@ nmap <leader>yy m`0v^$"+y``
 vmap <leader>y "+y
 
 nmap <silent> <F1> :noh<CR>
-nmap <silent> <F4> :NERDTreeClose<CR>:TagbarToggle<CR>
-nmap <C-b> :NERDTreeClose<CR>:Buffers<CR>
-nmap <C-g> :NERDTreeClose<CR>:History<CR>
-nmap <C-n> :NERDTreeClose<CR>:Files<CR>
+nmap <silent> <F4> :TagbarToggle<CR>
+nmap <C-b> :Buffers<CR>
+nmap <C-f> :Rg 
+nmap <C-g> :History<CR>
+nmap <C-n> :Files<CR>
 nmap <silent> <C-p> :w<CR>
-nmap <silent> <C-x> :NERDTreeClose<CR>:BD<CR>
+nmap <silent> <C-x> :BD<CR>
 
 " See https://vim.fandom.com/wiki/Move_cursor_by_display_lines_when_wrapping
 nmap <silent> j gj
@@ -268,7 +269,7 @@ nnoremap N Nzz
 
 nmap <C-q> <Plug>window:quickfix:loop
 
-nmap <silent> <C-f> :NERDTreeToggle<CR>
+nmap <silent> <C-e> :NERDTreeToggle<CR>
 nmap <silent> <C-t> :NERDTreeFind<CR>
 
 nmap <S-h> 2zh
