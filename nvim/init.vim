@@ -45,13 +45,17 @@ call plug#begin(stdpath('data') . '/plugged')
   Plug 'vim-python/python-syntax'
   Plug 'yuriescl/vim-colorscheme'
   Plug 'qpkorr/vim-bufkill'
-  Plug 'majutsushi/tagbar'
+  Plug 'yuriescl/tagbar', { 'branch': 'tagbar-scrolloff' }
   Plug 'rbgrouleff/bclose.vim'
   Plug 'francoiscabrol/ranger.vim'
   Plug 'jremmen/vim-ripgrep'
   Plug 'drmingdrmer/vim-toggle-quickfix'
   Plug 'itchyny/vim-gitbranch'
   Plug 'preservim/nerdtree'
+  Plug 'inkarkat/vim-ingo-library'
+  Plug 'inkarkat/vim-EnhancedJumps'
+  Plug 'MattesGroeger/vim-bookmarks'
+  Plug 'mgedmin/taghelper.vim'
 call plug#end()
 
 runtime macros/matchit.vim
@@ -70,11 +74,12 @@ hi StatusLineNC ctermbg=18 ctermfg=15
 
 set statusline=
 set statusline+=[%{gitbranch#name()}]\ 
-set statusline+=%m%r%w\                                "Modified? Readonly? 
-set statusline+=%<%F\                                  "File+path
+set statusline+=%m%r%w\  
+set statusline+=%<%t\  
 set statusline+=%=
-set statusline+=l:%l\ c:%c\                                  "Colnr
-set statusline+=%P\                                    "Top/bot.
+set statusline+=%{taghelper#curtag()}\  
+set statusline+=c:%c\  
+set statusline+=%P\  
 let s:statusline = 0
 
 let g:netrw_banner = 0
@@ -84,7 +89,7 @@ let g:python_highlight_all = 1
 
 " (Plugin fzf) Disable jumping to existing windows
 let g:fzf_buffers_jump = 0
-let $FZF_DEFAULT_COMMAND='rg -F --files --no-ignore --hidden --glob "!.git/*"'
+let $FZF_DEFAULT_COMMAND='rg -F --files --no-ignore --hidden --glob "!.git/*" --glob "!*__pycache__*"'
 
 " (Plugin tagbar)
 let g:tagbar_width = 25
@@ -94,6 +99,8 @@ let g:tagbar_sort = 0
 
 " (Plugin ranger)
 let g:ranger_map_keys = 0  " disable the default key mapping
+
+let NERDTreeWinSize = 27
 
 
 """""""""""""""""""""""""""""""""""
@@ -139,11 +146,12 @@ function ToggleStatusLine()
   else
     set statusline=
     set statusline+=[%{gitbranch#name()}]\ 
-    set statusline+=%m%r%w\                                "Modified? Readonly? 
-    set statusline+=%<%F\                                  "File+path
+    set statusline+=%m%r%w\  
+    set statusline+=%<%t\  
     set statusline+=%=
-    set statusline+=c:%c\                                  "Colnr
-    set statusline+=%P\                                    "Top/bot.
+    set statusline+=%{taghelper#curtag()}
+    set statusline+=l:%l\ c:%c\  
+    set statusline+=%P\  
 
     let s:statusline = 0
   endif
@@ -194,6 +202,38 @@ function FzfFiles()
 endfunction
 command! -bar FzfFiles call FzfFiles()
 
+function! OpenNERDTree()                   
+    if @% == ""
+        NERDTreeFocus
+    else                                    
+        NERDTreeFind
+    endif                                   
+endfun
+
+" https://github.com/MattesGroeger/vim-bookmarks#faq
+let g:bookmark_no_default_key_mappings = 1
+function! BookmarkMapKeys()
+    nmap mm :BookmarkToggle<CR>
+    nmap mi :BookmarkAnnotate<CR>
+    nmap mn :BookmarkNext<CR>
+    nmap mp :BookmarkPrev<CR>
+    nmap ma :BookmarkShowAll<CR>
+    nmap mc :BookmarkClear<CR>
+    nmap mx :BookmarkClearAll<CR>
+    nmap mkk :BookmarkMoveUp
+    nmap mjj :BookmarkMoveDown
+endfunction
+function! BookmarkUnmapKeys()
+    unmap mm
+    unmap mi
+    unmap mn
+    unmap mp
+    unmap ma
+    unmap mc
+    unmap mx
+    unmap mkk
+    unmap mjj
+endfunction
 
 """""""""""""""""""""""""""""""""""
 "           Auto commands
@@ -220,6 +260,14 @@ autocmd FocusGained,BufEnter,CursorHold,CursorHoldI *
 autocmd FileChangedShellPost *
   \ echohl WarningMsg | echo "File changed on disk. Buffer reloaded." | echohl None
 
+" workaround for shortcut conflicts between bookmarks and nerdtree
+autocmd BufEnter * :call BookmarkMapKeys()
+autocmd BufEnter NERD_tree_* :call BookmarkUnmapKeys()
+
+autocmd FileType nerdtree nnoremap <buffer> <silent> <C-e> <C-w><C-w>:NERDTreeFind<CR>
+
+" close quickfix window when an item is selected
+autocmd FileType qf nnoremap <buffer> <CR> <CR>:cclose<CR>
 
 """""""""""""""""""""""""""""""""""
 "           Mappings
@@ -236,6 +284,7 @@ nmap <C-b> :Buffers<CR>
 nmap <C-f> :Rg 
 nmap <C-g> :History<CR>
 nmap <C-n> :Files<CR>
+nmap <C-t> :Tags<CR>
 nmap <silent> <C-p> :w<CR>
 nmap <silent> <C-x> :BD<CR>
 
@@ -249,17 +298,17 @@ vmap <silent> k gk
 nmap <expr> gp "'[" . strpart(getregtype(), 0, 1) . "']"
 nmap <expr> gP "`[" . strpart(getregtype(), 0, 1) . "`]"
 
-nmap <silent> <c-j> gj
-vmap <silent> <c-j> gj
-nmap <silent> <c-k> gk
-vmap <silent> <c-k> gk
-
 vmap <silent> $ $h
 
 nmap <silent> K <Nop>
 vmap <silent> K <Nop>
 vmap <silent> K <Nop>
 vmap <silent> J <Nop>
+
+nmap <silent> <c-j> gj
+vmap <silent> <c-j> gj
+nmap <silent> <c-k> gk
+vmap <silent> <c-k> gk
 
 nmap <silent> <leader>d "_d
 vmap <silent> <leader>d "_d
@@ -269,8 +318,7 @@ nnoremap N Nzz
 
 nmap <C-q> <Plug>window:quickfix:loop
 
-nmap <silent> <C-e> :NERDTreeToggle<CR>
-nmap <silent> <C-t> :NERDTreeFind<CR>
+nmap <silent> <C-e> :call OpenNERDTree()<CR>
 
 nmap <S-h> 2zh
 nmap <S-l> 2zl
