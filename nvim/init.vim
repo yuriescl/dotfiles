@@ -72,7 +72,12 @@ colorscheme mixedmono
 hi StatusLine ctermbg=147 ctermfg=232
 hi StatusLineNC ctermbg=18 ctermfg=15
 
+function CwdName()
+    return fnamemodify(getcwd(), ':t')
+endfunction
+
 set statusline=
+set statusline+=%{CwdName()}\  
 set statusline+=[%{gitbranch#name()}]\ 
 set statusline+=%m%r%w\  
 set statusline+=%<%t\  
@@ -96,11 +101,20 @@ let g:tagbar_width = 25
 let g:tagbar_compact = 1
 let g:tagbar_indent = 1
 let g:tagbar_sort = 0
+let g:tagbar_autoclose = 1
+let g:tagbar_show_balloon = 0
+let g:tagbar_show_visibility = 0
+let g:tagbar_show_linenumbers = 0
+let g:tagbar_silent = 1
 
 " (Plugin ranger)
 let g:ranger_map_keys = 0  " disable the default key mapping
 
 let NERDTreeWinSize = 27
+
+" Plugin vim-bookmarks
+let g:bookmark_save_per_working_dir = 1
+let g:bookmark_auto_save = 1
 
 
 """""""""""""""""""""""""""""""""""
@@ -145,6 +159,7 @@ function ToggleStatusLine()
     let s:statusline = 1
   else
     set statusline=
+    set statusline+=%{CwdName()}\  
     set statusline+=[%{gitbranch#name()}]\ 
     set statusline+=%m%r%w\  
     set statusline+=%<%t\  
@@ -213,15 +228,15 @@ endfun
 " https://github.com/MattesGroeger/vim-bookmarks#faq
 let g:bookmark_no_default_key_mappings = 1
 function! BookmarkMapKeys()
-    nmap mm :BookmarkToggle<CR>
-    nmap mi :BookmarkAnnotate<CR>
-    nmap mn :BookmarkNext<CR>
-    nmap mp :BookmarkPrev<CR>
-    nmap ma :BookmarkShowAll<CR>
-    nmap mc :BookmarkClear<CR>
-    nmap mx :BookmarkClearAll<CR>
-    nmap mkk :BookmarkMoveUp
-    nmap mjj :BookmarkMoveDown
+    nmap <silent> mm :BookmarkToggle<CR>
+    nmap <silent> mi :BookmarkAnnotate<CR>
+    nmap <silent> mn :BookmarkNext<CR>
+    nmap <silent> mp :BookmarkPrev<CR>
+    nmap <silent> ma :BookmarkShowAll<CR>
+    nmap <silent> mc :BookmarkClear<CR>
+    nmap <silent> mx :BookmarkClearAll<CR>
+    nmap <silent> mkk :BookmarkMoveUp
+    nmap <silent> mjj :BookmarkMoveDown
 endfunction
 function! BookmarkUnmapKeys()
     unmap mm
@@ -267,7 +282,7 @@ autocmd BufEnter NERD_tree_* :call BookmarkUnmapKeys()
 autocmd FileType nerdtree nnoremap <buffer> <silent> <C-e> <C-w><C-w>:NERDTreeFind<CR>
 
 " close quickfix window when an item is selected
-autocmd FileType qf nnoremap <buffer> <CR> <CR>:cclose<CR>
+autocmd FileType qf nnoremap <buffer> <silent> <CR> <CR>:cclose<CR>
 
 """""""""""""""""""""""""""""""""""
 "           Mappings
@@ -279,12 +294,11 @@ nmap <leader>yy m`0v^$"+y``
 vmap <leader>y "+y
 
 nmap <silent> <F1> :noh<CR>
-nmap <silent> <F4> :TagbarToggle<CR>
+nmap <silent> <C-t> :TagbarToggle<CR>
 nmap <C-b> :Buffers<CR>
 nmap <C-f> :Rg 
 nmap <C-g> :History<CR>
 nmap <C-n> :Files<CR>
-nmap <C-t> :Tags<CR>
 nmap <silent> <C-p> :w<CR>
 nmap <silent> <C-x> :BD<CR>
 
