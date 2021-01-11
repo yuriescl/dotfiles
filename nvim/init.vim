@@ -29,32 +29,31 @@ set lcs=extends:›,precedes:‹
 set list
 set ignorecase
 set smartcase
-set foldmethod=manual
-set foldnestmax=1
+set foldmethod=indent
+set foldnestmax=2
+set foldcolumn=0
+set nofoldenable
 set nomodeline
 set vb t_vb=     " no visual bell & flash
 set tags=./tags,tags  " look for the tags file in current directory, then globally
 set updatetime=500
 set wildmode=longest,list
 set scrolloff=999
+set clipboard=unnamed
 
 call plug#begin(stdpath('data') . '/plugged')
-  Plug '~/Programs/fzf'  " path to fzf
+  Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
   Plug 'junegunn/fzf.vim'
   Plug 'danro/rename.vim'
   Plug 'vim-python/python-syntax'
   Plug 'yuriescl/vim-colorscheme'
   Plug 'qpkorr/vim-bufkill'
-  Plug 'yuriescl/tagbar', { 'branch': 'tagbar-scrolloff' }
+  Plug 'preservim/tagbar'
   Plug 'rbgrouleff/bclose.vim'
   Plug 'francoiscabrol/ranger.vim'
   Plug 'jremmen/vim-ripgrep'
   Plug 'drmingdrmer/vim-toggle-quickfix'
-  Plug 'itchyny/vim-gitbranch'
   Plug 'preservim/nerdtree'
-  Plug 'inkarkat/vim-ingo-library'
-  Plug 'inkarkat/vim-EnhancedJumps'
-  Plug 'MattesGroeger/vim-bookmarks'
   Plug 'mgedmin/taghelper.vim'
 call plug#end()
 
@@ -77,14 +76,8 @@ function CwdName()
 endfunction
 
 set statusline=
-set statusline+=%{CwdName()}\  
-set statusline+=[%{gitbranch#name()}]\ 
-set statusline+=%m%r%w\  
-set statusline+=%<%t\  
-set statusline+=%=
-set statusline+=%{taghelper#curtag()}\  
-set statusline+=c:%c\  
-set statusline+=%P\  
+set statusline+=%m%r%w\                                 "Modified? Readonly? 
+set statusline+=%<%F                                    "File+path
 let s:statusline = 0
 
 let g:netrw_banner = 0
@@ -94,6 +87,7 @@ let g:python_highlight_all = 1
 
 " (Plugin fzf) Disable jumping to existing windows
 let g:fzf_buffers_jump = 0
+let g:fzf_preview_window = []
 let $FZF_DEFAULT_COMMAND='rg -F --files --no-ignore --hidden --glob "!.git/*" --glob "!*__pycache__*"'
 
 " (Plugin tagbar)
@@ -111,11 +105,7 @@ let g:tagbar_silent = 1
 let g:ranger_map_keys = 0  " disable the default key mapping
 
 let NERDTreeWinSize = 27
-
-" Plugin vim-bookmarks
-let g:bookmark_save_per_working_dir = 1
-let g:bookmark_auto_save = 1
-
+let NERDTreeQuitOnOpen=1
 
 """""""""""""""""""""""""""""""""""
 "           Functions
@@ -126,7 +116,7 @@ function ToggleFoldColumn()
     if (&foldcolumn != 0)
         set foldcolumn=0
     else
-        set foldcolumn=2
+        set foldcolumn=1
     endif
 endfunction
 command! -bar ToggleFoldColumn call ToggleFoldColumn()
@@ -146,27 +136,20 @@ command! -bar ToggleSetList call ToggleSetList()
 function ToggleStatusLine()
   if !exists('s:statusline') || s:statusline == 0
     set statusline=
-    set statusline+=%<%F\                                  "File+path
     set statusline+=%m%r%w\                                "Modified? Readonly? 
+    set statusline+=%<%F\                                  "File+path
     set statusline+=%=%y\                                  "FileType
     set statusline+=%{''.(&fenc!=''?&fenc:&enc).''}        "Encoding
     set statusline+=%{(&bomb?\",BOM\":\"\")}\              "Encoding2
     set statusline+=%{&ff}\                                "FileFormat (dos/unix..) 
     set statusline+=r:%l/%L\                               "Rownumber/total (%)
-    set statusline+=c:%c\                                  "Colnr
-    set statusline+=%P\                                    "Top/bot.
+    set statusline+=c:%c                                   "Colnr
 
     let s:statusline = 1
   else
     set statusline=
-    set statusline+=%{CwdName()}\  
-    set statusline+=[%{gitbranch#name()}]\ 
-    set statusline+=%m%r%w\  
-    set statusline+=%<%t\  
-    set statusline+=%=
-    set statusline+=%{taghelper#curtag()}
-    set statusline+=l:%l\ c:%c\  
-    set statusline+=%P\  
+    set statusline+=%m%r%w\                                "Modified? Readonly? 
+    set statusline+=%<%F                                   "File+path
 
     let s:statusline = 0
   endif
@@ -225,29 +208,8 @@ function! OpenNERDTree()
     endif                                   
 endfun
 
-" https://github.com/MattesGroeger/vim-bookmarks#faq
-let g:bookmark_no_default_key_mappings = 1
-function! BookmarkMapKeys()
-    nmap <silent> mm :BookmarkToggle<CR>
-    nmap <silent> mi :BookmarkAnnotate<CR>
-    nmap <silent> mn :BookmarkNext<CR>
-    nmap <silent> mp :BookmarkPrev<CR>
-    nmap <silent> ma :BookmarkShowAll<CR>
-    nmap <silent> mc :BookmarkClear<CR>
-    nmap <silent> mx :BookmarkClearAll<CR>
-    nmap <silent> mkk :BookmarkMoveUp
-    nmap <silent> mjj :BookmarkMoveDown
-endfunction
-function! BookmarkUnmapKeys()
-    unmap mm
-    unmap mi
-    unmap mn
-    unmap mp
-    unmap ma
-    unmap mc
-    unmap mx
-    unmap mkk
-    unmap mjj
+function YankToClipboard()
+    call system('xclip -i -selection clipboard', trim(getreg('*')))
 endfunction
 
 """""""""""""""""""""""""""""""""""
@@ -261,40 +223,46 @@ if has("autocmd")
     \| exe "normal! g'\"" | endif
 endif
 
-" Filetype-specific
-autocmd FileType html,htmldjango setlocal tabstop=2 shiftwidth=2
+augroup Html
+    autocmd FileType html,htmldjango setlocal tabstop=2 shiftwidth=2
+augroup END
 
-" Triger `autoread` when files changes on disk
-" https://unix.stackexchange.com/questions/149209/refresh-changed-content-of-file-opened-in-vim/383044#383044
-" https://vi.stackexchange.com/questions/13692/prevent-focusgained-autocmd-running-in-command-line-editing-mode
-autocmd FocusGained,BufEnter,CursorHold,CursorHoldI *
-  \ if mode() !~ '\v(c|r.?|!|t)' && getcmdwintype() == '' | checktime | endif
+augroup ChangeDetect
+    " Triger `autoread` when files changes on disk
+    " https://unix.stackexchange.com/questions/149209/refresh-changed-content-of-file-opened-in-vim/383044#383044
+    " https://vi.stackexchange.com/questions/13692/prevent-focusgained-autocmd-running-in-command-line-editing-mode
+    autocmd FocusGained,BufEnter,CursorHold,CursorHoldI *
+      \ if mode() !~ '\v(c|r.?|!|t)' && getcmdwintype() == '' | checktime | endif
 
-" Notification after file change
-" https://vi.stackexchange.com/questions/13091/autocmd-event-for-autoread
-autocmd FileChangedShellPost *
-  \ echohl WarningMsg | echo "File changed on disk. Buffer reloaded." | echohl None
+    " Notification after file change
+    " https://vi.stackexchange.com/questions/13091/autocmd-event-for-autoread
+    autocmd FileChangedShellPost *
+      \ echohl WarningMsg | echo "File changed on disk. Buffer reloaded." | echohl None
 
-" workaround for shortcut conflicts between bookmarks and nerdtree
-autocmd BufEnter * :call BookmarkMapKeys()
-autocmd BufEnter NERD_tree_* :call BookmarkUnmapKeys()
+augroup END
 
-autocmd FileType nerdtree nnoremap <buffer> <silent> <C-e> <C-w><C-w>:NERDTreeFind<CR>
 
-" close quickfix window when an item is selected
-autocmd FileType qf nnoremap <buffer> <silent> <CR> <CR>:cclose<CR>
+augroup QuickFix
+    " close quickfix window when an item is selected
+    autocmd FileType qf nnoremap <buffer> <silent> <CR> <CR>:cclose<CR>
+augroup END
+
+"augroup Clipboard
+"    autocmd TextYankPost * :call YankToClipboard()
+"augroup END
 
 """""""""""""""""""""""""""""""""""
 "           Mappings
 "
 
-nmap <leader>p :set paste<CR>"+p:set paste!<CR>
-nmap <leader>P :set paste<CR>"+P:set paste!<CR>
-nmap <leader>yy m`0v^$"+y``
-vmap <leader>y "+y
+nmap <silent> <leader>p :set paste<CR>"+p:set paste!<CR>
+nmap <silent> <leader>P :set paste<CR>"+P:set paste!<CR>
+nmap <silent> <leader>yy m`0v^$"+y``
+vmap <silent> <leader>y "+y
+nmap <silent> Y :call YankToClipboard()<CR>
 
 nmap <silent> <F1> :noh<CR>
-nmap <silent> <C-t> :TagbarToggle<CR>
+nmap <silent> <C-e> :TagbarToggle<CR>
 nmap <C-b> :Buffers<CR>
 nmap <C-f> :Rg 
 nmap <C-g> :History<CR>
@@ -332,9 +300,14 @@ nnoremap N Nzz
 
 nmap <C-q> <Plug>window:quickfix:loop
 
-nmap <silent> <C-e> :call OpenNERDTree()<CR>
+nmap <silent> <C-t> :call OpenNERDTree()<CR>
 
 nmap <S-h> 2zh
 nmap <S-l> 2zl
+
+nnoremap <space> za
+vnoremap <space> zf
+
+"nnoremap <expr> p (v:register ==# '"' ? PasteFromVimClipboard('p') : 'p')
 
 command! R Ranger
