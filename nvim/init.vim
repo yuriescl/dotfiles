@@ -55,6 +55,8 @@ call plug#begin(stdpath('data') . '/plugged')
   Plug 'drmingdrmer/vim-toggle-quickfix'
   Plug 'preservim/nerdtree'
   Plug 'mgedmin/taghelper.vim'
+  "Plug 'vim-syntastic/syntastic'
+  Plug 'dense-analysis/ale'
 call plug#end()
 
 runtime macros/matchit.vim
@@ -78,7 +80,30 @@ endfunction
 set statusline=
 set statusline+=%m%r%w\                                 "Modified? Readonly? 
 set statusline+=%<%F                                    "File+path
+"set statusline+=%#warningmsg#
+"set statusline+=%{SyntasticStatuslineFlag()}
+"set statusline+=%*
 let s:statusline = 0
+
+""""""""""""
+" Syntastic
+let g:syntastic_always_populate_loc_list = 1
+"let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+let g:syntastic_python_checkers = ['flake8']
+let g:syntastic_python_flake8_post_args='--max-line-length=200 --ignore=E116,E302,E121,E123,E124,E126,E127,E128,E201,E202,E203,E211,E222,E225,E226,E231,E252,E261,E265,E303,E722,F401,F403,F405,F841,W291,W292,W391,W503 --exclude="**/migrations/**"'
+
+""""""
+" ALE
+" In ~/.vim/vimrc, or somewhere similar.
+let g:ale_linters = {
+\   'python': ['flake8'],
+\}
+" Only run linters named in ale_linters settings.
+let g:ale_linters_explicit = 1
+let g:ale_python_flake8_options = '--max-line-length=200 --ignore=E116,E302,E121,E123,E124,E126,E127,E128,E201,E202,E203,E211,E222,E225,E226,E231,E252,E261,E265,E303,E722,F401,F403,F405,F841,W291,W292,W391,W503 --exclude="**/migrations/**"'
+
 
 let g:netrw_banner = 0
 
@@ -211,6 +236,8 @@ endfun
 function YankToClipboard()
     call system('xclip -i -selection clipboard', trim(getreg('*')))
 endfunction
+
+command! ClearQuickfixList cexpr []
 
 """""""""""""""""""""""""""""""""""
 "           Auto commands
