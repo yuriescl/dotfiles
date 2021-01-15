@@ -79,11 +79,29 @@ endfunction
 
 set statusline=
 set statusline+=%m%r%w\                                 "Modified? Readonly? 
-set statusline+=%<%F                                    "File+path
-"set statusline+=%#warningmsg#
-"set statusline+=%{SyntasticStatuslineFlag()}
-"set statusline+=%*
+set statusline+=%<%F\                                   "File+path
 let s:statusline = 0
+
+function! LinterStatus() abort
+    let l:counts = ale#statusline#Count(bufnr(''))
+
+    let l:all_errors = l:counts.error + l:counts.style_error
+    let l:all_non_errors = l:counts.total - l:all_errors
+
+    if l:counts.total == 0
+        return ''
+    else
+        return printf(
+        \   '%dW %dE',
+        \   all_non_errors,
+        \   all_errors
+        \)
+    endif
+endfunction
+
+set statusline+=%#warningmsg#
+set statusline+=%{LinterStatus()}
+set statusline+=%*
 
 """"""""""""
 " Syntastic
@@ -103,6 +121,8 @@ let g:ale_linters = {
 " Only run linters named in ale_linters settings.
 let g:ale_linters_explicit = 1
 let g:ale_python_flake8_options = '--max-line-length=200 --ignore=E116,E302,E121,E123,E124,E126,E127,E128,E201,E202,E203,E211,E222,E225,E226,E231,E252,E261,E265,E303,E722,F401,F403,F405,F841,W291,W292,W391,W503 --exclude="**/migrations/**"'
+let g:ale_lint_on_enter = 0
+let g:ale_lint_on_text_changed = 'never'
 
 
 let g:netrw_banner = 0
@@ -239,6 +259,18 @@ endfunction
 
 command! ClearQuickfixList cexpr []
 
+function! GetVisualSelection()
+    let [line_start, column_start] = getpos("'<")[1:2]
+    let [line_end, column_end] = getpos("'>")[1:2]
+    let lines = getline(line_start, line_end)
+    if len(lines) == 0
+        return ''
+    endif
+    let lines[-1] = lines[-1][: column_end - (&selection == 'inclusive' ? 1 : 2)]
+    let lines[0] = lines[0][column_start - 1:]
+    return join(lines, "\n")
+endfunction
+
 """""""""""""""""""""""""""""""""""
 "           Auto commands
 "
@@ -272,6 +304,12 @@ augroup END
 augroup QuickFix
     " close quickfix window when an item is selected
     autocmd FileType qf nnoremap <buffer> <silent> <CR> <CR>:cclose<CR>
+augroup END
+
+augroup Loclist
+    if getwininfo(win_getid())[0]['loclist'] == 1
+        nnoremap <buffer> <silent> <CR> <CR>:lclose<CR>
+    endif
 augroup END
 
 "augroup Clipboard
@@ -338,3 +376,8 @@ vnoremap <space> zf
 "nnoremap <expr> p (v:register ==# '"' ? PasteFromVimClipboard('p') : 'p')
 
 command! R Ranger
+
+nmap <leader>f :<C-u>execute 'Rg '.expand("<cword>")<CR>
+vmap <leader>f :<C-u>execute 'Rg '.GetVisualSelection()<CR>
+
+
