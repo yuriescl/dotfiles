@@ -29,10 +29,9 @@ set lcs=extends:›,precedes:‹
 set list
 set ignorecase
 set smartcase
-set foldmethod=indent
+set foldmethod=manual
 set foldnestmax=2
 set foldcolumn=0
-set nofoldenable
 set nomodeline
 set vb t_vb=     " no visual bell & flash
 set tags=./tags,tags  " look for the tags file in current directory, then globally
@@ -55,8 +54,13 @@ call plug#begin(stdpath('data') . '/plugged')
   Plug 'drmingdrmer/vim-toggle-quickfix'
   Plug 'preservim/nerdtree'
   Plug 'mgedmin/taghelper.vim'
-  "Plug 'vim-syntastic/syntastic'
   Plug 'dense-analysis/ale'
+  Plug 'inkarkat/vim-ingo-library'
+  Plug 'inkarkat/vim-EnhancedJumps'
+  Plug 'dart-lang/dart-vim-plugin'
+  Plug 'kana/vim-textobj-user'
+  Plug 'rhysd/vim-textobj-anyblock'
+  Plug 'benknoble/vim-auto-origami'
 call plug#end()
 
 runtime macros/matchit.vim
@@ -105,12 +109,12 @@ set statusline+=%*
 
 """"""""""""
 " Syntastic
-let g:syntastic_always_populate_loc_list = 1
+"let g:syntastic_always_populate_loc_list = 1
 "let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
-let g:syntastic_python_checkers = ['flake8']
-let g:syntastic_python_flake8_post_args='--max-line-length=200 --ignore=E116,E302,E121,E123,E124,E126,E127,E128,E201,E202,E203,E211,E222,E225,E226,E231,E252,E261,E265,E303,E722,F401,F403,F405,F841,W291,W292,W391,W503 --exclude="**/migrations/**"'
+"let g:syntastic_check_on_open = 1
+"let g:syntastic_check_on_wq = 0
+"let g:syntastic_python_checkers = ['flake8']
+"let g:syntastic_python_flake8_post_args='--max-line-length=200 --ignore=E116,E302,E121,E123,E124,E126,E127,E128,E201,E202,E203,E211,E222,E225,E226,E231,E252,E261,E265,E303,E722,F401,F403,F405,F841,W291,W292,W391,W503 --exclude="**/migrations/**"'
 
 """"""
 " ALE
@@ -124,6 +128,9 @@ let g:ale_python_flake8_options = '--max-line-length=200 --ignore=E116,E302,E121
 let g:ale_lint_on_enter = 0
 let g:ale_lint_on_text_changed = 'never'
 
+let dart_html_in_string=v:true
+
+let g:textobj#anyblock#blocks=['(', '{', '[', 'f`']
 
 let g:netrw_banner = 0
 
@@ -145,6 +152,7 @@ let g:tagbar_show_balloon = 0
 let g:tagbar_show_visibility = 0
 let g:tagbar_show_linenumbers = 0
 let g:tagbar_silent = 1
+let g:tagbar_foldlevel = 0
 
 " (Plugin ranger)
 let g:ranger_map_keys = 0  " disable the default key mapping
@@ -271,6 +279,28 @@ function! GetVisualSelection()
     return join(lines, "\n")
 endfunction
 
+function ConfigureAle()
+    "if expand("%:p") =~ '^/home/yuri/work/github/antb123/jpy_hub/'
+    "    let g:ale_linters = {
+    "    \   'python': ['flake8'],
+    "    \}
+    "    let g:ale_use_global_executables = 1
+    "    let g:ale_python_flake8_executable = '/home/yuri/Dropbox/work/docker/jpy_hub-flake8.sh'
+    "    let g:ale_filename_mappings = {
+    "    \ 'pylint': [
+    "    \   ['/home/yuri/work/github/antb123/jpy_hub', '/data'],
+    "    \ ],
+    "    \}
+    "endif
+endfunction
+
+function DartConfig()
+    setlocal tabstop=2 shiftwidth=2
+    nmap <silent> <F2> zfib :AutoOrigamiFoldColumn<CR>
+    nmap <silent> <space> za
+    nmap <silent> <C-y> :DartFmt<CR>
+endfunction
+
 """""""""""""""""""""""""""""""""""
 "           Auto commands
 "
@@ -284,6 +314,10 @@ endif
 
 augroup Html
     autocmd FileType html,htmldjango setlocal tabstop=2 shiftwidth=2
+augroup END
+
+augroup Dart
+    autocmd FileType dart call DartConfig()
 augroup END
 
 augroup ChangeDetect
@@ -302,14 +336,17 @@ augroup END
 
 
 augroup QuickFix
-    " close quickfix window when an item is selected
-    autocmd FileType qf nnoremap <buffer> <silent> <CR> <CR>:cclose<CR>
+    " close quickfix and loclist when an item is selected
+    autocmd FileType qf nmap <buffer> <silent> <CR> <CR>:cclose<CR>:lclose<CR>
 augroup END
 
-augroup Loclist
-    if getwininfo(win_getid())[0]['loclist'] == 1
-        nnoremap <buffer> <silent> <CR> <CR>:lclose<CR>
-    endif
+augroup Ale
+    autocmd FocusGained,BufEnter,CursorHold,CursorHoldI * call ConfigureAle()
+augroup END
+
+augroup autofoldcolumn
+  au!
+  au CursorHold,BufWinEnter,WinEnter * AutoOrigamiFoldColumn
 augroup END
 
 "augroup Clipboard
@@ -370,9 +407,6 @@ nmap <silent> <C-t> :call OpenNERDTree()<CR>
 nmap <S-h> 2zh
 nmap <S-l> 2zl
 
-nnoremap <space> za
-vnoremap <space> zf
-
 "nnoremap <expr> p (v:register ==# '"' ? PasteFromVimClipboard('p') : 'p')
 
 command! R Ranger
@@ -380,4 +414,4 @@ command! R Ranger
 nmap <leader>f :<C-u>execute 'Rg '.expand("<cword>")<CR>
 vmap <leader>f :<C-u>execute 'Rg '.GetVisualSelection()<CR>
 
-
+nmap <space> za
