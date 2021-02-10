@@ -45,3 +45,25 @@ function validate_fzf_choice {
         *) return 0;;
     esac
 }
+
+function cd_virtualenv {
+    local VENV=$(ls -d $HOME/.virtualenvs/*/ | cut -d/ -f 5 | fzf)
+    if [ -n "$VENV" ]; then
+        echo "$HOME/.virtualenvs/$VENV/lib/python3.7/site-packages"
+        cd "$HOME/.virtualenvs/$VENV/lib/python3.7/site-packages"
+    fi
+}
+
+function wo {
+    local VENV=$(lsvirtualenv -b | fzf)
+    if [ -n "$VENV" ]; then
+        echo "$VENV"
+        workon "$VENV"
+    fi
+}
+
+function flutter-hotreload {
+    while true; do
+        find . -name *.dart | entr -dnp bash -c 'tmux send-keys -t :flutter_run r' /_
+    done
+}
