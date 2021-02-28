@@ -5,8 +5,6 @@ stty -ixon # disable Ctrl-S
 # avoid Ctrl-D spam exitting shells
 set -o ignoreeof
 
-export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --follow --glob "!.git/*"'
-
 alias sl='ls'
 alias lr='ls -lathr'
 
@@ -14,15 +12,27 @@ alias t='tmux'
 alias tl='tmux list-sessions'
 alias ta='tmux a -t'
 
-alias rg80='rg -M 80'
+alias view='vim -M'
+function v {
+    nvr --servername $NVIM_LISTEN_ADDRESS --nostart "$@"
+}
+function vwd {
+    nvr --servername $NVIM_LISTEN_ADDRESS --nostart "$@" -c "cd $(pwd)"
+}
+alias r='ranger-cd'
+
+export VIRTUALENVWRAPPER_PYTHON=$(which python3)
+source $(which  virtualenvwrapper.sh)
+
+alias b64decode="python3 -c 'import base64, sys; print(base64.b64decode(sys.argv[1]).decode())'"
+alias b64encode="python3 -c 'import base64, sys; print(base64.b64encode(sys.argv[1].encode()).decode())'"
 
 function treel { # tree view current directory
-    [ -n "$1" ] && DIR="$1" || DIR="."
-    tree -DCf $DIR | less -rS
+    tree -C "$@"
 }
 
-function tts {
-    tmux new-session -t "$1" -s "$2"
+function tree-django {
+    tree -C -I "__pycache__|static" "$@"
 }
 
 function tlr { # tail the last modified file in current folder
@@ -36,9 +46,9 @@ function vlr { # edit last modified file in current folder
     vim "$FILE"
 }
 
-function validate_fzf_choice { 
+function validate_fzf_choice {
     case "$1" in
-        "") return 1;; 
+        "") return 1;;
         + ) return 1;;
         +\n) return 1;;
         +\t) return 1;;
@@ -65,5 +75,22 @@ function wo {
 function flutter-hotreload {
     while true; do
         find . -name *.dart | entr -dnp bash -c 'tmux send-keys -t :flutter_run r' /_
+    done
+}
+
+function c {
+    while true; do
+        ls -aF
+        echo ''
+        pwd
+        CHOICE=$(ls -aF | awk '{ if ($1!="./") print $1}' | fzf --height=5 --reverse)
+        if [ -z "$CHOICE" ]; then
+            break
+        fi
+        if [ -f "$CHOICE" ]; then
+            v "$CHOICE"
+        else
+            cd "$CHOICE"
+        fi
     done
 }

@@ -49,7 +49,7 @@ call plug#begin(stdpath('data') . '/plugged')
   Plug 'qpkorr/vim-bufkill'
   Plug 'preservim/tagbar'
   Plug 'rbgrouleff/bclose.vim'
-  Plug 'francoiscabrol/ranger.vim'
+  Plug 'yuriescl/ranger.vim'
   Plug 'jremmen/vim-ripgrep'
   Plug 'drmingdrmer/vim-toggle-quickfix'
   Plug 'preservim/nerdtree'
@@ -157,7 +157,7 @@ let g:tagbar_foldlevel = 0
 " (Plugin ranger)
 let g:ranger_map_keys = 0  " disable the default key mapping
 
-let NERDTreeWinSize = 27
+let NERDTreeWinSize = 32
 let NERDTreeQuitOnOpen=1
 
 """""""""""""""""""""""""""""""""""
@@ -260,6 +260,7 @@ function! OpenNERDTree()
         NERDTreeFind
     endif                                   
 endfun
+command! -bar OpenNERDTree call OpenNERDTree()
 
 function YankToClipboard()
     call system('xclip -i -selection clipboard', trim(getreg('*')))
@@ -296,10 +297,16 @@ endfunction
 
 function DartConfig()
     setlocal tabstop=2 shiftwidth=2
-    nmap <silent> <F2> zfib :AutoOrigamiFoldColumn<CR>
+    nmap <silent> <F2> zfib :AutoOrigamiFoldColumn<CR>za
     nmap <silent> <space> za
     nmap <silent> <C-y> :DartFmt<CR>
+    let $FZF_DEFAULT_COMMAND='rg -F --files --no-ignore --hidden --glob "!.git/*" --glob "!build/*" --glob "!.dart_tool/*" --glob "!android/.gradle/*"'
 endfunction
+
+function OpenTerminal()
+    execute ':silent !source ~/.bashrc.d/colorterm.sh && vim-tmux-new-window '.expand('%:p:h').' '.v:servername
+endfunction
+command! -bar OpenTerminal call OpenTerminal()
 
 """""""""""""""""""""""""""""""""""
 "           Auto commands
@@ -349,6 +356,9 @@ augroup autofoldcolumn
   au CursorHold,BufWinEnter,WinEnter * AutoOrigamiFoldColumn
 augroup END
 
+autocmd TermOpen * let g:terminal_job_id = b:terminal_job_id
+autocmd TermClose * unlet g:terminal_job_id
+
 "augroup Clipboard
 "    autocmd TextYankPost * :call YankToClipboard()
 "augroup END
@@ -371,6 +381,8 @@ nmap <C-g> :History<CR>
 nmap <C-n> :Files<CR>
 nmap <silent> <C-p> :w<CR>
 nmap <silent> <C-x> :BD<CR>
+
+nmap <silent> <C-t> :OpenNERDTree<CR>
 
 " See https://vim.fandom.com/wiki/Move_cursor_by_display_lines_when_wrapping
 nmap <silent> j gj
@@ -402,8 +414,6 @@ nnoremap N Nzz
 
 nmap <C-q> <Plug>window:quickfix:loop
 
-nmap <silent> <C-t> :call OpenNERDTree()<CR>
-
 nmap <S-h> 2zh
 nmap <S-l> 2zl
 
@@ -413,5 +423,8 @@ command! R Ranger
 
 nmap <leader>f :<C-u>execute 'Rg '.expand("<cword>")<CR>
 vmap <leader>f :<C-u>execute 'Rg '.GetVisualSelection()<CR>
+
+nmap <silent> <leader>t :OpenTerminal<CR>
+nmap <silent> <C-t> :OpenNERDTree<CR>
 
 nmap <space> za
