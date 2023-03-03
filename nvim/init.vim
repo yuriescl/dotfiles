@@ -6,15 +6,12 @@ set shiftwidth=4
 set softtabstop=0
 set laststatus=2
 set keywordprg=rg
-set backupdir=/tmp//
-set directory=/tmp//
-set undodir=/tmp//
 set nocompatible
 set colorcolumn=80
 set mouse=
 set expandtab
 set hidden
-set nonumber
+set number
 set autoindent
 set nosmartindent
 set nocindent
@@ -25,13 +22,14 @@ set incsearch
 set ruler
 set cursorline
 set nowrap
-set lcs=extends:›,precedes:‹
+set listchars=extends:›,precedes:‹
 set list
 set ignorecase
 set smartcase
 set foldmethod=manual
 set foldnestmax=2
 set foldcolumn=0
+set signcolumn=number
 set nomodeline
 set vb t_vb=     " no visual bell & flash
 set tags=./tags,tags  " look for the tags file in current directory, then globally
@@ -39,6 +37,8 @@ set updatetime=500
 set wildmode=longest,list
 set scrolloff=999
 set clipboard=unnamed
+set undofile
+set noswapfile
 
 call plug#begin(stdpath('data') . '/plugged')
   Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
@@ -48,19 +48,18 @@ call plug#begin(stdpath('data') . '/plugged')
   Plug 'yuriescl/vim-colorscheme'
   Plug 'qpkorr/vim-bufkill'
   Plug 'preservim/tagbar'
-  Plug 'rbgrouleff/bclose.vim'
   Plug 'yuriescl/ranger.vim'
   Plug 'jremmen/vim-ripgrep'
   Plug 'drmingdrmer/vim-toggle-quickfix'
   Plug 'preservim/nerdtree'
-  Plug 'mgedmin/taghelper.vim'
-  Plug 'dense-analysis/ale'
+  "Plug 'dense-analysis/ale'
   Plug 'inkarkat/vim-ingo-library'
   Plug 'inkarkat/vim-EnhancedJumps'
-  Plug 'dart-lang/dart-vim-plugin'
   Plug 'kana/vim-textobj-user'
+  Plug 'dart-lang/dart-vim-plugin'
   Plug 'rhysd/vim-textobj-anyblock'
-  Plug 'benknoble/vim-auto-origami'
+  Plug 'neoclide/coc.nvim', {'branch': 'release'}
+  "Plug 'mileszs/ack.vim'
 call plug#end()
 
 runtime macros/matchit.vim
@@ -84,6 +83,10 @@ endfunction
 set statusline=
 set statusline+=%m%r%w\                                 "Modified? Readonly? 
 set statusline+=%<%F\                                   "File+path
+set statusline+=%=%#warningmsg#
+"set statusline+=%{LinterStatus()}
+set statusline+=%{coc#status()}%{get(b:,'coc_current_function','')}
+set statusline+=%*
 let s:statusline = 0
 
 function! LinterStatus() abort
@@ -103,10 +106,6 @@ function! LinterStatus() abort
     endif
 endfunction
 
-set statusline+=%#warningmsg#
-set statusline+=%{LinterStatus()}
-set statusline+=%*
-
 """"""""""""
 " Syntastic
 "let g:syntastic_always_populate_loc_list = 1
@@ -119,14 +118,14 @@ set statusline+=%*
 """"""
 " ALE
 " In ~/.vim/vimrc, or somewhere similar.
-let g:ale_linters = {
-\   'python': ['flake8'],
-\}
-" Only run linters named in ale_linters settings.
-let g:ale_linters_explicit = 1
-let g:ale_python_flake8_options = '--max-line-length=200 --ignore=E116,E302,E121,E123,E124,E126,E127,E128,E201,E202,E203,E211,E222,E225,E226,E231,E252,E261,E265,E303,E722,F401,F403,F405,F841,W291,W292,W391,W503 --exclude="**/migrations/**"'
-let g:ale_lint_on_enter = 0
-let g:ale_lint_on_text_changed = 'never'
+"let g:ale_linters = {
+"\   'python': ['flake8'],
+"\}
+"" Only run linters named in ale_linters settings.
+"let g:ale_linters_explicit = 1
+"let g:ale_python_flake8_options = '--max-line-length=120 --exclude="**/migrations/**"'
+"let g:ale_lint_on_enter = 0
+"let g:ale_lint_on_text_changed = 'never'
 
 let dart_html_in_string=v:true
 
@@ -135,30 +134,37 @@ let g:textobj#anyblock#blocks=['(', '{', '[', 'f`']
 let g:netrw_banner = 0
 
 " (Plugin python-syntax) 
-let g:python_highlight_all = 1
+"let g:python_highlight_all = 1
 
 " (Plugin fzf) Disable jumping to existing windows
 let g:fzf_buffers_jump = 0
 let g:fzf_preview_window = []
-let $FZF_DEFAULT_COMMAND='rg -F --files --no-ignore --hidden --glob "!.git/*" --glob "!*__pycache__*"'
-
-" (Plugin tagbar)
-let g:tagbar_width = 25
-let g:tagbar_compact = 1
-let g:tagbar_indent = 1
-let g:tagbar_sort = 0
-let g:tagbar_autoclose = 1
-let g:tagbar_show_balloon = 0
-let g:tagbar_show_visibility = 0
-let g:tagbar_show_linenumbers = 0
-let g:tagbar_silent = 1
-let g:tagbar_foldlevel = 0
+let $FZF_DEFAULT_COMMAND='rg -F --files --no-ignore --hidden --glob "!.git/*" --glob "!*__pycache__*" --glob "!build*" --glob "!node_modules/*" --glob "!.venv/*" --glob "!.mypy_cache/*"'
 
 " (Plugin ranger)
 let g:ranger_map_keys = 0  " disable the default key mapping
 
 let NERDTreeWinSize = 32
 let NERDTreeQuitOnOpen=1
+
+" (Plugin python-syntax)
+let g:python_highlight_all = 1
+
+" https://github.com/neoclide/coc.nvim/issues/3930
+" https://github.com/neoclide/coc.nvim/wiki/F.A.Q#cursor-disappeared-after-exit-coclist
+let g:coc_disable_transparent_cursor = 1
+
+
+""""""""""""""""""""""""""""""
+" From plugin 'mileszs/ack.vim'
+"
+"let g:ackprg = 'rg --vimgrep --hidden --glob "!build*" --glob "!.git/*" --glob "!node_modules/*" --glob "!__pycache__/*" --glob "!*.min.js"'
+" Auto close the Quickfix list after pressing '<enter>' on a list item
+"let g:ack_autoclose = 1
+" Any empty ack search will search for the work the cursor is on
+"let g:ack_use_cword_for_empty_search = 1
+" Don't jump to first match
+"cnoreabbrev Ack Ack!
 
 """""""""""""""""""""""""""""""""""
 "           Functions
@@ -203,6 +209,10 @@ function ToggleStatusLine()
     set statusline=
     set statusline+=%m%r%w\                                "Modified? Readonly? 
     set statusline+=%<%F                                   "File+path
+    set statusline+=%=%#warningmsg#
+    "set statusline+=%{LinterStatus()}
+    set statusline+=%{coc#status()}%{get(b:,'coc_current_function','')}
+    set statusline+=%*
 
     let s:statusline = 0
   endif
@@ -263,7 +273,7 @@ endfun
 command! -bar OpenNERDTree call OpenNERDTree()
 
 function YankToClipboard()
-    call system('xclip -i -selection clipboard', trim(getreg('*')))
+    call system('xclip -selection clipboard', trim(getreg('*')))
 endfunction
 
 command! ClearQuickfixList cexpr []
@@ -280,33 +290,74 @@ function! GetVisualSelection()
     return join(lines, "\n")
 endfunction
 
-function ConfigureAle()
-    "if expand("%:p") =~ '^/home/yuri/work/github/antb123/jpy_hub/'
-    "    let g:ale_linters = {
-    "    \   'python': ['flake8'],
-    "    \}
-    "    let g:ale_use_global_executables = 1
-    "    let g:ale_python_flake8_executable = '/home/yuri/Dropbox/work/docker/jpy_hub-flake8.sh'
-    "    let g:ale_filename_mappings = {
-    "    \ 'pylint': [
-    "    \   ['/home/yuri/work/github/antb123/jpy_hub', '/data'],
-    "    \ ],
-    "    \}
-    "endif
-endfunction
-
 function DartConfig()
     setlocal tabstop=2 shiftwidth=2
-    nmap <silent> <F2> zfib :AutoOrigamiFoldColumn<CR>za
-    nmap <silent> <space> za
     nmap <silent> <C-y> :DartFmt<CR>
-    let $FZF_DEFAULT_COMMAND='rg -F --files --no-ignore --hidden --glob "!.git/*" --glob "!build/*" --glob "!.dart_tool/*" --glob "!android/.gradle/*"'
+endfunction
+
+function PythonConfig()
+    setlocal tabstop=4 shiftwidth=4
+    nmap <silent> <C-y> :Format<CR>
+endfunction
+
+function TypescriptConfig()
+    setlocal tabstop=2 shiftwidth=2
+    nmap <silent> <C-y> :Prettier<CR>
+    " jump to begin of tag
+    nmap <silent> [g vatv`<
+    " jump to end of tag
+    nmap <silent> ]g vatv`>
+endfunction
+
+function JavascriptConfig()
+    setlocal tabstop=2 shiftwidth=2
+    nmap <silent> <C-y> :Prettier<CR>
+    " jump to begin of tag
+    nmap <silent> [g vatv`<
+    " jump to end of tag
+    nmap <silent> ]g vatv`>
+endfunction
+
+function CssConfig()
+    setlocal tabstop=2 shiftwidth=2
+    nmap <silent> <C-y> :Prettier<CR>
+endfunction
+
+function JsonConfig()
+    setlocal tabstop=2 shiftwidth=2
+    nmap <silent> <C-y> :Format<CR>
+endfunction
+
+function HtmlConfig()
+    setlocal tabstop=2 shiftwidth=2
+    nmap <silent> <C-y> :Prettier<CR>
+endfunction
+
+function HtmlDjangoConfig()
+    setlocal tabstop=2 shiftwidth=2
+    nmap <silent> <C-y> :Format<CR>
+endfunction
+
+function MarkdownConfig()
+    setlocal tabstop=2 shiftwidth=2
+    nmap <silent> <C-y> :Format<CR>
 endfunction
 
 function OpenTerminal()
     execute ':silent !source ~/.bashrc.d/colorterm.sh && vim-tmux-new-window '.expand('%:p:h').' '.v:servername
 endfunction
 command! -bar OpenTerminal call OpenTerminal()
+
+function! ShowDocumentation()
+  if CocAction('hasProvider', 'hover')
+    call CocActionAsync('doHover')
+  else
+    call feedkeys('K', 'in')
+  endif
+endfunction
+
+command! -bar Black execute ":!black %"
+command! -bar Isort execute ":!isort %"
 
 """""""""""""""""""""""""""""""""""
 "           Auto commands
@@ -319,49 +370,19 @@ if has("autocmd")
     \| exe "normal! g'\"" | endif
 endif
 
-augroup Html
-    autocmd FileType html,htmldjango setlocal tabstop=2 shiftwidth=2
-augroup END
+au FileType javascript,javascriptreact au BufEnter <buffer> call JavascriptConfig()
+au FileType typescript,typescriptreact au BufEnter <buffer> call TypescriptConfig()
+au FileType css au BufEnter <buffer> call CssConfig()
+au FileType json au BufEnter <buffer> call JsonConfig()
+au FileType html,xml au BufEnter <buffer> call HtmlConfig()
+au FileType htmldjango au BufEnter <buffer> call HtmlDjangoConfig()
+au FileType python au BufEnter <buffer> call PythonConfig()
+au FileType dart au BufEnter <buffer> call DartConfig()
+au FileType markdown au BufEnter <buffer> call MarkdownConfig()
+au FileType qf au BufEnter <buffer> nmap <silent> <CR> <CR>:cclose<CR>:lclose<CR>
 
-augroup Dart
-    autocmd FileType dart call DartConfig()
-augroup END
-
-augroup ChangeDetect
-    " Triger `autoread` when files changes on disk
-    " https://unix.stackexchange.com/questions/149209/refresh-changed-content-of-file-opened-in-vim/383044#383044
-    " https://vi.stackexchange.com/questions/13692/prevent-focusgained-autocmd-running-in-command-line-editing-mode
-    autocmd FocusGained,BufEnter,CursorHold,CursorHoldI *
-      \ if mode() !~ '\v(c|r.?|!|t)' && getcmdwintype() == '' | checktime | endif
-
-    " Notification after file change
-    " https://vi.stackexchange.com/questions/13091/autocmd-event-for-autoread
-    autocmd FileChangedShellPost *
-      \ echohl WarningMsg | echo "File changed on disk. Buffer reloaded." | echohl None
-
-augroup END
-
-
-augroup QuickFix
-    " close quickfix and loclist when an item is selected
-    autocmd FileType qf nmap <buffer> <silent> <CR> <CR>:cclose<CR>:lclose<CR>
-augroup END
-
-augroup Ale
-    autocmd FocusGained,BufEnter,CursorHold,CursorHoldI * call ConfigureAle()
-augroup END
-
-augroup autofoldcolumn
-  au!
-  au CursorHold,BufWinEnter,WinEnter * AutoOrigamiFoldColumn
-augroup END
-
-autocmd TermOpen * let g:terminal_job_id = b:terminal_job_id
-autocmd TermClose * unlet g:terminal_job_id
-
-"augroup Clipboard
-"    autocmd TextYankPost * :call YankToClipboard()
-"augroup END
+" coc-nvim
+au CursorHold * silent call CocActionAsync('highlight')
 
 """""""""""""""""""""""""""""""""""
 "           Mappings
@@ -369,14 +390,11 @@ autocmd TermClose * unlet g:terminal_job_id
 
 nmap <silent> <leader>p :set paste<CR>"+p:set paste!<CR>
 nmap <silent> <leader>P :set paste<CR>"+P:set paste!<CR>
-nmap <silent> <leader>yy m`0v^$"+y``
-vmap <silent> <leader>y "+y
 nmap <silent> Y :call YankToClipboard()<CR>
 
 nmap <silent> <F1> :noh<CR>
-nmap <silent> <C-e> :TagbarToggle<CR>
 nmap <C-b> :Buffers<CR>
-nmap <C-f> :Rg 
+nmap <C-f> :Rg<Space>
 nmap <C-g> :History<CR>
 nmap <C-n> :Files<CR>
 nmap <silent> <C-p> :w<CR>
@@ -409,22 +427,42 @@ vmap <silent> <c-k> gk
 nmap <silent> <leader>d "_d
 vmap <silent> <leader>d "_d
 
-nnoremap n nzz
-nnoremap N Nzz
+nmap n nzz
+nmap N Nzz
 
 nmap <C-q> <Plug>window:quickfix:loop
 
 nmap <S-h> 2zh
 nmap <S-l> 2zl
 
-"nnoremap <expr> p (v:register ==# '"' ? PasteFromVimClipboard('p') : 'p')
-
 command! R Ranger
-
-nmap <leader>f :<C-u>execute 'Rg '.expand("<cword>")<CR>
-vmap <leader>f :<C-u>execute 'Rg '.GetVisualSelection()<CR>
 
 nmap <silent> <leader>t :OpenTerminal<CR>
 nmap <silent> <C-t> :OpenNERDTree<CR>
 
-nmap <space> za
+nmap <space> %
+vmap <space> %
+
+nmap <C-]> g<C-]>
+
+"""""""""""
+" coc-nvim
+" GoTo code navigation.
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+nmap <leader>rn <Plug>(coc-rename)
+nmap <silent> K :call ShowDocumentation()<CR>
+" Symbol renaming.
+nmap <leader>rn <Plug>(coc-rename)
+" Formatting selected code.
+xmap <leader>f  <Plug>(coc-format-selected)
+nmap <leader>f  <Plug>(coc-format-selected)
+" Add `:Format` command to format current buffer.
+command! -nargs=0 Format :call CocActionAsync('format')
+" Add `:OrganizeImport` command for organize imports of the current buffer.
+command! -nargs=0 OrganizeImport :call CocActionAsync('runCommand', 'editor.action.organizeImport')
+command! -nargs=0 CD :CocDiagnostics<CR>
+command! -nargs=0 Prettier :CocCommand prettier.forceFormatDocument
+
