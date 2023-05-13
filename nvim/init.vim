@@ -22,7 +22,7 @@ set incsearch
 set ruler
 set cursorline
 set nowrap
-set listchars=extends:›,precedes:‹
+"set listchars=extends:›,precedes:‹
 set list
 set ignorecase
 set smartcase
@@ -60,6 +60,11 @@ call plug#begin(stdpath('data') . '/plugged')
   Plug 'rhysd/vim-textobj-anyblock'
   Plug 'neoclide/coc.nvim', {'branch': 'release'}
   "Plug 'mileszs/ack.vim'
+  Plug 'nvim-lua/plenary.nvim'
+  Plug 'nvim-telescope/telescope.nvim', { 'branch': '0.1.x' }
+  Plug 'HerringtonDarkholme/yats.vim'
+  " or Plug 'leafgarland/typescript-vim'
+  Plug 'maxmellon/vim-jsx-pretty'
 call plug#end()
 
 runtime macros/matchit.vim
@@ -139,7 +144,7 @@ let g:netrw_banner = 0
 " (Plugin fzf) Disable jumping to existing windows
 let g:fzf_buffers_jump = 0
 let g:fzf_preview_window = []
-let $FZF_DEFAULT_COMMAND='rg -F --files --no-ignore --hidden --glob "!.git/*" --glob "!*__pycache__*" --glob "!build*" --glob "!node_modules/*" --glob "!.venv/*" --glob "!.mypy_cache/*"'
+let $FZF_DEFAULT_COMMAND='rg -F --files --no-ignore --hidden --glob "!.git/*" --glob "!*__pycache__*" --glob "!build*" --glob "!*node_modules*" --glob "!.venv/*" --glob "!*.mypy_cache*" --glob "!*.next*"'
 
 " (Plugin ranger)
 let g:ranger_map_keys = 0  " disable the default key mapping
@@ -300,6 +305,11 @@ function PythonConfig()
     nmap <silent> <C-y> :Format<CR>
 endfunction
 
+function RustConfig()
+    setlocal tabstop=4 shiftwidth=4
+    nmap <silent> <C-y> :Format<CR>
+endfunction
+
 function TypescriptConfig()
     setlocal tabstop=2 shiftwidth=2
     nmap <silent> <C-y> :Prettier<CR>
@@ -379,10 +389,14 @@ au FileType htmldjango au BufEnter <buffer> call HtmlDjangoConfig()
 au FileType python au BufEnter <buffer> call PythonConfig()
 au FileType dart au BufEnter <buffer> call DartConfig()
 au FileType markdown au BufEnter <buffer> call MarkdownConfig()
+au FileType rust au BufEnter <buffer> call RustConfig()
 au FileType qf au BufEnter <buffer> nmap <silent> <CR> <CR>:cclose<CR>:lclose<CR>
 
 " coc-nvim
 au CursorHold * silent call CocActionAsync('highlight')
+
+" https://github.com/neoclide/coc.nvim/issues/2993
+au User CocStatusChange redrawstatus
 
 """""""""""""""""""""""""""""""""""
 "           Mappings
@@ -452,13 +466,9 @@ nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
+nmap <silent> gl :call CocAction('diagnosticInfo')<CR>
 nmap <leader>rn <Plug>(coc-rename)
 nmap <silent> K :call ShowDocumentation()<CR>
-" Symbol renaming.
-nmap <leader>rn <Plug>(coc-rename)
-" Formatting selected code.
-xmap <leader>f  <Plug>(coc-format-selected)
-nmap <leader>f  <Plug>(coc-format-selected)
 " Add `:Format` command to format current buffer.
 command! -nargs=0 Format :call CocActionAsync('format')
 " Add `:OrganizeImport` command for organize imports of the current buffer.
@@ -466,3 +476,9 @@ command! -nargs=0 OrganizeImport :call CocActionAsync('runCommand', 'editor.acti
 command! -nargs=0 CD :CocDiagnostics<CR>
 command! -nargs=0 Prettier :CocCommand prettier.forceFormatDocument
 
+
+"nnoremap <leader>ff <cmd>Telescope find_files<cr>
+"nnoremap <leader>fg <cmd>Telescope live_grep<cr>
+"nnoremap <leader>fb <cmd>Telescope buffers<cr>
+"nnoremap <leader>fh <cmd>Telescope help_tags<cr>
+"nnoremap <leader>f <cmd>Telescope grep_string<cr>
