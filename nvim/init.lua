@@ -61,6 +61,6 @@ vim.api.nvim_create_autocmd('DiagnosticChanged', {
 })
 
 -- Setup fidget. Fidget is used to display LSP notifications at the bottom right of the screen.
-require("fidget").setup {
-  -- options
-}
+require("fidget").setup {}
+
+require("outline").setup {}

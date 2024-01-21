@@ -52,6 +52,7 @@ call plug#begin(stdpath('data') . '/plugged')
   Plug 'neovim/nvim-lspconfig'
   Plug 'j-hui/fidget.nvim'
   Plug 'duane9/nvim-rg'
+  Plug 'hedyhli/outline.nvim'
 call plug#end()
 
 runtime macros/matchit.vim
