@@ -10,6 +10,8 @@ This repository contains a couple of my personal dotfiles that I use in all my L
   - Fedora.
     - Why?
       - Because after decades (literally) of using Ubuntu/Arch/Mint/PopOS/Gentoo and facing many annoying issues (including losing my system boot after a simple "apt upgrade"), Fedora has been the only distro that provides a great combination of bleeding edge but also stability. I don't mind reinstalling my OS once a year. This plus the fact that most Red Hat developers use Fedora so Fedora gets the bugfixes and improvements before any other GNOME-based distro. And yes I like Gnome 40 and their design philosophy (by the way, good philosophy doesn't mean no bugs, but honestly I used Cinnamon/KDE/Xfce and they're also buggy as hell).
+      - The famous Red Hat Enterprise Linux (RHEL), one of the most safest and well-maintained Linux enterprise distribution, is partially based on Fedora. So every update made on Fedora is in principle a future update on RHEL. Red Hat wants RHEL to be reliable, therefore, as a natural consequence, Fedora is made to be reliable in the first place.
+      - Not bloated by default. Default config is great, just works. Installer is simple and lets you just install the system without having to configure every single small piece of thing possible (sorry Arch - and yes I've used archinstall and it's decent - but still, Arch is for people who want to learn instead of actually get things done). Other distros like Ubuntu/OpenSUSE/Manjaro do work reasonably well, but don't feel clean and vanilla like Fedora. This is all a bit subjective, I won't elaborate. To summarize the main reason for Fedora: I like Red Hat software and principles, but I want fresh packages, therefore, I can't use RHEL (or any of its clones) so I just use Fedora.
 
 - Which IDE do I use?
   - None. Just NVIM + Terminal.
@@ -31,3 +33,4 @@ This repository contains a couple of my personal dotfiles that I use in all my L
       - Why not use more plugins?
         - No need to. The less the better. This keeps my setup simple, predictable and performant.
       - I do have a lot of utilitary shell scripts and aliases. NVIM alone isn't very productive, but when you introduce bash and tmux, it's very powerful.
+      - For me, in the end, what matters is efficiency and feeling comfortable coding for many hours. My wrists hurt when using normal IDEs because of the huge amount of different hand movements required for navigation. When using NVIM I don't feel any pain or discomfort due to how the shortcuts are centered around the same keyboard region, so my hands don't move much and this is good for wrist health.
