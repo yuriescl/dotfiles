@@ -22,7 +22,7 @@ set incsearch
 set ruler
 set cursorline
 set nowrap
-set listchars=extends:›,precedes:‹
+set listchars=tab:>\ ,extends:›,precedes:‹,nbsp:+,trail:-
 set list
 set ignorecase
 set smartcase
@@ -39,6 +39,20 @@ set scrolloff=999
 set clipboard=unnamed
 set undofile
 set noswapfile
+set shada
+
+call plug#begin(stdpath('data') . '/plugged')
+  Plug 'yuriescl/fzf', { 'do': { -> fzf#install() } }
+  Plug 'yuriescl/fzf.vim'
+  Plug 'yuriescl/nerdtree'
+  Plug 'dart-lang/dart-vim-plugin'
+  Plug 'bluz71/vim-moonfly-colors', { 'as': 'moonfly' }
+  "Plug 'yuriescl/yats.vim'
+  Plug 'github/copilot.vim'
+  Plug 'neovim/nvim-lspconfig'
+  Plug 'j-hui/fidget.nvim'
+  Plug 'duane9/nvim-rg'
+call plug#end()
 
 runtime macros/matchit.vim
 
@@ -48,54 +62,53 @@ filetype indent off
 
 syntax enable
 
-colorscheme desert
+colorscheme moonfly
+" Override the color of Normal text (white)
+highlight Normal guifg=#FFFFFF guibg=NONE ctermfg=15 ctermbg=NONE
 
-function CwdName()
-    return fnamemodify(getcwd(), ':t')
-endfunction
-
+" Set the modified statusline with LSP information
 set statusline=
-set statusline+=%m%r%w\                                 "Modified? Readonly? 
-set statusline+=%<%F\                                   "File+path
+set statusline+=%m%r%w\                                     "Modified? Readonly? 
+set statusline+=%<%F                                        "File+path
 set statusline+=%*
 let s:statusline = 0
 
 let g:netrw_banner = 0
+
+" (Plugin fzf) Disable jumping to existing windows
+let g:fzf_buffers_jump = 0
+let g:fzf_preview_window = []
+let $FZF_DEFAULT_COMMAND='rg -F --files --no-ignore --hidden --glob "!.git/*" --glob "!*__pycache__*" --glob "!build*" --glob "!*node_modules*" --glob "!.venv/*" --glob "!*.mypy_cache*" --glob "!*.next*"'
+
+let NERDTreeWinSize = 32
+let NERDTreeQuitOnOpen=1
+
+
+"""""""""""""""""""""""""""""""""""
+"           Functions
+"
+
+" Toggle fold column
+function ToggleFoldColumn()
+    if (&foldcolumn != 0)
+        set foldcolumn=0
+    else
+        set foldcolumn=1
+    endif
+endfunction
+command! -bar ToggleFoldColumn call ToggleFoldColumn()
+
 
 function ToggleSetList()
   if !exists('s:setlist') || s:setlist == 0
     set listchars=space:·,tab:»\ ,extends:›,precedes:‹,nbsp:·,trail:·,eol:$
     let s:setlist = 1
   else
-    set listchars=extends:›,precedes:‹
+    set listchars=tab:>\ ,extends:›,precedes:‹,nbsp:+,trail:-
     let s:setlist = 0
   endif
 endfunction
 command! -bar ToggleSetList call ToggleSetList()
-
-function ToggleStatusLine()
-  if !exists('s:statusline') || s:statusline == 0
-    set statusline=
-    set statusline+=%m%r%w\                                "Modified? Readonly? 
-    set statusline+=%<%F\                                  "File+path
-    set statusline+=%=%y\                                  "FileType
-    set statusline+=%{''.(&fenc!=''?&fenc:&enc).''}        "Encoding
-    set statusline+=%{(&bomb?\",BOM\":\"\")}\              "Encoding2
-    set statusline+=%{&ff}\                                "FileFormat (dos/unix..) 
-    set statusline+=r:%l/%L\                               "Rownumber/total (%)
-    set statusline+=c:%c                                   "Colnr
-
-    let s:statusline = 1
-  else
-    set statusline=
-    set statusline+=%m%r%w\                                "Modified? Readonly? 
-    set statusline+=%<%F                                   "File+path
-    set statusline+=%*
-
-    let s:statusline = 0
-  endif
-endfunction
-command! -bar ToggleStatusLine call ToggleStatusLine()
 
 " Echo File/dir paths
 function EchoRelativeFilePath()
@@ -119,7 +132,23 @@ function EchoFullDirPath()
 endfunction
 command! -bar EchoFullDirPath call EchoFullDirPath()
 
-command! ClearQuickfixList cexpr []
+function! OpenNERDTree()                   
+    if @% == ""
+        NERDTreeFocus
+    else                                    
+        NERDTreeFind
+    endif                                   
+endfun
+command! -bar OpenNERDTree call OpenNERDTree()
+
+function! OpenTerminal()
+    call system('tmux split-window -c "'.expand('%:p:h').'"')
+endfun
+command! -bar OpenTerminal call OpenTerminal()
+
+function YankToClipboard()
+    call system('xclip -selection clipboard', trim(getreg('*')))
+endfunction
 
 function DartConfig()
     setlocal tabstop=2 shiftwidth=2
@@ -127,6 +156,15 @@ endfunction
 
 function PythonConfig()
     setlocal tabstop=4 shiftwidth=4
+endfunction
+
+function RustConfig()
+    setlocal tabstop=4 shiftwidth=4
+endfunction
+
+function GoConfig()
+    setlocal noexpandtab tabstop=4 shiftwidth=4
+    set listchars=tab:\ \ ,extends:›,precedes:‹
 endfunction
 
 function TypescriptConfig()
@@ -165,6 +203,17 @@ function MarkdownConfig()
     setlocal tabstop=2 shiftwidth=2
 endfunction
 
+"""""""""""""""""""""""""""""""""""
+"           Auto commands
+"
+
+" Uncomment the following to have Vim jump to the last position when                                                       
+" reopening a file
+if has("autocmd")
+  au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
+    \| exe "normal! g'\"" | endif
+endif
+
 au FileType javascript,javascriptreact au BufEnter <buffer> call JavascriptConfig()
 au FileType typescript,typescriptreact au BufEnter <buffer> call TypescriptConfig()
 au FileType css au BufEnter <buffer> call CssConfig()
@@ -174,10 +223,35 @@ au FileType htmldjango au BufEnter <buffer> call HtmlDjangoConfig()
 au FileType python au BufEnter <buffer> call PythonConfig()
 au FileType dart au BufEnter <buffer> call DartConfig()
 au FileType markdown au BufEnter <buffer> call MarkdownConfig()
+au FileType rust au BufEnter <buffer> call RustConfig()
+au FileType go au BufEnter <buffer> call GoConfig()
+au FileType go compiler go | setlocal makeprg=go\ build
 au FileType qf au BufEnter <buffer> nmap <silent> <CR> <CR>:cclose<CR>:lclose<CR>
 
+" Fix syntax highlight when there's embedded TSX/JSX inside HTML
+au BufEnter,BufNew *.html :syntax sync fromstart
+
+"""""""""""""""""""""""""""""""""""
+"           Mappings
+"
+
+nmap <silent> <leader>p :set paste<CR>"+p:set paste!<CR>
+nmap <silent> <leader>P :set paste<CR>"+P:set paste!<CR>
+nmap <silent> Y :call YankToClipboard()<CR>
+
 nmap <silent> <F1> :noh<CR>
-nmap <silent> <C-x> :bd<CR>
+nmap <C-b> :Buffers<CR>
+nmap <C-f> :Rg<Space>
+nmap <C-g> :History<CR>
+nmap <C-n> :Files<CR>
+nmap <silent> <C-p> :w<CR>
+nmap <silent> <C-x> :bdelete<CR>
+nmap <silent> <C-t> :OpenTerminal<CR>
+nmap <silent> <C-e> :OpenNERDTree<CR>
+
+" Toggle quickfix. See https://stackoverflow.com/questions/11198382/how-to-create-a-key-map-to-open-and-close-the-quickfix-window-in-vim#comment122398806_63162084
+nmap <expr> <C-q> empty(filter(getwininfo(), 'v:val.quickfix')) ? ':copen<CR>' : ':cclose<CR>'
+nmap <expr> <S-q> empty(filter(getwininfo(), 'v:val.loclist')) ? ':lopen<CR>' : ':lclose<CR>'
 
 " See https://vim.fandom.com/wiki/Move_cursor_by_display_lines_when_wrapping
 nmap <silent> j gj
@@ -214,4 +288,7 @@ nmap <space> %
 vmap <space> %
 
 nmap <C-]> g<C-]>
+
+" Avoid UI glitch on GitHub Copilot when exiting insert mode with Ctrl+c
+inoremap <C-c> <Esc>
 
