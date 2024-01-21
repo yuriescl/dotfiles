@@ -22,6 +22,8 @@ This repository contains a couple of my personal dotfiles that I use in all my L
           - If you don't know what your IDE is doing under the hood, sorry but you're a newbie to programming. Learn more, get better, understand the tools and the flows. Stop pressing "Run" and start running things manually, and then, you'll see that IDEs do a lot of useless bloated stuff that just slows down your coding/execution/debugging.
         - Choice 2) Switch to NVIM+Terminal+Tmux, painfully learn and automate your setup, and then enjoy the speed/efficiency of navigation and control that those tools provide.
           - I don't use NVIM/Terminal because I want to be cool. I use it because it gets me to be 10x (or maybe more) faster doing my work (which is coding (or navigating code) most of the time). What's the point wasting time in life? Get things done faster and you'll be able to do more things.
+          - All your expertise in NVIM/Terminal can be applied to servers. You'll be quicker navigating and won't
+          have a hard time debugging issues server-side, because you'll be used to it already.
     - Have I tried switching back to an IDE?
       - Yes, I tried VS Code after they launched Copilot. It's cool but since I'm too slow outside of my NVIM/Terminal setup, I went back to NVIM. And guess what, Copilot works in NVIM as well, so all good.
     - Which plugins do I use in NVIM?
