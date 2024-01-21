@@ -4,6 +4,8 @@ This repository contains a couple of my personal dotfiles that I use in all my L
 - [nvim](./nvim)
 - [tmux](./tmux)
 
+## FAQ
+
 - Which Linux distro do I use?
   - Fedora.
     - Why?
