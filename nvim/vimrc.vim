@@ -251,8 +251,10 @@ nmap <silent> <C-t> :OpenTerminal<CR>
 nmap <silent> <C-e> :OpenNERDTree<CR>
 
 " Toggle quickfix. See https://stackoverflow.com/questions/11198382/how-to-create-a-key-map-to-open-and-close-the-quickfix-window-in-vim#comment122398806_63162084
-nmap <expr> <C-q> empty(filter(getwininfo(), 'v:val.quickfix')) ? ':copen<CR>' : ':cclose<CR>'
-nmap <expr> <S-q> empty(filter(getwininfo(), 'v:val.loclist')) ? ':lopen<CR>' : ':lclose<CR>'
+nmap <silent> <expr> <C-q> empty(filter(getwininfo(), 'v:val.quickfix')) ? ':copen<CR>' : ':cclose<CR>'
+nmap <silent> <expr> <S-q> empty(filter(getwininfo(), 'v:val.loclist')) ? ':lopen<CR>' : ':lclose<CR>'
+
+nmap <silent> <leader>o :Outline<CR>
 
 " See https://vim.fandom.com/wiki/Move_cursor_by_display_lines_when_wrapping
 nmap <silent> j gj

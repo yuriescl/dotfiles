@@ -35,6 +35,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
     local opts = { buffer = ev.buf }
     vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
     vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
+    vim.keymap.set('n', 'gl', vim.diagnostic.open_float, opts)
     vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
     vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
     vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, opts)
@@ -52,6 +53,8 @@ vim.api.nvim_create_autocmd('LspAttach', {
     end, opts)
   end,
 })
+
+
 -- Populate loclist with the current buffer diagnostics
 -- See https://gist.github.com/phelipetls/0aeb9f4aca9af25d9f45ee56e0c5a340?permalink_comment_id=4397599#gistcomment-4397599
 vim.api.nvim_create_autocmd('DiagnosticChanged', {
@@ -63,4 +66,18 @@ vim.api.nvim_create_autocmd('DiagnosticChanged', {
 -- Setup fidget. Fidget is used to display LSP notifications at the bottom right of the screen.
 require("fidget").setup {}
 
-require("outline").setup {}
+require("outline").setup {
+  symbol_folding = {
+    -- Depth past which nodes will be folded by default. Set to false to unfold all on open.
+    autofold_depth = 1,
+    -- When to auto unfold nodes
+    auto_unfold = {
+      -- Auto unfold currently hovered symbol
+      hovered = false,
+      -- Auto fold when the root level only has this many nodes.
+      -- Set true for 1 node, false for 0.
+      -- only = true,
+    },
+    markers = { '', '' },
+  },
+}
