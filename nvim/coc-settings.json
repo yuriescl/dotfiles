@@ -1,0 +1,12 @@
+{
+  "suggest.autoTrigger": "none",
+  "htmldjango.djlint.indent": 2,
+  "html.autoCreateQuotes": false,
+  "html.autoClosingTags": false,
+  "workspace.rootPatterns": [],
+  "diagnostic.enableMessage": "jump",
+  "diagnostic.checkCurrentLine": true,
+  "notification.disabledProgressSources": ["*"],
+  "coc.preferences.useQuickfixForLocations": true,
+  "git.addGBlameToVirtualText": true,
+}
