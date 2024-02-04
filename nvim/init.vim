@@ -44,42 +44,29 @@ set shada
 call plug#begin(stdpath('data') . '/plugged')
   Plug 'yuriescl/fzf', { 'do': { -> fzf#install() } }
   Plug 'yuriescl/fzf.vim'
-  "Plug 'yuriescl/python-syntax'
-  "Plug 'yuriescl/vim-colorscheme'
-  "Plug 'yuriescl/vim-bufkill'
   Plug 'yuriescl/vim-ripgrep'
   Plug 'yuriescl/vim-toggle-quickfix'
   Plug 'yuriescl/nerdtree'
   Plug 'dart-lang/dart-vim-plugin'
   Plug 'neoclide/coc.nvim', {'branch': 'release'}
-  Plug 'sheerun/vim-polyglot'
+  "Plug 'sheerun/vim-polyglot'
   Plug 'github/copilot.vim'
+  Plug 'charlespascoe/vim-go-syntax'
   Plug 'bluz71/vim-moonfly-colors', { 'as': 'moonfly' }
+  Plug 'liuchengxu/vista.vim'
 call plug#end()
 
-runtime macros/matchit.vim
+" Settings
 
+"" Native configs
+runtime macros/matchit.vim
 filetype plugin on
 filetype plugin indent off
 filetype indent off
-
 syntax enable
+let g:netrw_banner = 0
 
-colorscheme moonfly
-" Override the color of Normal text (white)
-highlight Normal guifg=#FFFFFF guibg=NONE ctermfg=15 ctermbg=NONE
-
-"colorscheme mixedmono
-"colorscheme default
-
-" Status line colors
-"hi StatusLine ctermbg=147 ctermfg=232
-"hi StatusLineNC ctermbg=18 ctermfg=15
-
-function CwdName()
-    return fnamemodify(getcwd(), ':t')
-endfunction
-
+""" Statusline
 set statusline=
 set statusline+=%m%r%w\                                 "Modified? Readonly? 
 set statusline+=%<%F\                                   "File+path
@@ -88,29 +75,31 @@ set statusline+=%{coc#status()}%{get(b:,'coc_current_function','')}
 set statusline+=%*
 let s:statusline = 0
 
+" bluz71/vim-moonfly-colors
+colorscheme moonfly
+" Override the color of Normal text (white)
+highlight Normal guifg=#FFFFFF guibg=NONE ctermfg=15 ctermbg=NONE
+
+" liuchengxu/vista.vim
+let g:vista_default_executive = 'coc'
+
+" dart-lang/dart-vim-plugin
 let dart_html_in_string=v:true
 
+" dart-lang/dart-vim-plugin
 let g:textobj#anyblock#blocks=['(', '{', '[', 'f`']
 
-let g:netrw_banner = 0
-
-" (Plugin python-syntax) 
-"let g:python_highlight_all = 1
-
-" (Plugin fzf) Disable jumping to existing windows
+" yuriescl/fzf.vim
+" Disable jumping to existing windows
 let g:fzf_buffers_jump = 0
 let g:fzf_preview_window = []
 let $FZF_DEFAULT_COMMAND='rg -F --files --no-ignore --hidden --glob "!.git/*" --glob "!*__pycache__*" --glob "!build*" --glob "!*node_modules*" --glob "!.venv/*" --glob "!*.mypy_cache*" --glob "!*.next*"'
 
-" (Plugin ranger)
-let g:ranger_map_keys = 0  " disable the default key mapping
-
+" yuriescl/nerdtree
 let NERDTreeWinSize = 32
 let NERDTreeQuitOnOpen=1
 
-" (Plugin python-syntax)
-let g:python_highlight_all = 1
-
+" neoclide/coc.nvim
 " https://github.com/neoclide/coc.nvim/issues/3930
 " https://github.com/neoclide/coc.nvim/wiki/F.A.Q#cursor-disappeared-after-exit-coclist
 let g:coc_disable_transparent_cursor = 1
@@ -141,33 +130,6 @@ function ToggleSetList()
   endif
 endfunction
 command! -bar ToggleSetList call ToggleSetList()
-
-function ToggleStatusLine()
-  if !exists('s:statusline') || s:statusline == 0
-    set statusline=
-    set statusline+=%m%r%w\                                "Modified? Readonly? 
-    set statusline+=%<%F\                                  "File+path
-    set statusline+=%=%y\                                  "FileType
-    set statusline+=%{''.(&fenc!=''?&fenc:&enc).''}        "Encoding
-    set statusline+=%{(&bomb?\",BOM\":\"\")}\              "Encoding2
-    set statusline+=%{&ff}\                                "FileFormat (dos/unix..) 
-    set statusline+=r:%l/%L\                               "Rownumber/total (%)
-    set statusline+=c:%c                                   "Colnr
-
-    let s:statusline = 1
-  else
-    set statusline=
-    set statusline+=%m%r%w\                                "Modified? Readonly? 
-    set statusline+=%<%F                                   "File+path
-    set statusline+=%=%#warningmsg#
-    "set statusline+=%{LinterStatus()}
-    set statusline+=%{coc#status()}%{get(b:,'coc_current_function','')}
-    set statusline+=%*
-
-    let s:statusline = 0
-  endif
-endfunction
-command! -bar ToggleStatusLine call ToggleStatusLine()
 
 " Toggles between manual and syntax folding
 function ToggleFoldMethod()
@@ -305,7 +267,7 @@ function HtmlDjangoConfig()
 endfunction
 
 function MarkdownConfig()
-    setlocal tabstop=2 shiftwidth=2
+    setlocal tabstop=4 shiftwidth=4
     nmap <silent> <C-y> :Format<CR>
 endfunction
 
@@ -350,68 +312,59 @@ au CursorHold * silent call CocActionAsync('highlight')
 " https://github.com/neoclide/coc.nvim/issues/2993
 au User CocStatusChange redrawstatus
 
-"""""""""""""""""""""""""""""""""""
-"           Mappings
-"
+" Mappings
 
+"" Simple mappings
+
+nmap <silent> Y :call YankToClipboard()<CR>
+nmap <silent> <F1> :noh<CR>
+
+""" See https://vim.fandom.com/wiki/Move_cursor_by_display_lines_when_wrapping
+nmap <silent> j gj
+vmap <silent> j gj
+nmap <silent> k gk
+vmap <silent> k gk
+
+""" See https://vim.fandom.com/wiki/Selecting_your_pasted_text
+nmap <expr> gp "'[" . strpart(getregtype(), 0, 1) . "']"
+nmap <expr> gP "`[" . strpart(getregtype(), 0, 1) . "`]"
+
+vmap <silent> $ $h
+nmap <silent> K <Nop>
+vmap <silent> K <Nop>
+vmap <silent> K <Nop>
+vmap <silent> J <Nop>
+nmap n nzz
+nmap N Nzz
+nmap <S-h> 2zh
+nmap <S-l> 2zl
+nmap <space> %
+vmap <space> %
+
+
+"" <leader>
 nmap <silent> <leader>p :set paste<CR>"+p:set paste!<CR>
 nmap <silent> <leader>P :set paste<CR>"+P:set paste!<CR>
-nmap <silent> Y :call YankToClipboard()<CR>
+nmap <silent> <leader>d "_d
+vmap <silent> <leader>d "_d
 
-nmap <silent> <F1> :noh<CR>
+"" Control + <key>
 nmap <C-b> :Buffers<CR>
 nmap <C-f> :Rg<Space>
 nmap <C-g> :History<CR>
 nmap <C-n> :Files<CR>
 nmap <silent> <C-p> :w<CR>
 nmap <silent> <C-x> :bd<CR>
-
 nmap <silent> <C-t> :OpenTerminal<CR>
 nmap <silent> <C-e> :OpenNERDTree<CR>
-
-" See https://vim.fandom.com/wiki/Move_cursor_by_display_lines_when_wrapping
-nmap <silent> j gj
-vmap <silent> j gj
-nmap <silent> k gk
-vmap <silent> k gk
-
-" See https://vim.fandom.com/wiki/Selecting_your_pasted_text
-nmap <expr> gp "'[" . strpart(getregtype(), 0, 1) . "']"
-nmap <expr> gP "`[" . strpart(getregtype(), 0, 1) . "`]"
-
-vmap <silent> $ $h
-
-nmap <silent> K <Nop>
-vmap <silent> K <Nop>
-vmap <silent> K <Nop>
-vmap <silent> J <Nop>
-
 nmap <silent> <c-j> gj
 vmap <silent> <c-j> gj
 nmap <silent> <c-k> gk
 vmap <silent> <c-k> gk
-
-nmap <silent> <leader>d "_d
-vmap <silent> <leader>d "_d
-
-nmap n nzz
-nmap N Nzz
-
 nmap <C-q> <Plug>window:quickfix:loop
-
-nmap <S-h> 2zh
-nmap <S-l> 2zl
-
-command! R Ranger
-
-nmap <space> %
-vmap <space> %
-
 nmap <C-]> g<C-]>
 
-"""""""""""
-" coc-nvim
-" GoTo code navigation.
+"" LSP
 nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gt <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
@@ -419,12 +372,7 @@ nmap <silent> gr <Plug>(coc-references)
 nmap <silent> gl :call CocAction('diagnosticInfo')<CR>
 nmap <leader>rn <Plug>(coc-rename)
 nmap <silent> K :call ShowDocumentation()<CR>
-" Add `:Format` command to format current buffer.
-command! -nargs=0 Format :call CocActionAsync('format')
-" Add `:OrganizeImport` command for organize imports of the current buffer.
-command! -nargs=0 OrganizeImport :call CocActionAsync('runCommand', 'editor.action.organizeImport')
 command! -nargs=0 CD :CocDiagnostics<CR>
-command! -nargs=0 Prettier :CocCommand prettier.forceFormatDocument
 
 " https://github.com/neoclide/coc.nvim/issues/64#issuecomment-662102899
 try
@@ -436,19 +384,19 @@ try
 endtry
 
 " Avoid UI glitch on GitHub Copilot when exiting insert mode with Ctrl+c
-inoremap <C-c> <Esc>
+imap <C-c> <Esc>
 
 " Use <c-space> to trigger completion
 if has('nvim')
-  inoremap <silent><expr> <c-space> coc#refresh()
+  imap <silent><expr> <c-space> coc#refresh()
 else
-  inoremap <silent><expr> <c-@> coc#refresh()
+  imap <silent><expr> <c-@> coc#refresh()
 endif
 
 " Make <CR> to accept selected completion item or notify coc.nvim to format
 " <C-g>u breaks current undo, please make your own choice
-inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
+imap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
                               \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
-nnoremap <silent><nowait> <leader>s  :<C-u>CocList -I symbols<cr>
-
+nmap <silent><nowait> <leader>s  :<C-u>CocList -I symbols<cr>
+nmap <silent><nowait> <leader>t  :Vista!!<cr>
