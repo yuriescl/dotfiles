@@ -373,6 +373,8 @@ nmap <silent> gl :call CocAction('diagnosticInfo')<CR>
 nmap <leader>rn <Plug>(coc-rename)
 nmap <silent> K :call ShowDocumentation()<CR>
 command! -nargs=0 CD :CocDiagnostics<CR>
+command! -nargs=0 Format :call CocActionAsync('format')
+command! -nargs=0 OrganizeImport :call CocActionAsync('runCommand', 'editor.action.organizeImport')
 
 " https://github.com/neoclide/coc.nvim/issues/64#issuecomment-662102899
 try
@@ -395,8 +397,7 @@ endif
 
 " Make <CR> to accept selected completion item or notify coc.nvim to format
 " <C-g>u breaks current undo, please make your own choice
-imap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
-                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+imap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm() : "\<CR>"
 
 nmap <silent><nowait> <leader>s  :<C-u>CocList -I symbols<cr>
 nmap <silent><nowait> <leader>t  :Vista!!<cr>
