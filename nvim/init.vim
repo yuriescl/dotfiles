@@ -375,6 +375,7 @@ nmap <silent> K :call ShowDocumentation()<CR>
 command! -nargs=0 CD :CocDiagnostics<CR>
 command! -nargs=0 Format :call CocActionAsync('format')
 command! -nargs=0 OrganizeImport :call CocActionAsync('runCommand', 'editor.action.organizeImport')
+command! -nargs=0 Prettier :CocCommand prettier.forceFormatDocument
 
 " https://github.com/neoclide/coc.nvim/issues/64#issuecomment-662102899
 try
