@@ -50,3 +50,9 @@ nmap <C-q> <Plug>window:quickfix:loop
 nmap <C-]> g<C-]>
 ]])
 
+
+-- Default autocomplete to search current and included files.
+-- This fixes CTRL-N triggering keyword completion.
+vim.cmd([[
+imap <C-n> <C-x><C-i>
+]])
