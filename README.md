@@ -29,8 +29,10 @@ This repository contains a few of my personal dotfiles that I use in my day-to-d
       - Yes, I tried VS Code after they launched Copilot. It works but it's far less efficient than my NVIM setup. And guess what, Copilot works in NVIM as well nowadays.
       - After you spend a couple years perfecting your Terminal workflow, there's no going back, every tool will feel slow and unproductive.
     - Which plugins do I use in NVIM?
-      - Just a couple of plugins that help quickly navigating in the filesystem tree (fzf + NERDTree + shortcuts), LSP (of course) and some good syntax highlighters.
+      - Just a couple of plugins that help quickly navigating in the filesystem tree (fzf + NERDTree + shortcuts), LSP (of course) and tree-sitter for improved syntax highlighting.
       - Why not use more plugins?
         - No need to. The less the better. This keeps my setup simple, predictable and performant.
+      - But how do you get proper support for languages, like go-to definition, renaming variables, etc?
+        - Those features are all provided by modern LSPs, which NVIM has native support for.
       - I do have a lot of utilitary shell scripts and aliases. NVIM alone isn't very productive, but when you introduce bash and tmux, it's very powerful.
     - For me, in the end, what matters is efficiency and feeling comfortable coding for many hours. My wrists hurt when using normal IDEs because of the huge amount of different hand movements required for navigation (Ctrl+Shift+whatever, arrow keys, etc). When using NVIM I don't feel any pain or discomfort due to how the shortcuts are centered around the same keyboard region, so my hands don't move much and this is good for wrist health. Even for Bash I don't use arrow keys usually, I prefer Ctrl+p and Ctrl+n for searching commands up and down, this keeps my hands in the same place.
