@@ -13,8 +13,6 @@ Plug('github/copilot.vim')
 
 -- Syntax
 Plug('dart-lang/dart-vim-plugin')
-Plug('charlespascoe/vim-go-syntax')
-Plug('ixru/nvim-markdown')
 Plug('nvim-treesitter/nvim-treesitter', {['do'] = ':TSUpdate'})
 Plug('sbdchd/neoformat')
 
