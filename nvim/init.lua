@@ -29,3 +29,5 @@ vim.env.FZF_DEFAULT_COMMAND = 'rg -F --files --no-ignore --hidden --glob "!.git/
 vim.g.NERDTreeWinSize = 32
 vim.g.NERDTreeQuitOnOpen = 1
 vim.g.NERDTreeShowBookmarks = 1
+
+vim.g.gitblame_enabled = 0 -- use :GitBlameToggle to toggle

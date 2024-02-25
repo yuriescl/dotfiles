@@ -31,7 +31,7 @@ nmap <silent> <leader>p :set paste<CR>"+p:set paste!<CR>
 nmap <silent> <leader>P :set paste<CR>"+P:set paste!<CR>
 nmap <silent> <leader>d "_d
 vmap <silent> <leader>d "_d
-nmap <silent> <leader>o :TroubleToggle<CR>
+nmap <silent> <leader>w :set wrap!<CR>
 
 "" Control + <key>
 nmap <C-b> :Buffers<CR>

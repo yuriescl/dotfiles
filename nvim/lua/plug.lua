@@ -22,7 +22,9 @@ Plug('sbdchd/neoformat')
 -- Prerequisites:
 --   npm install -g pyright typescript typescript-language-server
 Plug('neovim/nvim-lspconfig')
-
 Plug('j-hui/fidget.nvim')
+
+-- Misc
+Plug('f-person/git-blame.nvim')
 
 vim.call('plug#end')

@@ -1,7 +1,57 @@
 local lspconfig = require('lspconfig')
-lspconfig.pyright.setup {}
-lspconfig.tsserver.setup {}
+local functions = require('functions')
+local util = require('lspconfig.util')
+require("fidget").setup {}
+
+local function dir_has_file(dir, file)
+  return util.search_ancestors(dir, function(path)
+    local abs_path = util.path.join(path, file)
+    if util.path.is_file(abs_path) then
+      return true
+    end
+  end)
+end
+
+-- Python
+lspconfig.pyright.setup {
+  on_new_config = function(new_config, dir)
+    if dir_has_file(dir, "poetry.lock") then
+      new_config.cmd = { "poetry", "run", "pyright-langserver", "--stdio" }
+    elseif dir_has_file(dir, "Pipfile") then
+      new_config.cmd = { "pipenv", "run", "pyright-langserver", "--stdio" }
+    else
+      vim.notify_once("Running pyright without a virtualenv")
+    end
+  end
+}
+
+-- TypeScript
+local function typescript_organize_imports()
+  local params = {
+    command = "_typescript.organizeImports",
+    arguments = {vim.api.nvim_buf_get_name(0)},
+    title = ""
+  }
+  vim.lsp.buf.execute_command(params)
+end
+
+lspconfig.tsserver.setup {
+  commands = {
+    OrganizeImports = {
+      typescript_organize_imports,
+      description = "Organize Imports"
+    }
+  }
+}
+
+-- Go
 lspconfig.gopls.setup {}
+
+-- Dart
+lspconfig.dartls.setup {}
+
+----------
+-- Global
 
 -- A helper function to wrap a function with arguments, useful for keymaps
 local wrap = function(func, ...)
