@@ -103,6 +103,7 @@ end
 function functions.dart_config()
     vim.bo.tabstop = 2
     vim.bo.shiftwidth = 2
+    vim.api.nvim_set_keymap('n', '<C-y>', ':Neoformat! dart<CR>', {})
 end
 
 function functions.python_config()
