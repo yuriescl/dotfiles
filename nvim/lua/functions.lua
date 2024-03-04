@@ -109,6 +109,7 @@ end
 function functions.python_config()
     vim.bo.tabstop = 4
     vim.bo.shiftwidth = 4
+    vim.api.nvim_set_keymap('n', '<C-y>', ':Neoformat! python black<CR>', {})
 end
 
 function functions.rust_config()
