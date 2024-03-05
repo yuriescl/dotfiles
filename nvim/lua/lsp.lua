@@ -76,6 +76,12 @@ vim.api.nvim_create_autocmd('LspAttach', {
     -- Enable completion triggered by <c-x><c-o>
     vim.bo[ev.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
 
+    -- Default autocomplete to search current and included files.
+    -- This fixes CTRL-N triggering keyword completion when LSP is enabled
+    vim.cmd([[
+    imap <C-n> <C-x><C-i>
+    ]])
+
     -- Buffer local mappings.
     -- See `:help vim.lsp.*` for documentation on any of the below functions
     local opts = { buffer = ev.buf }
