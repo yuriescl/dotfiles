@@ -98,5 +98,3 @@ vim.api.nvim_create_autocmd('DiagnosticChanged', {
     vim.diagnostic.setloclist({open = false})
   end,
 })
-
-require("fidget").setup {}

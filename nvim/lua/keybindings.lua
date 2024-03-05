@@ -42,7 +42,7 @@ nmap <silent> <C-p> :w<CR>
 nmap <silent> <C-x> :bd<CR>
 nmap <silent> <C-t> :lua functions.open_terminal()<CR>
 nmap <silent> <C-e> :lua functions.open_nerdtree()<CR>
-nmap <silent> <c-j> gj
+nmap <silent> <c-j> zA
 vmap <silent> <c-j> gj
 nmap <silent> <c-k> gk
 vmap <silent> <c-k> gk

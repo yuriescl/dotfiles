@@ -27,12 +27,9 @@ end
 function functions.toggle_fold_method()
     if vim.wo.foldmethod == 'manual' then
         vim.wo.foldmethod = 'indent'
-        vim.cmd('echo "foldmethod=indent"')
         vim.wo.foldlevel = 0
-        vim.cmd('echo "foldlevel=0"')
     else
         vim.wo.foldmethod = 'manual'
-        vim.cmd('echo "foldmethod=manual"')
         vim.cmd([[normal! zE]])
     end
 end
