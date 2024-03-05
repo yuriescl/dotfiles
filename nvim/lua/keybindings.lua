@@ -42,9 +42,10 @@ nmap <silent> <C-p> :w<CR>
 nmap <silent> <C-x> :bd<CR>
 nmap <silent> <C-t> :lua functions.open_terminal()<CR>
 nmap <silent> <C-e> :lua functions.open_nerdtree()<CR>
-nmap <silent> <c-j> zA
+nmap <silent> <c-j> gj
 vmap <silent> <c-j> gj
-nmap <silent> <c-k> gk
+"nmap <silent> <c-k> gk
+nmap <silent> <c-k> zA
 vmap <silent> <c-k> gk
 nmap <C-q> <Plug>window:quickfix:loop
 nmap <C-]> g<C-]>
