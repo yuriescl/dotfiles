@@ -7,6 +7,7 @@ require("commands")
 require("autocommands")
 require("keybindings")
 require("lsp")
+require("bookmark")
 
 -- Load built-in plugins
 vim.cmd([[

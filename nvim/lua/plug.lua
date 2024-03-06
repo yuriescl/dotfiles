@@ -25,6 +25,8 @@ Plug('neovim/nvim-lspconfig')
 Plug('j-hui/fidget.nvim')
 
 -- Misc
-Plug('f-person/git-blame.nvim')
+Plug('yuriescl/git-blame.nvim')
+Plug('yuriescl/nvim-web-devicons')
+Plug('yuriescl/bookmarks.nvim')
 
 vim.call('plug#end')
