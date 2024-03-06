@@ -36,7 +36,7 @@ nmap <silent> <leader>w :set wrap!<CR>
 "" Control + <key>
 nmap <C-b> :Buffers<CR>
 nmap <C-f> :Rg<Space>
-nmap <C-g> :CwdHistory<CR>
+nmap <C-g> :History<CR>
 nmap <C-n> :Files<CR>
 nmap <silent> <C-p> :w<CR>
 nmap <silent> <C-x> :bd<CR>
