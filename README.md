@@ -4,6 +4,11 @@ This repository contains a few of my personal dotfiles that I use in my day-to-d
 - [nvim](./nvim)
 - [tmux](./tmux)
 
+## How my Neovim looks like
+
+![image](https://github.com/yuriescl/dotfiles/assets/26092447/a0215f98-a8e0-40ca-9bf2-7b71dcf2e40d)
+
+
 ## FAQ
 
 - Which Linux distro do I use?
