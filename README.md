@@ -3,7 +3,7 @@ This repository contains a few of my personal dotfiles that I use in my day-to-d
 - [bashrc.d](./bashrc.d): essential, otherwise everything else becomes unproductive
 - [nvim](./nvim): my primary text editor, I use VSCode sometimes for previewing markdown, or when I'm sharing my screen (otherwise it's impossible for other people to track my Neovim navigation)
 - [tmux](./tmux): helps me manage terminal screens without leaving keyboard home row
-- [kitty](./kitty): 
+- [kitty](./kitty): a minimalist but modern terminal that supports font ligatures, which helps reading code better
 
 ## How my Neovim looks like
 
