@@ -8,10 +8,14 @@ require('bookmarks').setup {
     ["@n"] = " ", -- mark annotation startswith @n ,signs this icon as `Note`
   },
   width = 1.0,                   -- bookmarks window width:  (0, 1]
-  preview_ratio = 0.2,          -- bookmarks preview window ratio (0.1]
+  preview_ratio = 0.1,          -- bookmarks preview window ratio (0.1]
   tags_ratio = 0.1,
+  hl = {
+      border = "TelescopeBorder", -- border highlight
+      cursorline = "cterm=none guibg=#1c1c1c", -- cursorline highlight
+  },
   keymap = {
-    toggle = "<tab><tab>",     -- toggle bookmarks
+    toggle = "<leader>bl",     -- toggle bookmarks
     close = "q",               -- close bookmarks (buffer mapping)
     add = "<leader>ba",               -- add bookmarks
     add_global = "<leader>bg",        -- add global bookmarks

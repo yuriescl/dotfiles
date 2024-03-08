@@ -2,12 +2,12 @@ require("opt")
 require("plug")
 require("colors")
 require("statusline")
-functions = require("functions")
+require("functions")
 require("commands")
 require("autocommands")
 require("keybindings")
 require("lsp")
-require("bookmark")
+require("fzf")
 
 -- Load built-in plugins
 vim.cmd([[
@@ -32,3 +32,4 @@ vim.g.NERDTreeQuitOnOpen = 1
 vim.g.NERDTreeShowBookmarks = 1
 
 vim.g.gitblame_enabled = 0 -- use :GitBlameToggle to toggle
+

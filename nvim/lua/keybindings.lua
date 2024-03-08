@@ -10,7 +10,7 @@ nmap <S-h> 2zh
 nmap <S-l> 2zl
 nmap <space> %
 vmap <space> %
-nmap <silent> Y :lua functions.yank_to_clipboard()<CR>
+nmap <silent> Y :lua require "functions".yank_to_clipboard()<CR>
 nmap <silent> <F1> :noh<CR>
 
 """ Avoid UI glitch on GitHub Copilot when exiting insert mode with Ctrl+c
@@ -32,6 +32,9 @@ nmap <silent> <leader>P :set paste<CR>"+P:set paste!<CR>
 nmap <silent> <leader>d "_d
 vmap <silent> <leader>d "_d
 nmap <silent> <leader>w :set wrap!<CR>
+nmap <silent> <leader>bb :MinimalBookmarksToggle<CR>
+nmap <silent> <leader>be :MinimalBookmarksEdit<CR>
+nmap <silent> <leader>ba :MinimalBookmarksAdd<CR>
 
 "" Control + <key>
 nmap <C-b> :Buffers<CR>
@@ -40,8 +43,8 @@ nmap <C-g> :History<CR>
 nmap <C-n> :Files<CR>
 nmap <silent> <C-p> :w<CR>
 nmap <silent> <C-x> :bd<CR>
-nmap <silent> <C-t> :lua functions.open_terminal()<CR>
-nmap <silent> <C-e> :lua functions.open_nerdtree()<CR>
+nmap <silent> <C-t> :lua require "functions".open_terminal()<CR>
+nmap <silent> <C-e> :lua require "functions".open_nerdtree()<CR>
 nmap <silent> <c-j> gj
 vmap <silent> <c-j> gj
 "nmap <silent> <c-k> gk
