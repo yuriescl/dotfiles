@@ -121,7 +121,7 @@ function functions.go_config()
     vim.bo.shiftwidth = 4
     vim.bo.expandtab = false
     vim.opt_local.listchars = { tab = '  ', extends = '›', precedes = '‹' }
-    vim.api.nvim_set_keymap('n', '<C-y>', ':Neoformat! go<CR>', {})
+    vim.api.nvim_set_keymap('n', '<C-y>', ':Neoformat! go gofmt<CR>', {})
 end
 
 function functions.typescript_config()
