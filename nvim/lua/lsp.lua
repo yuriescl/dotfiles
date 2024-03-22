@@ -1,7 +1,7 @@
 local lspconfig = require('lspconfig')
-local functions = require('functions')
 local util = require('lspconfig.util')
 require("fidget").setup {}
+require("outline").setup({})
 
 local function dir_has_file(dir, file)
   return util.search_ancestors(dir, function(path)

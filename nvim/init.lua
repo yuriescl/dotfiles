@@ -25,7 +25,7 @@ vim.g.dart_html_in_string = true
 vim.g.fzf_buffers_jump = 0
 vim.g.fzf_preview_window = {}
 
-vim.env.FZF_DEFAULT_COMMAND = 'rg -F --files --no-ignore --hidden'
+vim.env.FZF_DEFAULT_COMMAND = 'rg -F --files --no-ignore --hidden --glob "!.git/*" --glob "!*__pycache__*" --glob "!build*" --glob "!*node_modules*" --glob "!.venv/*" --glob "!*.mypy_cache*" --glob "!*.next*"'
 
 vim.g.NERDTreeWinSize = 32
 vim.g.NERDTreeQuitOnOpen = 1

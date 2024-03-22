@@ -23,6 +23,7 @@ Plug('sbdchd/neoformat')
 --   npm install -g pyright typescript typescript-language-server
 Plug('neovim/nvim-lspconfig')
 Plug('j-hui/fidget.nvim')
+Plug('hedyhli/outline.nvim')
 
 -- Misc
 Plug('yuriescl/git-blame.nvim')

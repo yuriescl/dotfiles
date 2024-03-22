@@ -35,6 +35,9 @@ nmap <silent> <leader>w :set wrap!<CR>
 nmap <silent> <leader>bb :MinimalBookmarksToggle<CR>
 nmap <silent> <leader>be :MinimalBookmarksEdit<CR>
 nmap <silent> <leader>ba :MinimalBookmarksAdd<CR>
+nmap <silent> <leader>o :topleft Outline<CR>
+nmap <silent> <leader>l <C-w>10>
+nmap <silent> <leader>h <C-w>10<
 
 "" Control + <key>
 nmap <C-b> :Buffers<CR>
@@ -53,5 +56,3 @@ vmap <silent> <c-k> gk
 nmap <C-q> <Plug>window:quickfix:loop
 nmap <C-]> g<C-]>
 ]])
-
-
