@@ -35,6 +35,7 @@ nmap <silent> <leader>w :set wrap!<CR>
 nmap <silent> <leader>bb :MinimalBookmarksToggle<CR>
 nmap <silent> <leader>be :MinimalBookmarksEdit<CR>
 nmap <silent> <leader>ba :MinimalBookmarksAdd<CR>
+nmap <silent> <leader>bi :MinimalBookmarksInsert<CR>
 nmap <silent> <leader>o :topleft Outline<CR>
 nmap <silent> <leader>l <C-w>10>
 nmap <silent> <leader>h <C-w>10<
