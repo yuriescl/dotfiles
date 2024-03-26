@@ -1,7 +1,12 @@
 local lspconfig = require('lspconfig')
 local util = require('lspconfig.util')
 require("fidget").setup {}
-require("outline").setup({})
+require("outline").setup({
+    outline_window = {
+        width = 60,
+        relative_width = true,
+    }
+})
 
 local function dir_has_file(dir, file)
   return util.search_ancestors(dir, function(path)
