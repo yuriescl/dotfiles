@@ -5,7 +5,11 @@ require("outline").setup({
     outline_window = {
         width = 60,
         relative_width = true,
-    }
+    },
+    keymaps = {
+        goto_location = '<S-CR>',
+        goto_and_close = '<CR>',
+    },
 })
 
 local function dir_has_file(dir, file)
