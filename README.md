@@ -48,6 +48,8 @@ This repository contains a few of my personal dotfiles that I use in my day-to-d
       - Just a couple of plugins that help quickly navigating in the filesystem tree (fzf + NERDTree + shortcuts), LSP (of course) and tree-sitter for improved syntax highlighting.
       - Why not use more plugins?
         - No need to. The less the better. This keeps my setup simple, predictable and performant.
+      - Do you use Telescope or LazyVim?
+        - No, stay away from them.
       - But how do you get proper support for languages, like go-to definition, renaming variables, etc?
         - Those features are all provided by modern LSPs, which Neovim has native support for.
       - I do have a lot of utilitary shell scripts and aliases. Neovim alone isn't very productive, but when you introduce bash and tmux, it's very powerful.
