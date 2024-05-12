@@ -32,3 +32,11 @@ vim.g.NERDTreeQuitOnOpen = 1
 vim.g.NERDTreeShowBookmarks = 1
 
 vim.g.gitblame_enabled = 0 -- use :GitBlameToggle to toggle
+
+vim.cmd([[
+augroup quickfix
+    autocmd!
+    autocmd QuickFixCmdPost [^l]* cwindow
+    autocmd QuickFixCmdPost l* lwindow
+augroup END
+]])
