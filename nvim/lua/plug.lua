@@ -7,7 +7,7 @@ Plug('yuriescl/vim-moonfly-colors', { ['as'] = 'moonfly' })
 Plug('yuriescl/fzf', {['do'] = vim.fn['fzf#install']})
 Plug('yuriescl/fzf.vim')
 Plug('yuriescl/nerdtree')
--- Plug('yuriescl/vim-ripgrep')
+Plug('yuriescl/vim-ripgrep')
 -- Plug('duane9/nvim-rg')
 Plug('yuriescl/vim-toggle-quickfix')
 Plug('yuriescl/copilot.vim')
@@ -23,6 +23,12 @@ Plug('yuriescl/neoformat')
 -- Prerequisites:
 --   npm install -g pyright typescript typescript-language-server
 Plug('yuriescl/nvim-lspconfig')
+Plug('hrsh7th/cmp-nvim-lsp')
+Plug('hrsh7th/cmp-buffer')
+Plug('hrsh7th/cmp-path')
+Plug('hrsh7th/cmp-cmdline')
+Plug('hrsh7th/nvim-cmp')
+
 Plug('yuriescl/fidget.nvim')
 Plug('yuriescl/outline.nvim')
 

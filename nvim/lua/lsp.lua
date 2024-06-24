@@ -1,5 +1,6 @@
 local lspconfig = require('lspconfig')
 local util = require('lspconfig.util')
+local cmp = require('cmp')
 require("fidget").setup {}
 require("outline").setup({
     outline_window = {
@@ -12,6 +13,38 @@ require("outline").setup({
     },
 })
 
+cmp.setup({
+  snippet = {
+    expand = function(args)
+      vim.snippet.expand(args.body) -- For native neovim snippets (Neovim v0.10+)
+    end,
+  },
+  window = {
+    -- completion = cmp.config.window.bordered(),
+    -- documentation = cmp.config.window.bordered(),
+  },
+  mapping = cmp.mapping.preset.insert({
+    --['<C-b>'] = cmp.mapping.scroll_docs(-4),
+    --['<C-f>'] = cmp.mapping.scroll_docs(4),
+    ['<C-u>'] = cmp.mapping.scroll_docs(-4),
+    ['<C-d>'] = cmp.mapping.scroll_docs(4),
+    ['<C-Space>'] = cmp.mapping.complete(),
+    ['<C-e>'] = cmp.mapping.abort(),
+    ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+  }),
+  sources = cmp.config.sources({
+    { name = 'nvim_lsp' },
+    --{ name = 'vsnip' }, -- For vsnip users.
+    -- { name = 'luasnip' }, -- For luasnip users.
+    -- { name = 'ultisnips' }, -- For ultisnips users.
+    -- { name = 'snippy' }, -- For snippy users.
+  }, {
+    { name = 'buffer' },
+  })
+})
+
+local cmp_default_capabilities = require('cmp_nvim_lsp').default_capabilities()
+
 local function dir_has_file(dir, file)
   return util.search_ancestors(dir, function(path)
     local abs_path = util.path.join(path, file)
@@ -23,6 +56,7 @@ end
 
 -- Python
 lspconfig.pyright.setup {
+  capabilities = cmp_default_capabilities,
   on_new_config = function(new_config, dir)
     if dir_has_file(dir, "poetry.lock") then
       new_config.cmd = { "poetry", "run", "pyright-langserver", "--stdio" }
@@ -45,6 +79,7 @@ local function typescript_organize_imports()
 end
 
 lspconfig.tsserver.setup {
+  capabilities = cmp_default_capabilities,
   commands = {
     OrganizeImports = {
       typescript_organize_imports,
@@ -54,12 +89,17 @@ lspconfig.tsserver.setup {
 }
 
 -- Go
-lspconfig.gopls.setup {}
+lspconfig.gopls.setup {
+  capabilities = cmp_default_capabilities,
+}
 
 -- Dart
-lspconfig.dartls.setup {}
+lspconfig.dartls.setup {
+  capabilities = cmp_default_capabilities,
+}
 
 require'lspconfig'.lua_ls.setup {
+  capabilities = cmp_default_capabilities,
   on_init = function(client)
     local path = client.workspace_folders[1].name
     if vim.loop.fs_stat(path..'/.luarc.json') or vim.loop.fs_stat(path..'/.luarc.jsonc') then
