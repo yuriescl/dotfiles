@@ -14,6 +14,9 @@ require("outline").setup({
 })
 
 cmp.setup({
+  completion = {
+    autocomplete = false
+  },
   snippet = {
     expand = function(args)
       vim.snippet.expand(args.body) -- For native neovim snippets (Neovim v0.10+)
