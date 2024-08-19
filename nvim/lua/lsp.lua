@@ -146,10 +146,10 @@ local wrap = function(func, ...)
 end
 
 vim.keymap.set('n', 'gl', vim.diagnostic.open_float)
-vim.keymap.set('n', '[d', vim.diagnostic.goto_prev)
-vim.keymap.set('n', ']d', vim.diagnostic.goto_next)
-vim.keymap.set('n', '[e', wrap(vim.diagnostic.goto_prev, { severity = vim.diagnostic.severity.ERROR }))
-vim.keymap.set('n', ']e', wrap(vim.diagnostic.goto_next, { severity = vim.diagnostic.severity.ERROR }))
+vim.keymap.set('n', '[d', vim.diagnostic.goto_next)
+vim.keymap.set('n', ']d', vim.diagnostic.goto_prev)
+vim.keymap.set('n', '[e', wrap(vim.diagnostic.goto_next, { severity = vim.diagnostic.severity.ERROR }))
+vim.keymap.set('n', ']e', wrap(vim.diagnostic.goto_prev, { severity = vim.diagnostic.severity.ERROR }))
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist)
 
 -- Use LspAttach autocommand to only map the following keys
@@ -181,10 +181,15 @@ vim.api.nvim_create_autocmd('LspAttach', {
   end,
 })
 
--- Populate loclist with the current buffer diagnostics
--- See https://gist.github.com/phelipetls/0aeb9f4aca9af25d9f45ee56e0c5a340?permalink_comment_id=4397599#gistcomment-4397599
 vim.api.nvim_create_autocmd('DiagnosticChanged', {
   callback = function(args)
-    vim.diagnostic.setloclist({open = false})
+    local bufnr = args.buf
+    local diagnostics = vim.diagnostic.get(bufnr)
+
+    -- Only set loclist if there are diagnostics to display
+    if #diagnostics > 0 then
+      vim.diagnostic.setloclist({open = false})
+    end
   end,
 })
+
