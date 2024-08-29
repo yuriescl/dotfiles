@@ -2,8 +2,10 @@
 vim.cmd([[
 command! -nargs=? RgProto lua require "functions".rg_proto(<f-args>)
 command! -nargs=? RgNotGen lua require "functions".rg_not_gen(<f-args>)
+command! -nargs=? RgCode lua require "functions".rg_code(<f-args>)
 command! -nargs=? RgOnlyGo lua require "functions".rg_only_go(<f-args>)
 command! -nargs=? ROG lua require "functions".rg_only_go(<f-args>)
+command! -nargs=? RgServiceFunc lua require "functions".rg_service_func(<f-args>)
 command! -bar ClearQuickfixList cexpr []
 command! -bar ToggleFoldColumn lua require "functions".toggle_fold_column()
 command! -bar ToggleSetList lua require "functions".toggle_set_list()

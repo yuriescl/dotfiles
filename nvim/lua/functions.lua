@@ -92,7 +92,15 @@ function functions.rg_proto(search_str)
 end
 
 function functions.rg_not_gen(search_str)
-    return functions.rg_with_args(search_str, '-g "!*/gen/*"')
+    return functions.rg_with_args(search_str, '-g "!**/gen/**"')
+end
+
+function functions.rg_code(search_str)
+    return functions.rg_with_args(search_str, '-g "!**/gen/**" -g "!**/vendor/**"')
+end
+
+function functions.rg_service_func(search_str)
+    return functions.rg_with_args('func.*' .. search_str, '-g "*service.go"')
 end
 
 function functions.rg_only_go(search_str)
