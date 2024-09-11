@@ -180,7 +180,7 @@ end
 function functions.check_lsp()
   local clients = vim.lsp.get_clients({ bufnr = 0 })
   if next(clients) == nil then
-    vim.api.nvim_echo({{"Error: No active LSP attached to this buffer", "ErrorMsg"}}, true, {})
+    vim.api.nvim_echo({{"No active LSP attached to this buffer", "ErrorMsg"}}, true, {})
   else
     vim.lsp.buf.references()
   end
