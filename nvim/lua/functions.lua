@@ -177,4 +177,13 @@ function functions.markdown_config()
     vim.bo.shiftwidth = 4
 end
 
+function functions.check_lsp()
+  local clients = vim.lsp.get_clients({ bufnr = 0 })
+  if next(clients) == nil then
+    vim.api.nvim_echo({{"Error: No active LSP attached to this buffer", "ErrorMsg"}}, true, {})
+  else
+    vim.lsp.buf.references()
+  end
+end
+
 return functions

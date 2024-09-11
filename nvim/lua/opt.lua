@@ -28,6 +28,7 @@ vim.opt.smartcase = true
 vim.opt.foldmethod = 'manual'
 vim.opt.foldnestmax = 2
 vim.opt.foldcolumn = '0'
+vim.opt.foldenable = false
 vim.opt.signcolumn = 'number'
 vim.opt.modeline = false
 vim.opt.visualbell = false

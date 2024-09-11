@@ -28,3 +28,14 @@ au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
 endif
 ]])
 
+-- https://stackoverflow.com/a/77999918
+--vim.api.nvim_create_autocmd({ "FileType" }, {
+--  callback = function()
+--    if require("nvim-treesitter.parsers").has_parser() then
+--      vim.opt.foldmethod = "expr"
+--      vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
+--    else
+--      vim.opt.foldmethod = "syntax"
+--    end
+--  end,
+--})
