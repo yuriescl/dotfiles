@@ -81,7 +81,7 @@ local function typescript_organize_imports()
   vim.lsp.buf.execute_command(params)
 end
 
-lspconfig.tsserver.setup {
+lspconfig.ts_ls.setup {
   capabilities = cmp_default_capabilities,
   commands = {
     OrganizeImports = {
@@ -192,4 +192,3 @@ vim.api.nvim_create_autocmd('DiagnosticChanged', {
     end
   end,
 })
-

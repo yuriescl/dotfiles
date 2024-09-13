@@ -49,7 +49,7 @@ nmap <C-g> :History<CR>
 nmap <C-n> :Files<CR>
 nmap <silent> <C-p> :w<CR>
 nmap <silent> <C-x> :bd<CR>
-nmap <silent> <C-t> :lua require "functions".open_terminal()<CR>
+"nmap <silent> <C-t> :lua require "functions".open_terminal()<CR>
 nmap <silent> <C-e> :lua require "functions".open_nerdtree()<CR>
 nmap <silent> <c-j> gj
 vmap <silent> <c-j> gj
