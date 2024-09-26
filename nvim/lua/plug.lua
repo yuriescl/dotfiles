@@ -34,6 +34,7 @@ Plug('yuriescl/outline.nvim')
 
 -- Misc
 Plug('yuriescl/git-blame.nvim')
+Plug('lewis6991/gitsigns.nvim')
 Plug('yuriescl/nvim-web-devicons')
 Plug('yuriescl/minimal-bookmarks.nvim')
 

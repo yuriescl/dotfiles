@@ -62,3 +62,4 @@ nmap <C-[> za
 nmap <silent> gr :lua require "functions".check_lsp()<CR>
 ]])
 
+

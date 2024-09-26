@@ -100,6 +100,9 @@ function functions.rg_code(search_str)
 end
 
 function functions.rg_service_func(search_str)
+    if not search_str then
+        search_str = vim.fn.expand('<cword>')
+    end
     return functions.rg_with_args('func.*' .. search_str, '-g "*service.go"')
 end
 
@@ -117,7 +120,18 @@ end
 function functions.python_config()
     vim.bo.tabstop = 4
     vim.bo.shiftwidth = 4
-    vim.api.nvim_set_keymap('n', '<C-y>', ':Neoformat! python black<CR>', {})
+    vim.api.nvim_set_keymap('n', '<C-y>', [[:lua RunNeoformat()<CR>]], {})
+    -- Define the RunNeoformat function to handle remapping Ctrl-C
+    function RunNeoformat()
+        -- Disable Ctrl-C temporarily
+        vim.api.nvim_set_keymap('n', '<C-c>', '<Nop>', { noremap = true, silent = true })
+
+        -- Run Neoformat and then restore Ctrl-C functionality
+        vim.cmd([[Neoformat! python black]])
+
+        -- Re-enable Ctrl-C
+        vim.api.nvim_del_keymap('n', '<C-c>')
+    end
 end
 
 function functions.rust_config()
@@ -130,7 +144,8 @@ function functions.go_config()
     vim.bo.shiftwidth = 4
     vim.bo.expandtab = false
     vim.opt_local.listchars = { tab = '  ', extends = '›', precedes = '‹' }
-    vim.api.nvim_set_keymap('n', '<C-y>', ':Neoformat! go gofmt<CR>', {})
+
+    vim.api.nvim_set_keymap('n', '<C-y>', '<cmd>lua vim.lsp.buf.format({ async = false, timeout_ms = 500 })<CR>', { noremap = true, silent = true })
 end
 
 function functions.typescript_config()
@@ -138,7 +153,19 @@ function functions.typescript_config()
     vim.bo.shiftwidth = 2
     vim.api.nvim_set_keymap('n', '[g', 'vatv`<', { silent = true })
     vim.api.nvim_set_keymap('n', ']g', 'vatv`>', { silent = true })
-    vim.api.nvim_set_keymap('n', '<C-y>', ':Neoformat! typescript prettier<CR>', {})
+
+    vim.api.nvim_set_keymap('n', '<C-y>', [[:lua RunNeoformat()<CR>]], {})
+    -- Define the RunNeoformat function to handle remapping Ctrl-C
+    function RunNeoformat()
+        -- Disable Ctrl-C temporarily
+        vim.api.nvim_set_keymap('n', '<C-c>', '<Nop>', { noremap = true, silent = true })
+
+        -- Run Neoformat and then restore Ctrl-C functionality
+        vim.cmd([[Neoformat! typescript prettier]])
+
+        -- Re-enable Ctrl-C
+        vim.api.nvim_del_keymap('n', '<C-c>')
+    end
 end
 
 function functions.javascript_config()
@@ -146,25 +173,70 @@ function functions.javascript_config()
     vim.bo.shiftwidth = 2
     vim.api.nvim_set_keymap('n', '[g', 'vatv`<', { silent = true })
     vim.api.nvim_set_keymap('n', ']g', 'vatv`>', { silent = true })
-    vim.api.nvim_set_keymap('n', '<C-y>', ':Neoformat! javascript prettier<CR>', {})
+
+    vim.api.nvim_set_keymap('n', '<C-y>', [[:lua RunNeoformat()<CR>]], {})
+    -- Define the RunNeoformat function to handle remapping Ctrl-C
+    function RunNeoformat()
+        -- Disable Ctrl-C temporarily
+        vim.api.nvim_set_keymap('n', '<C-c>', '<Nop>', { noremap = true, silent = true })
+
+        -- Run Neoformat and then restore Ctrl-C functionality
+        vim.cmd([[Neoformat! javascript prettier]])
+
+        -- Re-enable Ctrl-C
+        vim.api.nvim_del_keymap('n', '<C-c>')
+    end
 end
 
 function functions.css_config()
     vim.bo.tabstop = 2
     vim.bo.shiftwidth = 2
-    vim.api.nvim_set_keymap('n', '<C-y>', ':Neoformat! css prettier<CR>', {})
+    vim.api.nvim_set_keymap('n', '<C-y>', [[:lua RunNeoformat()<CR>]], {})
+    -- Define the RunNeoformat function to handle remapping Ctrl-C
+    function RunNeoformat()
+        -- Disable Ctrl-C temporarily
+        vim.api.nvim_set_keymap('n', '<C-c>', '<Nop>', { noremap = true, silent = true })
+
+        -- Run Neoformat and then restore Ctrl-C functionality
+        vim.cmd([[Neoformat! css prettier]])
+
+        -- Re-enable Ctrl-C
+        vim.api.nvim_del_keymap('n', '<C-c>')
+    end
 end
 
 function functions.json_config()
     vim.bo.tabstop = 2
     vim.bo.shiftwidth = 2
-    vim.api.nvim_set_keymap('n', '<C-y>', ':Neoformat! json prettier<CR>', {})
+    vim.api.nvim_set_keymap('n', '<C-y>', [[:lua RunNeoformat()<CR>]], {})
+    -- Define the RunNeoformat function to handle remapping Ctrl-C
+    function RunNeoformat()
+        -- Disable Ctrl-C temporarily
+        vim.api.nvim_set_keymap('n', '<C-c>', '<Nop>', { noremap = true, silent = true })
+
+        -- Run Neoformat and then restore Ctrl-C functionality
+        vim.cmd([[Neoformat! json prettier]])
+
+        -- Re-enable Ctrl-C
+        vim.api.nvim_del_keymap('n', '<C-c>')
+    end
 end
 
 function functions.html_config()
     vim.bo.tabstop = 2
     vim.bo.shiftwidth = 2
-    vim.api.nvim_set_keymap('n', '<C-y>', ':Neoformat! html prettier<CR>', {})
+    vim.api.nvim_set_keymap('n', '<C-y>', [[:lua RunNeoformat()<CR>]], {})
+    -- Define the RunNeoformat function to handle remapping Ctrl-C
+    function RunNeoformat()
+        -- Disable Ctrl-C temporarily
+        vim.api.nvim_set_keymap('n', '<C-c>', '<Nop>', { noremap = true, silent = true })
+
+        -- Run Neoformat and then restore Ctrl-C functionality
+        vim.cmd([[Neoformat! html prettier]])
+
+        -- Re-enable Ctrl-C
+        vim.api.nvim_del_keymap('n', '<C-c>')
+    end
 end
 
 function functions.html_django_config()

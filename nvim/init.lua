@@ -8,6 +8,7 @@ require("autocommands")
 require("keybindings")
 require("lsp")
 require("fzf")
+require("git")
 
 -- Load built-in plugins
 vim.cmd([[
