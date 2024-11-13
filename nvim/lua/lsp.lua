@@ -65,6 +65,8 @@ lspconfig.pyright.setup {
       new_config.cmd = { "poetry", "run", "pyright-langserver", "--stdio" }
     elseif dir_has_file(dir, "Pipfile") then
       new_config.cmd = { "pipenv", "run", "pyright-langserver", "--stdio" }
+    elseif dir_has_file(dir, "uv.lock") then
+      new_config.cmd = { "uv", "run", "pyright-langserver", "--stdio" }
     else
       vim.notify_once("Running pyright without a virtualenv")
     end
