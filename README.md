@@ -5,6 +5,14 @@ This repository contains a few of my personal dotfiles that I use in my day-to-d
 - [tmux](./tmux): helps me manage terminal screens without leaving keyboard home row
 - [kitty](./kitty): a minimalist but modern terminal that supports font ligatures, which helps reading code better
 
+## What Linux distro do I use?
+
+I used to distro hop a lot in the past but as my time became more and more restricted, I had to stop distro hopping and choose a system.
+The only thing that makes me format my PC nowadays if if the system gets broken by either disk corruption or after a big update. This is very rare, but sometimes happen.
+Tried to stay in Ubuntu, it broke, then Fedora, broke, then Debian, broke. Then finally settled on Arch Linux in 2024.
+
+My current distro is Arch Linux with KDE. Best system I have ever used since 2009. KDE used to be buggy and all weird but now it feels better than Windows, congrats to the Devs and to Steam for sponsoring the development and using it for Steam Deck OS.
+
 ## How my Neovim looks like
 
 ### Python
