@@ -7,11 +7,11 @@ This repository contains a few of my personal dotfiles that I use in my day-to-d
 
 ## What Linux distro do I use?
 
-I used to distro hop a lot in the past but as my time became more and more restricted, I had to stop distro hopping and choose a system.
-The only thing that makes me format my PC nowadays if if the system gets broken by either disk corruption or after a big update. This is very rare, but sometimes happen.
+My history with Linux goes a long way back, started using Ubuntu in 2009, then went over dozens of distros including advanced ones like Gentoo and LFS. It was fun to keep switching but not productive for daily work, so I had to stop distro hopping.
+The only thing that makes me format my PC nowadays is if the system gets broken by either disk corruption or after a big update. This is very rare, but sometimes happen, even on major "stable" distros, usually due to Kernel driver bugs. I had many issues with Acer laptops and Linux.
 Tried to stay in Ubuntu, it broke, then Fedora, broke, then Debian, broke. Then finally settled on Arch Linux in 2024.
 
-My current distro is Arch Linux with KDE. Best system I have ever used since 2009. KDE used to be buggy and all weird but now it feels better than Windows, congrats to the Devs and to Steam for sponsoring the development and using it for Steam Deck OS.
+My current distro is Arch Linux with KDE. Best system I have ever used since 2009. KDE used to be buggy and all weird but now it feels better than Windows, congrats to the Devs and to Steam for sponsoring the development and using it for Steam Deck OS, which significantly made the distro get improvements quicker.
 
 ## How my Neovim looks like
 
