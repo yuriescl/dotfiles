@@ -11,7 +11,7 @@ My history with Linux goes a long way back, started using Ubuntu in 2009, then w
 The only thing that makes me format my PC nowadays is if the system gets broken by either disk corruption or after a big update. This is very rare, but sometimes happen, even on major "stable" distros, usually due to Kernel driver bugs. I had many issues with Acer laptops and Linux.
 Tried to stay in Ubuntu, it broke, then Fedora, broke, then Debian, broke. Then finally settled on Arch Linux in 2024.
 
-My current distro is Arch Linux with KDE. Best system I have ever used since 2009. KDE used to be buggy and all weird but now it feels better than Windows, congrats to the Devs and to Steam for sponsoring the development and using it for Steam Deck OS, which significantly made the distro get improvements quicker.
+My current distro is Arch Linux with KDE. Best system I have ever used since 2009. It does require the user to have more responsibility as the system heavily depends on user knowledge, but it's worth it if you know the basics of package managers and how a Linux distro is architectured. KDE used to be buggy and all weird but now it feels better than Windows, congrats to the Devs and to Steam for sponsoring the development and using it for Steam Deck OS, which significantly made the distro get improvements quicker.
 
 ## How my Neovim looks like
 
