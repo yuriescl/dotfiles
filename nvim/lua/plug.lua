@@ -15,6 +15,7 @@ Plug('yuriescl/copilot.vim')
 -- Syntax
 Plug('yuriescl/dart-vim-plugin')
 Plug('yuriescl/nvim-treesitter', {['do'] = ':TSUpdate'})
+Plug('nvim-treesitter/nvim-treesitter-context')
 Plug('yuriescl/neoformat')
 
 -- LSP

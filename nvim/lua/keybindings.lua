@@ -62,4 +62,6 @@ nmap <C-[> za
 nmap <silent> gr :lua require "functions".check_lsp()<CR>
 ]])
 
-
+vim.keymap.set("n", "[c", function()
+  require("treesitter-context").go_to_context(vim.v.count1)
+end, { silent = true })
