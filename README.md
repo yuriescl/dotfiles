@@ -18,14 +18,4 @@ My current distro is Fedora (vanilla). I like it because it has direct upstream 
 Font: Inconsolata Semi-Condensed
 Why? because it saves a lot of space horizontally, I can see more characters in the screen.
 
-### Python
-![image](https://github.com/yuriescl/dotfiles/assets/26092447/a0215f98-a8e0-40ca-9bf2-7b71dcf2e40d)
-
-### Go
-![image](https://github.com/yuriescl/dotfiles/assets/26092447/5c11af10-00d8-43ff-b926-bfddef3a1479)
-
-### TypeScript
-![image](https://github.com/yuriescl/dotfiles/assets/26092447/06dd02f2-6703-4588-8ce7-4a57925d05f6)
-
-### Markdown
-![image](https://github.com/yuriescl/dotfiles/assets/26092447/fb7e8213-e2d6-4088-8526-1f812db0b62e)
+![image](https://github.com/user-attachments/assets/7cfba767-39de-4d12-a030-7461afaecb0a)
