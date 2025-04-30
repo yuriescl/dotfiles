@@ -15,6 +15,9 @@ My current distro is Fedora (vanilla). I like it because it has direct upstream 
 
 ## How my Neovim looks like
 
+Font: Inconsolata Semi-Condensed
+Why? because it saves a lot of space horizontally, I can see more characters in the screen.
+
 ### Python
 ![image](https://github.com/yuriescl/dotfiles/assets/26092447/a0215f98-a8e0-40ca-9bf2-7b71dcf2e40d)
 
