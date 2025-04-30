@@ -8,9 +8,7 @@ Plug('yuriescl/fzf', {['do'] = vim.fn['fzf#install']})
 Plug('yuriescl/fzf.vim')
 Plug('yuriescl/nerdtree')
 Plug('yuriescl/vim-ripgrep')
--- Plug('duane9/nvim-rg')
 Plug('yuriescl/vim-toggle-quickfix')
-Plug('yuriescl/copilot.vim')
 
 -- Syntax
 Plug('yuriescl/dart-vim-plugin')
@@ -36,7 +34,6 @@ Plug('yuriescl/outline.nvim')
 -- Misc
 Plug('yuriescl/git-blame.nvim')
 Plug('lewis6991/gitsigns.nvim')
-Plug('yuriescl/nvim-web-devicons')
 Plug('yuriescl/minimal-bookmarks.nvim')
 
 vim.call('plug#end')

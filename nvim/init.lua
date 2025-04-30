@@ -10,6 +10,14 @@ require("lsp")
 require("fzf")
 require("git")
 
+-- Minimalist mode, for boring days
+--require("opt")
+--require("keybindings")
+--vim.cmd([[
+--colorscheme desert
+--]])
+
+
 -- Load built-in plugins
 vim.cmd([[
 runtime macros/matchit.vim
@@ -35,10 +43,3 @@ vim.g.NERDTreeShowBookmarks = 1
 vim.g.gitblame_enabled = 0 -- use :GitBlameToggle to toggle
 
 vim.g.rg_binary = 'rghead'
-
--- disable copilot globally, I use <leader>c to manually enable it when I want
-vim.cmd([[
-let g:copilot_filetypes = {
-  \ '*': v:false,
-  \ }
-]])

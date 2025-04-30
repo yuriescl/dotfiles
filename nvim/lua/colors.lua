@@ -5,7 +5,7 @@ highlight Normal guifg=#FFFFFF guibg=NONE ctermfg=15 ctermbg=NONE
 ]])
 
 require'nvim-treesitter.configs'.setup {
-  ensure_installed = "all",
+  ensure_installed = { "go", "python", "javascript", "typescript", "tsx", "markdown", "html", "css" },
   highlight = {
     enable = true
   },
