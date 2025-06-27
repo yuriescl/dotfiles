@@ -48,50 +48,82 @@ cmp.setup({
 
 local cmp_default_capabilities = require('cmp_nvim_lsp').default_capabilities()
 
-local function dir_has_file(dir, file)
-  return util.search_ancestors(dir, function(path)
-    local abs_path = util.path.join(path, file)
-    if util.path.is_file(abs_path) then
-      return true
-    end
-  end)
+-- Try to get Python path from Poetry
+local function get_poetry_python_path()
+  local handle = io.popen("poetry env info -p 2>/dev/null")
+  if not handle then return nil end
+  local result = handle:read("*a")
+  handle:close()
+  local venv_path = vim.fn.trim(result)
+  local python_path = venv_path .. "/bin/python"
+  if vim.fn.filereadable(python_path) == 1 then
+    return python_path
+  end
+  return nil
 end
 
--- Python
-lspconfig.pyright.setup {
+-- Try to get Python path from uv
+local function get_uv_python_path()
+  local handle = io.popen("uv venv 2>/dev/null")
+  if not handle then return nil end
+  local result = handle:read("*a")
+  handle:close()
+  local venv_path = vim.fn.trim(result)
+  local python_path = venv_path .. "/bin/python"
+  if vim.fn.filereadable(python_path) == 1 then
+    return python_path
+  end
+  return nil
+end
+
+require("lspconfig").pyright.setup {
   capabilities = cmp_default_capabilities,
-  on_new_config = function(new_config, dir)
-    if dir_has_file(dir, "poetry.lock") then
-      new_config.cmd = { "poetry", "run", "pyright-langserver", "--stdio" }
-    elseif dir_has_file(dir, "Pipfile") then
-      new_config.cmd = { "pipenv", "run", "pyright-langserver", "--stdio" }
-    elseif dir_has_file(dir, "uv.lock") then
-      new_config.cmd = { "uv", "run", "pyright-langserver", "--stdio" }
+  settings = {
+    python = {
+      analysis = {
+        autoSearchPaths = true,
+        useLibraryCodeForTypes = true,
+        diagnosticMode = "openFilesOnly",
+      },
+    },
+  },
+  before_init = function(_, config)
+    local python_path = nil
+    local root_dir = config.root_dir
+  
+    if root_dir and util.path.is_file(util.path.join(root_dir, "pyproject.toml")) then
+      python_path = get_poetry_python_path() or get_uv_python_path()
+    end
+  
+    if python_path and vim.fn.filereadable(python_path) == 1 then
+      config.settings.python.pythonPath = python_path
     else
-      vim.notify_once("Running pyright without a virtualenv")
+      config.settings.python.pythonPath = vim.fn.exepath("python3")
     end
   end
 }
 
 -- TypeScript
-local function typescript_organize_imports()
-  local params = {
-    command = "_typescript.organizeImports",
-    arguments = {vim.api.nvim_buf_get_name(0)},
-    title = ""
-  }
-  vim.lsp.buf.execute_command(params)
-end
+--local function typescript_organize_imports()
+--  local params = {
+--    command = "_typescript.organizeImports",
+--    arguments = {vim.api.nvim_buf_get_name(0)},
+--    title = ""
+--  }
+--  vim.lsp.buf.execute_command(params)
+--end
+--
+--lspconfig.ts_ls.setup {
+--  capabilities = cmp_default_capabilities,
+--  commands = {
+--    OrganizeImports = {
+--      typescript_organize_imports,
+--      description = "Organize Imports"
+--    }
+--  }
+--}
+require("typescript-tools").setup {}
 
-lspconfig.ts_ls.setup {
-  capabilities = cmp_default_capabilities,
-  commands = {
-    OrganizeImports = {
-      typescript_organize_imports,
-      description = "Organize Imports"
-    }
-  }
-}
 
 -- Go
 lspconfig.gopls.setup {
