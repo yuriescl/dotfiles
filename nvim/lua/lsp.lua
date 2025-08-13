@@ -1,7 +1,7 @@
 local lspconfig = require('lspconfig')
 local util = require('lspconfig.util')
 local cmp = require('cmp')
-require("fidget").setup {}
+-- require("fidget").setup {}
 require("outline").setup({
     outline_window = {
         width = 60,
@@ -76,6 +76,14 @@ local function get_uv_python_path()
   return nil
 end
 
+require("lspconfig").ruff.setup {
+  init_options = {
+    settings = {
+      args = { "--select", "I", "--fix", "--line-length", "100", "--target-version", "py310"},
+    }
+  }
+}
+
 require("lspconfig").pyright.setup {
   capabilities = cmp_default_capabilities,
   settings = {
@@ -100,8 +108,73 @@ require("lspconfig").pyright.setup {
     else
       config.settings.python.pythonPath = vim.fn.exepath("python3")
     end
-  end
+  end,
+  handlers = {
+    -- Override the default rename handler to remove the `annotationId` from edits.
+    --
+    -- Pyright is being non-compliant here by returning `annotationId` in the edits, but not
+    -- populating the `changeAnnotations` field in the `WorkspaceEdit`. This causes Neovim to
+    -- throw an error when applying the workspace edit.
+    --
+    -- See:
+    -- - https://github.com/neovim/neovim/issues/34731
+    -- - https://github.com/microsoft/pyright/issues/10671
+    [vim.lsp.protocol.Methods.textDocument_rename] = function(err, result, ctx)
+      if err then
+        vim.notify('Pyright rename failed: ' .. err.message, vim.log.levels.ERROR)
+        return
+      end
+
+      ---@cast result lsp.WorkspaceEdit
+      for _, change in ipairs(result.documentChanges or {}) do
+        for _, edit in ipairs(change.edits or {}) do
+          if edit.annotationId then
+            edit.annotationId = nil
+          end
+        end
+      end
+
+      local client = assert(vim.lsp.get_client_by_id(ctx.client_id))
+      vim.lsp.util.apply_workspace_edit(result, client.offset_encoding)
+    end,
+  },
 }
+
+--lspconfig.pylsp.setup({
+--  capabilities = cmp_default_capabilities,
+--  settings = {
+--    pylsp = {
+--      plugins = {
+--        -- Linting
+--        --pyflakes = { enabled = true },
+--        --pycodestyle = { enabled = true, maxLineLength = 128 },
+--        --mccabe = { enabled = true },
+--
+--        -- Ruff (fast lint + fixes)
+--        ruff = { enabled = true },
+--
+--        -- Type checking
+--        pylsp_mypy = { enabled = true, live_mode = false, strict = false },
+--
+--        -- Formatting
+--        black = { enabled = true },
+--        autopep8 = { enabled = false },
+--        yapf = { enabled = false },
+--
+--        -- Import sorting
+--        isort = { enabled = true },
+--
+--        -- Docstring style checks
+--        -- pydocstyle = { enabled = true, convention = "google" },
+--
+--        -- Refactoring support
+--        rope_autoimport = { enabled = true },
+--        rope_completion = { enabled = true },
+--        rope_rename = { enabled = true },
+--      }
+--    }
+--  }
+--})
 
 -- TypeScript
 --local function typescript_organize_imports()
@@ -212,6 +285,20 @@ vim.api.nvim_create_autocmd('LspAttach', {
     vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts)
     vim.keymap.set({ 'n', 'v' }, '<leader>ca', vim.lsp.buf.code_action, opts)
     vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
+
+    -- Only set Python-specific mappings
+    local ft = vim.bo[ev.buf].filetype
+    if ft == "python" then
+      -- Buffer-local keybinding for formatting with Ruff
+      vim.keymap.set("n", "<C-y>", function()
+        vim.lsp.buf.format({
+          async = true,
+          filter = function(client)
+            return client.name == "ruff"
+          end,
+        })
+      end, { buffer = ev.buf, desc = "Format buffer with Ruff" })
+    end
   end,
 })
 

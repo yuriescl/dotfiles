@@ -120,18 +120,18 @@ end
 function functions.python_config()
     vim.bo.tabstop = 4
     vim.bo.shiftwidth = 4
-    vim.api.nvim_set_keymap('n', '<C-y>', [[:lua RunNeoformat()<CR>]], {})
-    -- Define the RunNeoformat function to handle remapping Ctrl-C
-    function RunNeoformat()
-        -- Disable Ctrl-C temporarily
-        vim.api.nvim_set_keymap('n', '<C-c>', '<Nop>', { noremap = true, silent = true })
+    --vim.api.nvim_set_keymap('n', '<C-y>', [[:lua RunNeoformat()<CR>]], {})
+    ---- Define the RunNeoformat function to handle remapping Ctrl-C
+    --function RunNeoformat()
+    --    -- Disable Ctrl-C temporarily
+    --    vim.api.nvim_set_keymap('n', '<C-c>', '<Nop>', { noremap = true, silent = true })
 
-        -- Run Neoformat and then restore Ctrl-C functionality
-        vim.cmd([[Neoformat! python black]])
+    --    -- Run Neoformat and then restore Ctrl-C functionality
+    --    vim.cmd([[Neoformat! python black]])
 
-        -- Re-enable Ctrl-C
-        vim.api.nvim_del_keymap('n', '<C-c>')
-    end
+    --    -- Re-enable Ctrl-C
+    --    vim.api.nvim_del_keymap('n', '<C-c>')
+    --end
 end
 
 function functions.rust_config()

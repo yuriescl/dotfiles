@@ -39,7 +39,8 @@ nmap <silent> <leader>bi :MinimalBookmarksInsert<CR>
 nmap <silent> <leader>o :topleft Outline<CR>
 nmap <silent> <leader>l <C-w>10>
 nmap <silent> <leader>h <C-w>10<
-nmap <leader>c :let b:copilot_enabled = !get(b:, 'copilot_enabled', v:false)<CR>
+nmap <leader>ce :Codeium Enable<CR>
+nmap <leader>cd :Codeium Disable<CR>
 
 "" Control + <key>
 nmap <C-b> :Buffers<CR>
@@ -65,3 +66,16 @@ nmap <silent> gr :lua require "functions".check_lsp()<CR>
 vim.keymap.set("n", "[c", function()
   require("treesitter-context").go_to_context(vim.v.count1)
 end, { silent = true })
+
+-- Keybindings for overlook.nvim
+vim.keymap.set("n", "<leader>pd", function()
+  require("overlook.api").peek_definition()
+end, { desc = "Overlook: Peek definition", silent = true })
+
+vim.keymap.set("n", "<leader>pc", function()
+  require("overlook.api").close_all()
+end, { desc = "Overlook: Close all popup", silent = true })
+
+vim.keymap.set("n", "<leader>pu", function()
+  require("overlook.api").restore_popup()
+end, { desc = "Overlook: Restore popup", silent = true })
