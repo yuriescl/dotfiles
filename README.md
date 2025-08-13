@@ -18,4 +18,4 @@ My Acer laptop died so I ended up getting a desktop, from that point onwards I'v
 Font: Iosevka
 Why? because it saves a lot of space horizontally, I can see more characters in the screen.
 
-![image](https://github.com/user-attachments/assets/7cfba767-39de-4d12-a030-7461afaecb0a)
+<img width="1005" height="868" alt="image" src="https://github.com/user-attachments/assets/f3dd042f-897c-496f-a94c-a3fe0b0f3d7f" />
